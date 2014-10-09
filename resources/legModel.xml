@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!-- Messor 2 leg's properties-->
+  <parameters linksNo="3" jointsNo="3"> </parameters>
+  <Link0>
+    <name>Coxa</name>
+    <parameters length="0.05"></parameters>
+  </Link0>
+  <Link1>
+    <name>Femur</name>
+    <parameters length="0.12"></parameters>
+  </Link1>
+  <Link2>
+    <name>Tibia</name>
+    <parameters length="0.175"></parameters>
+  </Link2>
