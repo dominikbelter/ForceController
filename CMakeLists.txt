@@ -162,10 +162,10 @@ endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_KINEMATIC)
 
 if(BUILD_CONTROLLER AND BUILD_CONTROLLER_LEG)
         file(GLOB LEG_SOURCES
-            "${CMAKE_SOURCE_DIR}/src/legControl/*.cpp"
+            "${CMAKE_SOURCE_DIR}/src/legModel/*.cpp"
         )
         file(GLOB LEG_HEADERS
-            "${CMAKE_SOURCE_DIR}/include/legControl/*.h"
+            "${CMAKE_SOURCE_DIR}/include/legModel/*.h"
         )
 
         ADD_LIBRARY(Leg STATIC ${LEG_SOURCES} ${LEG_HEADERS})
@@ -182,10 +182,10 @@ endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_LEG)
 
 if(BUILD_CONTROLLER AND BUILD_CONTROLLER_ROBOT)
         file(GLOB ROBOT_SOURCES
-            "${CMAKE_SOURCE_DIR}/src/robotControl/*.cpp"
+            "${CMAKE_SOURCE_DIR}/src/robotModel/*.cpp"
         )
         file(GLOB ROBOT_HEADERS
-            "${CMAKE_SOURCE_DIR}/include/robotControl/*.h"
+            "${CMAKE_SOURCE_DIR}/include/robotModel/*.h"
         )
 
         ADD_LIBRARY(Robot STATIC ${ROBOT_SOURCES} ${ROBOT_HEADERS})

@@ -90,18 +90,18 @@ class BoardDynamixel : public Board {
         void readContact(const std::vector<bool> contact);
 
         /// Returns current from servo
-        unsigned int readServoCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent);
+        unsigned int readCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent);
         /// Returns current from servo
-        unsigned int readServoCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent);
+        unsigned int readCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent);
         /// Returns current from servo
-        unsigned int readServoCurrent(const std::vector<float_type>& servoCurrent);
+        unsigned int readCurrent(const std::vector<float_type>& servoCurrent);
 
         /// Returns torque/load from servo
-        unsigned int readServoTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque);
+        unsigned int readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque);
         /// Returns torque/load from servo
-        unsigned int readServoTorque(unsigned char legNo, const std::vector<float_type>& servoTorque);
+        unsigned int readTorque(unsigned char legNo, const std::vector<float_type>& servoTorque);
         /// Returns torque/load from servo
-        unsigned int readServoTorque(const std::vector<float_type>& servoTorque);
+        unsigned int readTorque(const std::vector<float_type>& servoTorque);
 
         /// Set servo Offset
         void setOffset(unsigned char legNo, unsigned char jointNo, float_type offset);

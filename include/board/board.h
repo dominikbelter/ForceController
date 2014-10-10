@@ -89,18 +89,18 @@ namespace controller {
             virtual void readContact(const std::vector<bool> contact) = 0;
 
             /// Returns current from servo
-            virtual unsigned int readServoCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent) = 0;
+            virtual unsigned int readCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent) = 0;
             /// Returns current from servo
-            virtual unsigned int readServoCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent) = 0;
+            virtual unsigned int readCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent) = 0;
             /// Returns current from servo
-            virtual unsigned int readServoCurrent(const std::vector<float_type>& servoCurrent) = 0;
+            virtual unsigned int readCurrent(const std::vector<float_type>& servoCurrent) = 0;
 
             /// Returns torque/load from servo
-            virtual unsigned int readServoTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque) = 0;
+            virtual unsigned int readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque) = 0;
             /// Returns torque/load from servo
-            virtual unsigned int readServoTorque(unsigned char legNo, const std::vector<float_type>& servoTorque) = 0;
+            virtual unsigned int readTorque(unsigned char legNo, const std::vector<float_type>& servoTorque) = 0;
             /// Returns torque/load from servo
-            virtual unsigned int readServoTorque(const std::vector<float_type>& servoTorque) = 0;
+            virtual unsigned int readTorque(const std::vector<float_type>& servoTorque) = 0;
 
             /// Set servo Offset
             virtual void setOffset(unsigned char legNo, unsigned char jointNo, float_type offset) = 0;

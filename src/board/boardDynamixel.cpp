@@ -133,32 +133,32 @@ void BoardDynamixel::readContact(const std::vector<bool> contact){
 }
 
 /// Returns current from servo
-unsigned int BoardDynamixel::readServoCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent){
+unsigned int BoardDynamixel::readCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent){
 
 }
 
 /// Returns current from servo
-unsigned int BoardDynamixel::readServoCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent){
+unsigned int BoardDynamixel::readCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent){
 
 }
 
 /// Returns current from servo
-unsigned int BoardDynamixel::readServoCurrent(const std::vector<float_type>& servoCurrent){
+unsigned int BoardDynamixel::readCurrent(const std::vector<float_type>& servoCurrent){
 
 }
 
 /// Returns torque/load from servo
-unsigned int BoardDynamixel::readServoTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
+unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
 
 }
 
 /// Returns torque/load from servo
-unsigned int BoardDynamixel::readServoTorque(unsigned char legNo, const std::vector<float_type>& servoTorque){
+unsigned int BoardDynamixel::readTorque(unsigned char legNo, const std::vector<float_type>& servoTorque){
 
 }
 
 /// Returns torque/load from servo
-unsigned int BoardDynamixel::readServoTorque(const std::vector<float_type>& servoTorque){
+unsigned int BoardDynamixel::readTorque(const std::vector<float_type>& servoTorque){
 
 }
 

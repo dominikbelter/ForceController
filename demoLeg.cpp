@@ -1,5 +1,5 @@
 #include "include/defs/defs.h"
-#include "include/legControl/leg.h"
+#include "include/legModel/leg.h"
 #include <iostream>
 #include <stdio.h>
 

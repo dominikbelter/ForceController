@@ -1,5 +1,5 @@
 #include "include/defs/defs.h"
-#include "include/robotControl/robot.h"
+#include "include/robotModel/robot.h"
 #include <iostream>
 #include <stdio.h>
 
