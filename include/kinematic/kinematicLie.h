@@ -41,13 +41,13 @@ class KinematicLie : public Kinematic {
         const std::string& getName() const { return name; }
 
         /// Compute forward kinematic, default (-1) -- the last joint
-        Mat34 forwardKinematic(std::vector<float_type> configuration, unsigned int linkNo=-1);
+        Mat34 forwardKinematic(const std::vector<float_type>& configuration, unsigned int linkNo=-1);
 
         /// Compute forward kinematic, default (-1) -- the last joint
-        std::vector<float_type> inverseKinematic(Mat34 linkPose, unsigned int linkNo=-1);
+        std::vector<float_type> inverseKinematic(const Mat34& linkPose, unsigned int linkNo=-1);
 
         /// Return set of link's poses
-        std::vector<Mat34> getState(std::vector<float_type> configuration);
+        std::vector<Mat34> getState(const std::vector<float_type>& configuration);
 
     private:
 

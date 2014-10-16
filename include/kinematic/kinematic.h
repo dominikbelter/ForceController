@@ -48,13 +48,13 @@ namespace controller {
             virtual const std::string& getName() const { return name; }
 
             /// Compute forward kinematic, default (-1) -- the last joint
-            virtual Mat34 forwardKinematic(std::vector<float_type> configuration, unsigned int linkNo=-1) = 0;
+            virtual Mat34 forwardKinematic(const std::vector<float_type>& configuration, unsigned int linkNo=-1) = 0;
 
             /// Compute forward kinematic, default (-1) -- the last joint
-            virtual std::vector<float_type> inverseKinematic(Mat34 linkPose, unsigned int linkNo=-1) = 0;
+            virtual std::vector<float_type> inverseKinematic(const Mat34& linkPose, unsigned int linkNo=-1) = 0;
 
             /// Return set of link's poses
-            virtual std::vector<Mat34> getState(std::vector<float_type> configuration) = 0;
+            virtual std::vector<Mat34> getState(const std::vector<float_type>& configuration) = 0;
 
             /// Virtual descrutor
             virtual ~Kinematic() {}
