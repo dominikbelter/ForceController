@@ -55,7 +55,7 @@ mark_as_advanced(BUILD_CONTROLLER_DEMO_VISUALIZATION)
 # include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 #Eigen
-add_definitions(-Wno-deprecated -DEIGEN_DONT_VECTORIZE -DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
+add_definitions(-DEIGEN_DONT_VECTORIZE -DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 
 # PCL
 # find_package(PCL REQUIRED)
