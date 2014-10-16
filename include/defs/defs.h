@@ -11,7 +11,6 @@
 #include <vector>
 #include <memory>
 #include <cmath>
-#include "opencv2/core/core.hpp"
 #include <Eigen/Geometry>
 
 /// controller name space
