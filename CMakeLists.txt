@@ -136,7 +136,7 @@ endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_BOARD)
 
 ###############################################################################
 #
-# CONTROLLER Board library
+# Kinematic Board library
 #
 ###############################################################################
 
@@ -220,7 +220,7 @@ endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_VISUALIZATION)
 #
 ###############################################################################
 
-if(BUILD_CONTROLLER_DEMO AND BUILD_GRABBER_DEMO_BASIC)
+if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_BASIC)
 
         SET(DEMO_SOURCES ./main.cpp)
         ADD_EXECUTABLE(demo ${DEMO_SOURCES})
@@ -228,7 +228,7 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_GRABBER_DEMO_BASIC)
         INSTALL(TARGETS demo RUNTIME DESTINATION bin)
         INSTALL(FILES ${DEMO_FILES} DESTINATION bin)
 
-endif(BUILD_CONTROLLER_DEMO AND BUILD_GRABBER_DEMO_BASIC)
+endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_BASIC)
 
 
 ###############################################################################

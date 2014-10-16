@@ -17,7 +17,7 @@
 /// controller name space
 namespace controller {
 
-    /// flytracker default floating point
+    /// controller default floating point
     typedef double float_type;
 
     /// 3 element vector class
@@ -25,9 +25,6 @@ namespace controller {
 
     /// Matrix representation of SO(3) group of rotations
     typedef Eigen::Matrix<float_type,3,3> Mat33;
-
-    /// Information Matrix of SE(3) transformation
-    typedef Eigen::Matrix<float_type,6,6> Mat66;
 
     /// Quaternion representation of SO(3) group of rotations
     typedef Eigen::Quaternion<float_type> Quaternion;

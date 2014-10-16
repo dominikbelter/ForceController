@@ -1,8 +1,8 @@
 #include "include/defs/defs.h"
 #include "include/board/boardDynamixel.h"
 #include "include/kinematic/kinematicLie.h"
-#include "include/legControl/insectLeg.h"
-#include "include/robotControl/robotMessor2.h"
+#include "include/legModel/insectLeg.h"
+#include "include/robotModel/robotMessor2.h"
 #include "include/visualization/visualizerGL.h"
 #include <iostream>
 #include <stdio.h>
