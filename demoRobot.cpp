@@ -2,7 +2,10 @@
 #include "include/robotModel/robot.h"
 #include <iostream>
 #include <stdio.h>
+/*
+Maciej Okoniewski
 
+*/
 using namespace std;
 
 int main( int argc, const char** argv )
