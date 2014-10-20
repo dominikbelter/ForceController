@@ -1,3 +1,5 @@
+//Norbert Werblinski
+
 #include "../include/kinematic/kinematicLie.h"
 #include <iostream>
 
@@ -18,7 +20,7 @@ Mat34 KinematicLie::forwardKinematic(const std::vector<float_type>& configuratio
 	return tmp;
 }
 
-/// Compute forward kinematic, default (-1) -- the last joint
+/// Compute inverse kinematic, default (-1) -- the last joint
 std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, unsigned int linkNo){
     std::vector<float_type> tmp;
     return tmp;
