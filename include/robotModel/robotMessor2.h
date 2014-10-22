@@ -1,1 +1,2 @@
 //Jerzy Wiatrow
+//Emil Walêdziak
