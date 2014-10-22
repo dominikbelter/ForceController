@@ -2,6 +2,7 @@
  *
  * Robot interface
  *
+ * Jerzy Wiatrow
  */
 
 #ifndef _ROBOT_H_
