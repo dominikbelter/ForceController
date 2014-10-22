@@ -3,7 +3,7 @@
 #include "include/board/boardDynamixel.h"
 #include <iostream>
 #include <stdio.h>
-// Limek
+// Limek - Micha³ Limañski
 using namespace std;
 
 int main( int argc, const char** argv )
