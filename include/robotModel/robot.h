@@ -3,7 +3,7 @@
  * Robot interface
  * Emil Walêdziak
  * Jerzy Wiatrow
-	
+ * Maciej Okoniewski	
  */
 
 #ifndef _ROBOT_H_
