@@ -4,7 +4,7 @@
  * Emil Walêdziak
  * Jerzy Wiatrow
  * Maciej Okoniewski
- * Marcin Zgoliñœki	
+ * Marcin Zgolinski	
  */
 
 #ifndef _ROBOT_H_
