@@ -8,9 +8,10 @@
 #include <stdio.h>
 
 
-/**
- * @authors Paulina Jankowska
- * Tomasz Chroœniak
+/*
+ Paulina Jankowska
+
+
  */
 
 using namespace std;
@@ -79,7 +80,7 @@ public:
       return metoda1(parametr1,parametr2);
     }
 
-    virtual DoxygenTestClass();
+    DoxygenTestClass();
     virtual ~DoxygenTestClass();
 
 };
