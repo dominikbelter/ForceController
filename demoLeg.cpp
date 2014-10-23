@@ -1,5 +1,5 @@
 /*	Autorzy:
-		Lukasz Mejlun
+		£ukasz Mej³un
 		Wojciech Nowakowski
 */
 
