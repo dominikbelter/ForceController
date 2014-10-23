@@ -7,8 +7,10 @@
 #include <iostream>
 #include <stdio.h>
 
+
 /**
- * @authors Paulina Jankowska, Tomasz Chroœniak
+ * @authors Paulina Jankowska
+ * Tomasz Chroœniak
  */
 
 using namespace std;
