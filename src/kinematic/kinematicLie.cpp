@@ -1,4 +1,5 @@
 //Norbert Werblinski
+//Adam Czeszejkowski
 
 #include "../include/kinematic/kinematicLie.h"
 #include <iostream>
