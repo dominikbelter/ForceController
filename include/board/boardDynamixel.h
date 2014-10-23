@@ -1,7 +1,7 @@
 /** @file boardDynamixel.h
  *
  * implementation - Board with usb2dynamixel
- *
+ * Author1: Pawel Szczygiel
  */
 
 #ifndef BOARDDYNAMIXEL_H_INCLUDED
