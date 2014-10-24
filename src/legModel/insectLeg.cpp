@@ -32,16 +32,13 @@ Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, unsigne
 	return result;
 }
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// W tym ponizej pojawia mi sie blad: error C2719: 'linkPose': formal parameter with __declspec(align('16')) won't be aligned
-
 /// Compute inverse kinematic, default (-1) -- the last joint
-/*std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, unsigned int linkNo)
+std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, unsigned int linkNo)
 {
 	std::vector<float_type> result;
 
 	return result;
-}*/
+}
 
 controller::Leg* controller::createInsectLeg(void) 
 {
