@@ -3,12 +3,12 @@
 #include "include/board/boardDynamixel.h"
 #include <iostream>
 #include <stdio.h>
-<<<<<<< HEAD
+
 // Limek - Micha³ Limañski 123
-=======
+
 // Limek
 //pelka
->>>>>>> origin/master
+
 using namespace std;
 
 int main( int argc, const char** argv )
