@@ -99,6 +99,14 @@ add_library(tinyxml2 STATIC ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/tinyXML/tinyxml
 
 ###############################################################################
 #
+# Dynamixel library
+#
+###############################################################################
+add_library(dynamixel STATIC ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/dynamixel/dynamixel.h ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/dynamixel/dxl_hal.h ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/dynamixel/dynamixel.cpp ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/dynamixel/dxl_hal.cpp)
+
+
+###############################################################################
+#
 # defs library
 #
 ###############################################################################
