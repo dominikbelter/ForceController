@@ -4,7 +4,7 @@
 */
 
 #include "include/defs/defs.h"
-#include "include/legModel/leg.h"
+#include "include/legModel/insectLeg.h"
 #include <iostream>
 #include <stdio.h>
 
@@ -14,9 +14,12 @@ int main( int argc, const char** argv )
 {
 	try 
 	{
-		//Grabber* grabber;
-		//grabber = createFileGrabber();
-		cout << "DEMO STEROWNIKA NOGI";
+		cout << "DEMO STEROWNIKA NOGI" << "\n";
+
+		Leg* legModel;
+		legModel = createInsectLeg("../resources/legModel.xml");
+		std::cout << "Leg type: " << legModel->getName() << "\n";
+
 		getchar();
 	}
   catch (const std::exception& ex) 
