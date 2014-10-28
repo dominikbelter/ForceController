@@ -1,7 +1,10 @@
 /** @file robot.h
  *
  * Robot interface
- *
+ * Emil Walêdziak
+ * Jerzy Wiatrow
+ * Maciej Okoniewski
+ * Marcin Zgolinski	
  */
 
 #ifndef _ROBOT_H_

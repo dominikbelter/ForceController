@@ -7,7 +7,13 @@
 #include <iostream>
 #include <stdio.h>
 
+/*
+ Paulina Jankowska
+ Tomasz Chrosniak
+ */
+
 using namespace std;
+
 
 int main( int argc, const char** argv )
 {
