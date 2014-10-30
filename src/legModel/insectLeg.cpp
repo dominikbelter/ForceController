@@ -1,5 +1,5 @@
 #include "../include/legModel/insectLeg.h"
-#include "../include/Kinematic/kinematicLie.h"
+#include "../include/kinematic/kinematicLie.h"
 #include <iostream>
 
 using namespace controller;
