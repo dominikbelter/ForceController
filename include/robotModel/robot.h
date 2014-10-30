@@ -1,7 +1,7 @@
 /** @file robot.h
  *
  * Robot interface
- * Emil Walêdziak
+ * Emil Waledziak
  * Jerzy Wiatrow
  * Maciej Okoniewski
  * Marcin Zgolinski	
