@@ -25,7 +25,7 @@ namespace controller {
             };
 
             /// overloaded constructor
-            Visualizer(const std::string _name, Type _type) : name(_name), type(_type) {};
+            Visualizer(const std::string _name, Type _type) : name(_name), type(_type) {}
 
             Visualizer(std::string configFilename, const std::string _name, Type _type) : name(_name), type(_type){
 
