@@ -17,4 +17,12 @@ virtual std::vector<float_type> movePlatform(const Mat34& motion)
 virtual std::vector<float_type> movePlatformNeutral(const Mat34 motion)
 {
 	return 0;
+}
+
+///Compute force in each joint of the legs, input configuration of the robot
+virtual std::vector<float_type> computeCompliance(std::vector<float_type>)
 {
+   
+    return 0;
+
+}
