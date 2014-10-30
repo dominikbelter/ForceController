@@ -1,28 +1,31 @@
-#include "robot.h"
+#include "../include/robotModel/robot.h"
+#include <iostream>
 
-
-using namespace controller
+using namespace controller;
 
 
 
 
 
 ///Compute configuration of the robot for the reference motion
-virtual std::vector<float_type> movePlatform(const Mat34& motion)
+ std::vector<float_type> movePlatform(const Mat34& motion)
 {
-	return 0;
+    std::vector<float_type> tmp;
+     return tmp;
 }
 		
 ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
-virtual std::vector<float_type> movePlatformNeutral(const Mat34 motion)
+ std::vector<float_type> movePlatformNeutral(const Mat34 motion)
 {
-	return 0;
+     std::vector<float_type> tmp;
+      return tmp;
 }
 
 ///Compute force in each joint of the legs, input configuration of the robot
-virtual std::vector<float_type> computeCompliance(std::vector<float_type>)
+ std::vector<float_type> computeCompliance(std::vector<float_type>)
 {
    
-    return 0;
+     std::vector<float_type> tmp;
+      return tmp;
 
 }
