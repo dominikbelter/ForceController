@@ -1,4 +1,4 @@
-#include "visualization\visualizerGL.h"
+#include "../include/visualization/visualizerGL.h"
 
 
 using namespace controller;
