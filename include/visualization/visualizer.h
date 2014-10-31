@@ -1,9 +1,14 @@
 /** @file visualizer.h
  *
  * Visualizer interface
- * Tomasz Walczewski
- * Sebastian Drogowski
  */
+
+
+/**
+* @author Tomasz Walczewski
+* @author Sebastian Drogowski
+* @mainpage
+*/
 
 #ifndef _VISUALIZER_H_
 #define _VISUALIZER_H_

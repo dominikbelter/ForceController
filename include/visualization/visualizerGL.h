@@ -1,10 +1,12 @@
-/** @file visualizer.h
+/** @file visualizerGL.h
 *
 * Visualizer interface
-* Tomasz Walczewski
-* Sebastian Drogowski
 */
-
+/**
+* @author Tomasz Walczewski
+* @author Sebastian Drogowski
+* @mainpage
+*/
 #ifndef _VISUALIZERGL_H_
 #define _VISUALIZERGL_H_
 
