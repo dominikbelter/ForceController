@@ -2,6 +2,7 @@
 *
 * Visualizer interface
 * Tomasz Walczewski
+* Sebastian Drogowski
 */
 
 #ifndef _VISUALIZERGL_H_
