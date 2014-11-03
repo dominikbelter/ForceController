@@ -1,6 +1,7 @@
-/*	Autorzy:
-		Lukasz Mejlun
-		Wojciech Nowakowski
+/** @file demoLeg.cpp
+*
+* @author Lukasz Mejlun
+* @author Wojciech Nowakowski
 */
 
 #include "include/defs/defs.h"

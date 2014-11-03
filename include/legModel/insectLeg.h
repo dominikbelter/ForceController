@@ -2,6 +2,8 @@
 *
 * Leg interface for insects
 *
+* @author Lukasz Mejlun
+* @author Wojciech Nowakowski
 */
 
 #ifndef _INSECTLEG_H_INCLUDED
@@ -42,7 +44,7 @@ class InsectLeg : public Leg
 		/// Name of the leg model
 		const std::string& getName() const { return name; }
 
-		///Compute torque in each joint for given the force applied in the foot
+		/// Compute torque in each joint for given the force applied in the foot
 		std::vector<float_type> computLoad(Vec3& force);
 
 		/// Compute forward kinematic, default (-1) -- the last joint
