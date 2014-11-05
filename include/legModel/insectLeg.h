@@ -25,7 +25,7 @@ namespace controller
 
 using namespace controller;
 
-/// Kinematic implementation
+/// Insect Leg implementation
 class InsectLeg : public Leg 
 {
 	public:
