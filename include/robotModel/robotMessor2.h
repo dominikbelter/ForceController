@@ -1,49 +1,44 @@
 //Jerzy Wiatrow
 //Emil Waledziak
+//Maciej Okoniewski
+//Marcin Zgolinski
+
+#ifndef _ROBOTMESSOR_H_INCLUDED
+#define _ROBOTMESSOR_H_INCLUDED
+
+#include "robot.h"
+#include <iostream>
 
 
 namespace controller {
-    /// Kinematic interface
-    class Robot {
-        public:
 
-            /// Robot type
-            enum Type {
-                /// Messor Robot
-                TYPE_MESSOR,
-                /// Messor2 Robot
-                TYPE_MESSOR2,
-                /// StarlETH robot
-                TYPE_STARLETH,
-            };
+                    Robot* createRobotMessor(void);
+                    Robot* createRobotMessor(std::string filename);
 
-            /// overloaded constructor
-            Robot(const std::string _name, Type _type) : name(_name), type(_type) {};
+                     }
 
-            Robot(std::string configFilename, const std::string _name, Type _type) : name(_name), type(_type){
+using namespace controller;
 
-            }
+class RobotMessor: public Robot
+{
+public:
 
-            /// Name of the robot model
-            virtual const std::string& getName() const { return name; }
 
-            ///Compute configuration of the robot for the reference motion
-            virtual std::vector<float_type> movePlatform(const Mat34& motion) = 0;
+    /// Name of the robot model
+    const std::string& getName() const { return name; }
 
-            ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
-            virtual std::vector<float_type> movePlatformNeutral(const Mat34 motion) = 0;
+    ///Compute configuration of the robot for the reference motion
+    std::vector<float_type> movePlatform(const Mat34& motion);
 
-            ///Compute force in each joint of the legs, input configuration of the robot
-            virtual std::vector<float_type> computeCompliance(std::vector<float_type>) = 0;
+    ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
+    std::vector<float_type> movePlatformNeutral(const Mat34 motion);
 
-            /// Virtual descrutor
-            virtual ~Robot() {}
+    ///Compute force in each joint of the legs, input configuration of the robot
+    std::vector<float_type> computeCompliance(std::vector<float_type>);
+private:
 
-        protected:
-            /// Robot type
-            Type type;
-
-            /// Robot name
-            const std::string name;
-    };
 };
+
+#endif
+
+
