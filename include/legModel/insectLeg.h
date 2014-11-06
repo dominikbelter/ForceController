@@ -36,7 +36,39 @@ class InsectLeg : public Leg
 		InsectLeg(void);
 			
 		/// Construction
-		InsectLeg(std::string configFilename) : Leg(configFilename, "Insect Leg", TYPE_INSECT){};
+		InsectLeg(std::string configFilename) : Leg(configFilename, "Insect Leg", TYPE_INSECT)
+		{
+		  tinyxml2::XMLDocument config;
+		  std::string filename = "../../resources/" + configFilename;
+		  config.LoadFile(filename.c_str());
+		  if (config.ErrorID())
+		  {
+		      std::cout << "unable to load Kinematic config file.\n";
+		  }
+		  else
+		  {
+		      tinyxml2::XMLElement * parameters = config.FirstChildElement( "parameters" );
+		      int param;
+		      parameters->QueryIntAttribute("linksNo", &param); linksNo = param;
+		      parameters->QueryIntAttribute("jointsNo", &param); jointsNo = param;
+
+		      float_type paramf;
+		      parameters = config.FirstChildElement("Link0");
+		      parameters = parameters->FirstChildElement( "parameters" );
+		      parameters->QueryDoubleAttribute("length", &paramf); lengths[0] = paramf;
+		      parameters = config.FirstChildElement("Link1");
+		      parameters = parameters->FirstChildElement( "parameters" );
+		      parameters->QueryDoubleAttribute("length", &paramf); lengths[1] = paramf;
+		      parameters = config.FirstChildElement("Link2");
+		      parameters = parameters->FirstChildElement( "parameters" );
+		      parameters->QueryDoubleAttribute("length", &paramf); lengths[2] = paramf;
+
+		      std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
+		      std::cout << "Lenght1: " << lengths[0] << std::endl;
+		      std::cout << "Lenght2: " << lengths[1] << std::endl;
+		      std::cout << "Lenght3: " << lengths[2] << std::endl;
+		  }
+		}
 	
 		/// Destructor
 		~InsectLeg(void);
@@ -54,7 +86,14 @@ class InsectLeg : public Leg
 		std::vector<float_type> inverseKinematic(Mat34 linkPose, unsigned int linkNo = -1);
 
 	private:
+		/// number of joints
+		unsigned int jointsNo;
 
+                /// Number of links
+                unsigned int linksNo;
+
+                ///
+                float_type lengths[3];
 
 };
 
