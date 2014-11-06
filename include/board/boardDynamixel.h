@@ -13,14 +13,18 @@
 #include <memory>
 #include <mutex>
 
+
 namespace controller {
+
     /// create a single board controller (with usb2dynamixel)
     Board* createBoardDynamixel(void);
 };
 
 using namespace controller;
 
-/// Board implementation
+/**
+ * \brief Board implementation.
+ */
 class BoardDynamixel : public Board {
     public:
         /// Pointer
@@ -31,86 +35,254 @@ class BoardDynamixel : public Board {
 
         /// Destructor
         ~BoardDynamixel(void);
-
-        /// Set reference position value for servomotor, returns error value
+        /**
+         * \brief Set reference position value for servomotor.
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param angle Angle value.
+         * \return Return error value.
+         */
         unsigned int setPosition(unsigned char legNo, unsigned char jointNo, float_type angle);
-        /// Set reference position value for servomotors, returns error value
+        /**
+         * \brief Set reference position value for all serwomotors in particular leg.
+         * \param legNo Leg number.
+         * \param &angle Vector of joint angles.
+         * \return Return error value.
+         */
         unsigned int setPosition(unsigned char legNo, const std::vector<float_type>& angle);
-        /// Set reference position value for servomotors, returns error value
+        /**
+         * \brief Set reference position value for all serwomotors.
+         * \param &angle Vector of joint angles.
+         * \return Return error value.
+         */
         unsigned int setPosition(const std::vector<float_type>& angle);
-
-        /// Set reference speed value for servomotor, returns error value
+        /**
+         * \brief Set reference speed value for servomotor.
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param speed Speed value.
+         * \return Return error value.
+         */
         unsigned int setSpeed(unsigned char legNo, unsigned char jointNo, float_type speed);
-        /// Set reference speed value for servomotors, returns error value
+        /**
+         * \brief Set reference speed value for all serwomotors in particular leg.
+         * \param legNo Leg number.
+         * \param &speed Vector of joint speeds.
+         * \return Return error value.
+         */
         unsigned int setSpeed(unsigned char legNo, const std::vector<float_type>& speed);
-        /// Set reference speed value for servomotors, returns error value
+        /**
+         * \brief Set reference speed value for all serwomotors.
+         * \param &speed Vector of joint speeds.
+         * \return Return error value.
+         */
         unsigned int setSpeed(const std::vector<float_type>& speed);
-
-        /// Set compliance margin [0,254]- dead zone -- for this area the torque is zero, returns error value
+        /**
+         * \brief Set compliance margin for servomotor.
+         * \details [0,254]- dead zone -- for this area the torque is zero.
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param margin Compliance margin.
+         * \return Return error value.
+         */
         unsigned int setComplianceMargin(unsigned char legNo, unsigned char jointNo, float_type margin);
-        /// Set compliance margins [0,254]- dead zone -- for this area the torque is zero, returns error value
+        /**
+         * \brief Set compliance margins for all serwomotors in particular leg.
+         * \details [0,254]- dead zone -- for this area the torque is zero, returns error value
+         * \param legNo Leg number
+         * \param margin Vector of compliance margins.
+         * \return Return error value.
+         */
         unsigned int setComplianceMargin(unsigned char legNo, const std::vector<float_type> margin);
-        /// Set compliance margins [0,254]- dead zone -- for this area the torque is zero, returns error value
+        /**
+         * \brief Set compliance margins for all serwomotors.
+         * \param margin Vector of compliance margins.
+         * \return Return error value.
+         */
         unsigned int setComplianceMargin(const std::vector<float_type> margin);
 
-        /// Set compiance slope [1,254] - the area with the reduced torque, returns error value
+
+        /**
+         * \brief Set compliance slope for serwomotor.
+         * \details [1,254] - the area with the reduced torque
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param slope Compiance slope.
+         * \return Return error value.
+         */
         unsigned int setComplianceSlope(unsigned char legNo, unsigned char jointNo, float_type slope);
-        /// Set compiance slope [1,254] - the area with the reduced torque, returns error value
+
+        /**
+         * \brief Set compliance slope for all serwomotors in particular leg.
+         * \details [1,254]- the area with the reduced torque.
+         * \param legNo Leg number.
+         * \param &slope Vector of compilace slopes.
+         * \return Return error value.
+         */
         unsigned int setComplianceSlope(unsigned char legNo, const std::vector<float_type>& slope);
-        /// Set compiance slope [1,254] - the area with the reduced torque, returns error value
+        /**
+         * \brief Set compliance slope for all serwomotors.
+         * \details [1,254]- the area with the reduced torque.
+         * \param &slope Vector of compilace slopes.
+         * \return Return error value.
+         */
         unsigned int setComplianceSlope(const std::vector<float_type>& slope);
 
-        /// Set torque limit torque_limit [0,1023] - the torque limit, returns error value
+        /**
+         * \brief Set torque limit for serwomotor.
+         * \details [0,1023] - the torque limit.
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param torqueLimit Torque limit.
+         * \return Return error value.
+         */
         unsigned int setTorqueLimit(unsigned char legNo, unsigned char jointNo, float_type torqueLimit);
-        /// Set torque limit torque_limit [0,1023] - the torque limit, returns error value
+
+        /**
+         * \brief Set torque limit for serwomotors in particular leg.
+         * \details [0,1023] - the torque limit for servos.
+         * \param legNo Leg number.
+         * \param &torqueLimit Vector of Torque limits.
+         * \return Return error value.
+         */
         unsigned int setTorqueLimit(unsigned char legNo, const std::vector<float_type>& torqueLimit);
-        /// Set torque limit torque_limit [0,1023] - the torque limit, returns error value
+
+        /**
+         * \brief Set torque limit for serwomotors.
+         * \details [0,1023] - the torque limit for servos.
+         * \param &torqueLimit Vector of Torque limits.
+         * \return Return error value.
+         */
         unsigned int setTorqueLimit(const std::vector<float_type>& torqueLimit);
 
-        /// Returns current position of the servomotor, returns error value
+        /**
+         * \brief Returns current position of the servomotor.
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param &angle Angle value.
+         * \return Return error value.
+         */
         unsigned int readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle);
-        /// Returns current position of the servomotors, returns error value
+
+        /**
+         * \brief Returns current position of the servomotors in particular leg.
+         * \param legNo Leg number.
+         * \param &angle Angle values.
+         * \return Return error value.
+         */
         unsigned int readPositions(unsigned char legNo, const std::vector<float_type>& angle);
-        /// Returns current position of the servomotor, returns error value
+
+        /**
+         * \brief Returns current position of the servomotors.
+         * \param &angle Angle values.
+         * \return Return error value.
+         */
         unsigned int readPosition(const std::vector<float_type>& angle);
 
-        /// Returns contact force from 1-axis force sensor
+        /**
+         * \brief Returns contact force from 3-axis force sensor in particular leg.
+         * \param legNo Leg number.
+         * \param &contactForce Contact force value.
+         * \return Return error value.
+         */
         unsigned int readForce(unsigned char legNo, float_type& contactForce);
-        /// Returns contact force from 1-axis force sensor
+
+        // Niepotrzebna funkcja - nie ruszać.
+        /**
+         * \brief Returns contact forces from 3-axis force sensors.
+         * \param &contactForce Contact force value.
+         * \return Return error value.
+         */
         unsigned int readForce(const std::vector<float_type>& contactForce);
 
+        // Niepotrzebna funkcja - nie ruszać.
         /// Returns contact force from 3-axis torque/force sensor
         unsigned int readTorqueForce(unsigned char legNo, TorqueForce& valueTF);
+
+        // Niepotrzebna funkcja - nie ruszać.
         /// Returns contact force from 3-axis torque/force sensor
         unsigned int readTorqueForce(const std::vector<float_type>& valueTF);
 
+        // Niepotrzebna funkcja - nie ruszać.
         /// Returns contact or from microswitch
         bool readContact(unsigned char legNo);
+
+        // Niepotrzebna funkcja - nie ruszać.
         /// Returns contact or from microswitches
         void readContact(const std::vector<bool> contact);
 
-        /// Returns current from servo
+        /**
+         * \brief Returns current value from servo.
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param &servoCurrent Current value.
+         * \return Return error value.
+         */
         unsigned int readCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent);
-        /// Returns current from servo
+
+        /**
+         * \brief Returns current values from servos in particular leg.
+         * \param legNo Leg number.
+         * \param &servoCurrent Current values.
+         * \return Return error value.
+         */
         unsigned int readCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent);
-        /// Returns current from servo
+
+        /**
+         * \brief Returns current value from servos.
+         * \param &servoCurrent Current values.
+         * \return Return error value.
+         */
         unsigned int readCurrent(const std::vector<float_type>& servoCurrent);
 
-        /// Returns torque/load from servo
+        /**
+         * \brief Returns torque(load) value from servo.
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param &servoTorque Torque(load) value.
+         * \return Return error value.
+         */
         unsigned int readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque);
-        /// Returns torque/load from servo
+
+        /**
+         * \brief Returns torque(load) value from servos in particular leg.
+         * \param legNo Leg number.
+         * \param &servoTorque Torque(load) values.
+         * \return Return error value.
+         */
         unsigned int readTorque(unsigned char legNo, const std::vector<float_type>& servoTorque);
-        /// Returns torque/load from servo
+
+        /**
+         * \brief Returns torque(load) value from servos.
+         * \param &servoTorque Torque(load) values.
+         * \return Return error value.
+         */
         unsigned int readTorque(const std::vector<float_type>& servoTorque);
 
-        /// Set servo Offset
+        /**
+         * \brief Returns servo's offset.
+         * \param legNo Leg number.
+         * \param jointNo Joint number.
+         * \param offset Offset value.
+         * \return Return error value.
+         */
         void setOffset(unsigned char legNo, unsigned char jointNo, float_type offset);
-        /// Set servo Offset
+        /**
+         * \brief Returns offset of servos in particular leg.
+         * \param legNo Leg number.
+         * \param offset Vector of offset values.
+         * \return Return error value.
+         */
         void setOffset(unsigned char legNo, const std::vector<float_type> offset);
-        /// Set servo Offset
+        /**
+         * \brief Returns offset of servos.
+         * \param offset Vector of offset values.
+         * \return Return error value.
+         */
         void setOffset(const std::vector<float_type> offset);
-
-        /// Board configuration -- set default value
+        /**
+         * \brief Set default value.
+         */
         void setDefault(void);
 
     private:
