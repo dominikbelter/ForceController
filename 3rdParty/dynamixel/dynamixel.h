@@ -36,6 +36,10 @@
 #define COMM_RXTIMEOUT		(6)
 #define COMM_RXCORRUPT		(7)
 
+/**
+ * \brief   The CDynamixel class - Comunication with motors and methods of control.
+ **/
+
 class CDynamixel {
     public :
         CDynamixel(void);
@@ -58,7 +62,7 @@ class CDynamixel {
         int dxl_get_rxpacket_parameter(int index);
 
 
-        // utility for value
+        /// utility for value
         int dxl_makeword(int lowbyte, int highbyte);
         int dxl_get_lowbyte(int word);
         int dxl_get_highbyte(int word);
