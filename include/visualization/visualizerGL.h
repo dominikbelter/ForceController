@@ -4,7 +4,7 @@
 */
 /**
 * @author Tomasz Walczewski
-* @author Sebastian Drogowski
+* @author Sebastian Sebulba Drogowski
 * @mainpage
 */
 #ifndef _VISUALIZERGL_H_

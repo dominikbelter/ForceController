@@ -1,7 +1,10 @@
-//Jerzy Wiatrow
-//Emil Waledziak
-//Maciej Okoniewski
-//Marcin Zgolinski
+/**
+* @author Maciej Okoniewski
+* @author Emil Waledziak
+* @author Jerzy Wiatrow
+* @author Marcin Zgolinski
+* @mainpage
+*/
 
 #ifndef _ROBOTMESSOR_H_INCLUDED
 #define _ROBOTMESSOR_H_INCLUDED
