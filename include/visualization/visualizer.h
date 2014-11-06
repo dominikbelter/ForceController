@@ -24,30 +24,31 @@ namespace controller {
     class Visualizer {
         public:
 
-            /// Visualizer type
+            ///@param Visualizer type
             enum Type {
                 /// Insect
                 TYPE_GL,
             };
 
-            // overloaded constructor
+            /// overloaded constructor
             Visualizer(const std::string _name, Type _type) : name(_name), type(_type) {}
 
             Visualizer(std::string configFilename, const std::string _name, Type _type) : name(_name), type(_type){
 
             }
 
-			/**
-			* Returns the name of the object
+			/** Name of the Robot
+			* @param string name
 			*/
             virtual const std::string& getName() const { return name; }
 
-			/**
-			* Drawing robot
+			/** Drawing a robot
+			* @param Mat34 robotPose
+			* @param vector<float_type> configuration
 			*/
             virtual void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) = 0;
 
-            // Virtual descrutor
+            /// Virtual descrutor
             virtual ~Visualizer() {}
 
         protected:

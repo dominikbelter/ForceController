@@ -4,7 +4,7 @@
 */
 /**
 * @author Tomasz Walczewski
-* @author Sebastian Sebulba Drogowski
+* @author Sebastian Drogowski
 * @mainpage
 */
 #ifndef _VISUALIZERGL_H_
@@ -26,7 +26,7 @@ namespace controller {
 
 using namespace controller;
 
-	/// Visualizer interface
+	/// VisualizerGL interface
 	class VisualizerGL : public Visualizer {
 	public:
 
@@ -34,18 +34,23 @@ using namespace controller;
 		/// Pointer
 		typedef std::unique_ptr<VisualizerGL> Ptr;
 
-		// overloaded constructor
+		/// overloaded constructor
 		VisualizerGL(const std::string _name) : Visualizer(_name, TYPE_GL) {};
 
 		VisualizerGL(std::string configFilename, const std::string _name) : Visualizer(configFilename, _name, TYPE_GL) {}
 
-		// Name of the Visualizer
+		/** Name of the Robot
+		* @param string name
+		*/
 		const std::string& getName() const { return name; }
 
-		//Compute torque in each joint for given the force applied in the foot
+		/** Drawing a robot
+		* @param Mat34 robotPose
+		* @param vector<float_type> configuration
+		*/
 		void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration);
 
-		// Virtual descrutor
+		/// Virtual descrutor
 		~VisualizerGL() {}
 
 	};
