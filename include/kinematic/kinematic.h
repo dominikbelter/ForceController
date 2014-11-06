@@ -3,6 +3,12 @@
  * Kinematic interface
  *
  */
+ 
+ /**
+* @author Adam Czeszejkowski
+* @author Norbert Werbliñski
+* @mainpage
+*/
 
 #ifndef _KINEMATIC_H_
 #define _KINEMATIC_H_
@@ -43,17 +49,43 @@ namespace controller {
                     std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
                 }
             }
-
-            /// Name of the kienematic model
+            
+             /** Name of the kienematic model
+             *
+             * 
+             *@return name Nazwa pliku
+             *
+             */
             virtual const std::string& getName() const { return name; }
-
-            /// Compute forward kinematic, default (-1) -- the last joint
+            
+            /** Compute forward kinematic, default (-1) -- the last joint
+             *
+             * 
+             *@param [in] configuration Wektor wspolrzednych wewnetrznych
+             *@param [in] linkNo Numer ogniwa
+             *@return Macierz rotacji i translacji
+             *
+             */
+            
             virtual Mat34 forwardKinematic(const std::vector<float_type>& configuration, unsigned int linkNo=-1) = 0;
 
-            /// Compute forward kinematic, default (-1) -- the last joint
+             /** Compute inverse kinematic, default (-1) -- the last joint
+              *
+              * 
+              *@param [in] linkPose Macierz translacji i rotacji
+              *@param [in] linkNo Numer ogniwa
+              *@return Wektor wspolrzednych konfiguracyjnych
+              *
+              */
             virtual std::vector<float_type> inverseKinematic(const Mat34& linkPose, unsigned int linkNo=-1) = 0;
 
-            /// Return set of link's poses
+             /** Return set of link's poses
+             *
+             * 
+             *@param [in] configuration Wektor wspolrzednych wewnetrznych
+             *@return Macierz rotacji i translacji
+             *
+             */
             virtual std::vector<Mat34> getState(const std::vector<float_type>& configuration) = 0;
 
             /// Virtual descrutor
