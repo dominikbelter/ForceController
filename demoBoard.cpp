@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdio.h>
 // test Ubuntu Limek
-// Limek - Micha≥ LimaÒski 123
+// Limek - Micha≈Ç Lima≈Ñski 123
 
 // Limek
 //pelka
