@@ -45,7 +45,7 @@ namespace controller {
             ///Compute configuration of the robot for the reference motion
             /**
             * @param motion - specified motion
-            * @return tmp
+            * @return tmp (DB: wyjasnic co dokladnie jest zwracane np. wektor wartosci zadanych dla serwomechanizmow)
             */
             virtual std::vector<float_type> movePlatform(const Mat34& motion) = 0;
 
