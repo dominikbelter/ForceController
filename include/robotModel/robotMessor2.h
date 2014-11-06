@@ -32,14 +32,14 @@ public:
 
     ///Compute configuration of the robot for the reference motion
     /**
-    * @param motion
+    * @param motion - specified motion
     * @return tmp
     */
     std::vector<float_type> movePlatform(const Mat34& motion);
 
     ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
     /**
-    * @param motion
+    * @param motion - specified motion
     * @return tmp
     */
     std::vector<float_type> movePlatformNeutral(const Mat34 motion);
