@@ -56,6 +56,9 @@ namespace controller {
             */
             virtual std::vector<float_type> movePlatformNeutral(const Mat34 motion) = 0;
 
+            /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)
+            virtual std::vector<Mat34> conputeLinksPosition(std::vector<float_type> configuration) = 0;
+
             ///Compute force in each joint of the legs, input configuration of the robot
             /**
             * @param vector<float_type>

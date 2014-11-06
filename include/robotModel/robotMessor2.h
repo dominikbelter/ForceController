@@ -44,6 +44,9 @@ public:
     */
     std::vector<float_type> movePlatformNeutral(const Mat34 motion);
 
+    /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)
+    std::vector<Mat34> conputeLinksPosition(std::vector<float_type> configuration);
+
     ///Compute force in each joint of the legs, input configuration of the robot
     /**
     * @param vector<float_type>
