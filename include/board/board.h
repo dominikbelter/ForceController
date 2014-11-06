@@ -31,7 +31,6 @@ namespace controller {
             /// Name of the board
             virtual const std::string& getName() const { return name; }
 
-            /// Set reference position value for servomotor, returns error value
             virtual unsigned int setPosition(unsigned char legNo, unsigned char jointNo, float_type angle) = 0;
             /// Set reference position value for servomotors, returns error value
             virtual unsigned int setPosition(unsigned char legNo, const std::vector<float_type>& angle) = 0;
