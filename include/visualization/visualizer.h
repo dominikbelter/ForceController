@@ -30,20 +30,24 @@ namespace controller {
                 TYPE_GL,
             };
 
-            /// overloaded constructor
+            // overloaded constructor
             Visualizer(const std::string _name, Type _type) : name(_name), type(_type) {}
 
             Visualizer(std::string configFilename, const std::string _name, Type _type) : name(_name), type(_type){
 
             }
 
-            /// Name of the Visualizer
+			/**
+			* Returns the name of the object
+			*/
             virtual const std::string& getName() const { return name; }
 
-            ///Compute torque in each joint for given the force applied in the foot
+			/**
+			* Drawing robot
+			*/
             virtual void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) = 0;
 
-            /// Virtual descrutor
+            // Virtual descrutor
             virtual ~Visualizer() {}
 
         protected:
