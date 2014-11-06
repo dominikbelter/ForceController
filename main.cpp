@@ -25,6 +25,17 @@ int main( int argc, const char** argv )
          Kinematic* kinematicModel;
          kinematicModel = createKinematicLie("../resources/legModel.xml");
          std::cout << "Kinematic type: " << kinematicModel->getName() << "\n";
+
+         Robot* robot;
+         robot = createRobotMessor("Messor2");
+         std::cout << "Robot name: " << robot->getName() << "\n";
+
+         Mat34 destinationMatrix; // where do the values come from?
+         std::vector<float_type> destinationConfiguration = robot->movePlatform(destinationMatrix);
+         board->setPosition(destinationConfiguration);
+
+         std::vector<float_type> destinationCompliance = robot->computeCompliance(destinationConfiguration);
+         board->setTorqueLimit(destinationCompliance);
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
