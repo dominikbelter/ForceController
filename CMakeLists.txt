@@ -107,6 +107,20 @@ add_library(dynamixel STATIC ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/dynamixel/dyna
 
 ###############################################################################
 #
+# Irrlicht library
+#
+###############################################################################
+FIND_PACKAGE(X11)
+FIND_PACKAGE(ZLIB)
+
+INCLUDE_DIRECTORIES(
+   "/usr/include/irrlicht"
+   ${X11_INCLUDE_DIR}
+   ${ZLIB_INCLUDE_DIR}
+)
+
+###############################################################################
+#
 # defs library
 #
 ###############################################################################
@@ -314,7 +328,7 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION)
 
         SET(DEMO_VISUALIZATION_SOURCES ./demoVisualization.cpp)
         ADD_EXECUTABLE(demoVisualization ${DEMO_VISUALIZATION_SOURCES})
-        TARGET_LINK_LIBRARIES(demoVisualization Leg Board Robot Visualization)
+        TARGET_LINK_LIBRARIES(demoVisualization Leg Board Robot Visualization ${X11_LIBRARIES} ${ZLIB_LIBRARIES} "/usr/lib/x86_64-linux-gnu/libIrrlicht.so")
         INSTALL(TARGETS demoVisualization RUNTIME DESTINATION bin)
         INSTALL(FILES ${DEMO_VISUALIZATION_FILES} DESTINATION bin)
 
