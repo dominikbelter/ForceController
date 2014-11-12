@@ -39,36 +39,36 @@ int main(int argc, const char** argv)
 	//Zasiêg pola widzenia kamery
 	//kam->setFarValue( 90000 );
 	//Wczytywanie modelu
-	IAnimatedMesh * coxa = menage->getMesh("/home/tomlock/Desktop/ForceController/src/visualization/coxa.stl");
+	IAnimatedMesh * coxa = menage->getMesh("resources/coxa.stl");
 	IAnimatedMeshSceneNode * cx = menage->addAnimatedMeshSceneNode(coxa);
 	IAnimatedMeshSceneNode * cx2 = menage->addAnimatedMeshSceneNode(coxa);
 	cx->setScale(core::vector3df(-30, -30, -30));
 	cx->setPosition(core::vector3df(0, 0, 0));
 	cx->setMaterialFlag(video::EMF_LIGHTING, false);
-	cx->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
+	//cx->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 
 	cx2->setScale(core::vector3df(-30, -30, -30));
 	cx2->setPosition(core::vector3df(0, 300, 0));
 	cx2->setMaterialFlag(video::EMF_LIGHTING, false);
-	cx2->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
+	//cx2->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 
-	IAnimatedMesh * vitulus = menage->getMesh("/home/tomlock/Desktop/ForceController/src/visualization/vitulus.stl");
+	IAnimatedMesh * vitulus = menage->getMesh("resources/vitulus.stl");
 	IAnimatedMeshSceneNode * vit = menage->addAnimatedMeshSceneNode(vitulus);
 	vit->setScale(core::vector3df(-30, -30, -30));
 	vit->setRotation(core::vector3df(90, 90, 0));
 	vit->setPosition(core::vector3df(200, 0, 0));
 	vit->setMaterialFlag(video::EMF_LIGHTING, false);
-	vit->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
+	//vit->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 
-	IAnimatedMesh * femur = menage->getMesh("/home/tomlock/Desktop/ForceController/src/visualization/femur.stl");
+	IAnimatedMesh * femur = menage->getMesh("resources/femur.stl");
 	IAnimatedMeshSceneNode * fe = menage->addAnimatedMeshSceneNode(femur);
 	fe->setScale(core::vector3df(-30, -30, -30));
 	fe->setRotation(core::vector3df(90, 90, 0));
 	fe->setPosition(core::vector3df(200, 300, 0));
 	fe->setMaterialFlag(video::EMF_LIGHTING, false);
-	fe->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
+	//fe->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 	// wczytywanie korpusu
-	IAnimatedMesh * korpus = menage->getMesh("/home/tomlock/Desktop/ForceController/src/visualization/korpus2.stl");
+	IAnimatedMesh * korpus = menage->getMesh("resources/korpus2.stl");
 	IAnimatedMeshSceneNode * kor = menage->addAnimatedMeshSceneNode(korpus);
 	kor->setScale(core::vector3df(-30, -30, -30));
 	kor->setRotation(core::vector3df(90, 90, 0));
