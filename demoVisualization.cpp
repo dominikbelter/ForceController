@@ -39,7 +39,7 @@ int main(int argc, const char** argv)
 	//Zasiêg pola widzenia kamery
 	//kam->setFarValue( 90000 );
 	//Wczytywanie modelu
-	IAnimatedMesh * coxa = menage->getMesh("resources/coxa.stl");
+	IAnimatedMesh * coxa = menage->getMesh("../../resources/coxa.stl");
 	IAnimatedMeshSceneNode * cx = menage->addAnimatedMeshSceneNode(coxa);
 	IAnimatedMeshSceneNode * cx2 = menage->addAnimatedMeshSceneNode(coxa);
 	cx->setScale(core::vector3df(-30, -30, -30));
@@ -52,7 +52,7 @@ int main(int argc, const char** argv)
 	cx2->setMaterialFlag(video::EMF_LIGHTING, false);
 	//cx2->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 
-	IAnimatedMesh * vitulus = menage->getMesh("resources/vitulus.stl");
+	IAnimatedMesh * vitulus = menage->getMesh("../../resources/vitulus.stl");
 	IAnimatedMeshSceneNode * vit = menage->addAnimatedMeshSceneNode(vitulus);
 	vit->setScale(core::vector3df(-30, -30, -30));
 	vit->setRotation(core::vector3df(90, 90, 0));
@@ -60,7 +60,7 @@ int main(int argc, const char** argv)
 	vit->setMaterialFlag(video::EMF_LIGHTING, false);
 	//vit->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 
-	IAnimatedMesh * femur = menage->getMesh("resources/femur.stl");
+	IAnimatedMesh * femur = menage->getMesh("../../resources/femur.stl");
 	IAnimatedMeshSceneNode * fe = menage->addAnimatedMeshSceneNode(femur);
 	fe->setScale(core::vector3df(-30, -30, -30));
 	fe->setRotation(core::vector3df(90, 90, 0));
@@ -68,7 +68,7 @@ int main(int argc, const char** argv)
 	fe->setMaterialFlag(video::EMF_LIGHTING, false);
 	//fe->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 	// wczytywanie korpusu
-	IAnimatedMesh * korpus = menage->getMesh("resources/korpus2.stl");
+	IAnimatedMesh * korpus = menage->getMesh("../../resources/korpus2.stl");
 	IAnimatedMeshSceneNode * kor = menage->addAnimatedMeshSceneNode(korpus);
 	kor->setScale(core::vector3df(-30, -30, -30));
 	kor->setRotation(core::vector3df(90, 90, 0));
