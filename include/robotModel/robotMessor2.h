@@ -25,7 +25,9 @@ using namespace controller;
 class RobotMessor: public Robot
 {
 public:
-
+    /// Pointer
+    typedef std::unique_ptr<Robot> Ptr;
+    RobotMessor(void);
 
     /// Name of the robot model
     const std::string& getName() const { return name; }
@@ -53,6 +55,8 @@ public:
     * @return tmp
     */
     std::vector<float_type> computeCompliance(std::vector<float_type>);
+
+    ~RobotMessor(void);
 private:
 
 };

@@ -6,6 +6,17 @@ using namespace controller;
 
 
 
+RobotMessor::Ptr RobotMessor;
+
+RobotMessor::RobotMessor(void) : Robot("robot Messor", TYPE_MESSOR2)
+{
+
+}
+
+RobotMessor::~RobotMessor(void)
+{
+
+}
 
 ///Compute configuration of the robot for the reference motion
 std::vector<float_type> movePlatform(const Mat34& motion)
