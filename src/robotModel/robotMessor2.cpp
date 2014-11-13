@@ -6,12 +6,13 @@ using namespace controller;
 
 
 
-RobotMessor::Ptr RobotMessor;
+RobotMessor::Ptr robotmessor;
 
-RobotMessor::RobotMessor(void) : Robot("robot Messor", TYPE_MESSOR2)
+RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 {
 
 }
+
 
 RobotMessor::~RobotMessor(void)
 {
@@ -46,3 +47,13 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
       return tmp;
 
 }
+
+ controller::Robot* controller::createRobotMessor(void) {
+     robotmessor.reset(new RobotMessor());
+     return robotmessor.get();
+ }
+
+ controller::Robot* controller::createRobotMessor(std::string filename) {
+     robotmessor.reset(new RobotMessor(filename));
+     return robotmessor.get();
+ }
