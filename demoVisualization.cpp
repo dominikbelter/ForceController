@@ -10,40 +10,62 @@
 // sudo apt-get install libIrrlicht1.8 libIrrlicht-dev
 
 using namespace std;
-
-
 using namespace irr;
-
 using namespace core;
 using namespace scene;
 using namespace video;
 using namespace io;
 using namespace gui;
 
+// Tworzymy klase
+class Klawisze
+	: public IEventReceiver
+{
+public:
+	virtual bool OnEvent(const SEvent & event)
+	{
+		//  Zapamiêtuje po³o¿enie klawisza (klucza) (góra/dó³)
+		if (event.EventType == irr::EET_KEY_INPUT_EVENT)
+			KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
+
+		return false;
+	}
+	// Sprawdza czy klawisz (klucz) zosta³ u¿yty
+	virtual bool IsKeyDown(EKEY_CODE keyCode) const
+	{
+		return KeyIsDown[keyCode];
+	}
+	Klawisze()
+	{
+		for (u32 i = 0; i < KEY_KEY_CODES_COUNT; ++i)
+			KeyIsDown[i] = false;
+
+	}
+
+private:
+	// U¿ywamy by zgromadziæ aktualny stan ka¿dego klawisza (klucza)
+	bool KeyIsDown[KEY_KEY_CODES_COUNT];
+};
 
 
 int main(int argc, const char** argv)
 {
-
+	Klawisze aktywne;
 	int a1, b1, a2, b2, a3, b3, a4, b4, a5, b5;
 
 	IrrlichtDevice *device =
 		createDevice(video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,
-		false, false, false, 0);
+		false, false, false, &aktywne);
 	if (!device)
 		return 1;
 
 	video::IVideoDriver * video = device->getVideoDriver();
 	scene::ISceneManager * menage = device->getSceneManager();
 	scene::ICameraSceneNode * kam = menage->addCameraSceneNode();
-
-
-	//device->getCursorControl(false);
 	device->getCursorControl()->setVisible(false);
-	kam->setPosition(core::vector3df(-50, 50, -50));
-	//kam->setPosition( core::vector3df( -20, 20, -30) );
-	//Zasiêg pola widzenia kamery
+	kam->setPosition(core::vector3df(0, 0, -50));
 	kam->setFarValue(90000);
+
 	//Wczytywanie modelu
 
 	IAnimatedMesh * coxa = menage->getMesh("../../resources/coxa.stl");
@@ -136,8 +158,8 @@ int main(int argc, const char** argv)
 
 	IAnimatedMeshSceneNode * vit3 = menage->addAnimatedMeshSceneNode(vitulus);
 	vit3->setScale(core::vector3df(1, 1, 1));
-	vit3->setRotation(core::vector3df(90, 270, 180));
-	vit3->setPosition(core::vector3df(-38, 23, 0));
+	vit3->setRotation(core::vector3df(90, 90, 180));
+	vit3->setPosition(core::vector3df(-40, 24, 0));
 	vit3->setMaterialFlag(video::EMF_LIGHTING, false);
 	vit3->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 
@@ -160,8 +182,8 @@ int main(int argc, const char** argv)
 
 	IAnimatedMeshSceneNode * vit4 = menage->addAnimatedMeshSceneNode(vitulus);
 	vit4->setScale(core::vector3df(1, 1, 1));
-	vit4->setRotation(core::vector3df(90, 270, 180));
-	vit4->setPosition(core::vector3df(-38 + a4, 23, 0 + b4));
+	vit4->setRotation(core::vector3df(90, 90, 180));
+	vit4->setPosition(core::vector3df(-40 + a4, 24, 0 + b4));
 	vit4->setMaterialFlag(video::EMF_LIGHTING, false);
 	vit4->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 
@@ -184,8 +206,8 @@ int main(int argc, const char** argv)
 
 	IAnimatedMeshSceneNode * vit5 = menage->addAnimatedMeshSceneNode(vitulus);
 	vit5->setScale(core::vector3df(1, 1, 1));
-	vit5->setRotation(core::vector3df(90, 270, 180));
-	vit5->setPosition(core::vector3df(-38 + a5, 23, 0 + b5));
+	vit5->setRotation(core::vector3df(90, 90, 180));
+	vit5->setPosition(core::vector3df(-40 + a5, 24, 0 + b5));
 	vit5->setMaterialFlag(video::EMF_LIGHTING, false);
 	vit5->setMaterialTexture(0, video->getTexture("media/img/pudlo.png"));
 
@@ -209,10 +231,56 @@ int main(int argc, const char** argv)
 	while (device->run())
 
 	{
+
+		//Poruszanie do przodu i do ty³u
+		if (aktywne.IsKeyDown(irr::KEY_KEY_W))
+		{
+			core::vector3df v = kam->getPosition();
+			v.Z += 0.5f;
+			kam->setPosition(v);
+		}
+		else if (aktywne.IsKeyDown(irr::KEY_KEY_S))
+		{
+			core::vector3df v = kam->getPosition();
+			v.Z -= 0.5f;
+			kam->setPosition(v);
+		}
+		//Powiêkszanie obiektu
+		else if (aktywne.IsKeyDown(irr::KEY_KEY_D))
+		{
+			core::vector3df v = kam->getPosition();
+			v.X += 0.50f;
+			kam->setPosition(v);
+		}
+		//Obracanie obiektu
+		else if (aktywne.IsKeyDown(irr::KEY_KEY_A))
+		{
+			core::vector3df v = kam->getPosition();
+			v.X -= 0.50f;
+			kam->setPosition(v);
+		}
+		else if (aktywne.IsKeyDown(irr::KEY_UP))
+		{
+			core::vector3df v = kam->getPosition();
+			v.Y += 0.50f;
+			kam->setPosition(v);
+		}
+		else if (aktywne.IsKeyDown(irr::KEY_DOWN))
+		{
+			core::vector3df v = kam->getPosition();
+			v.Y -= 0.50f;
+			kam->setPosition(v);
+		}
+		else if (aktywne.IsKeyDown(irr::KEY_ESCAPE))
+		{
+			device->drop();
+			return 0;
+		}
 		video->beginScene(true, true, video::SColor(255, 0, 10, 200));
 		menage->drawAll();
 		video->endScene();
 	}
 	//device->drop();
 	return 0;
+
 }
