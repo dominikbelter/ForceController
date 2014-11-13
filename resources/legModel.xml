@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <!-- Messor 2 leg's properties-->
+  <!-- Messor 2 leg's properties
   <parameters linksNo="3" jointsNo="3"> </parameters>
   <Link0>
     <name>Coxa</name>
@@ -12,4 +12,52 @@
   <Link2>
     <name>Tibia</name>
     <parameters length="0.175"></parameters>
-  </Link2>
+  </Link2> -->
+
+  <!-- Zmodyfikowane parametry nogi -->
+  <parameters linksNo="3" jointsNo="3"> </parameters>
+  <Joint0>
+    <name>ksi0</name>   
+    <parameters>
+	<ksi0 type = "array">
+		<value>0</value>
+		<value>0</value>
+		<value>0</value>
+		<value>0</value>
+		<value>0</value>
+		<value>1</value>
+	</parameters>
+  </Joint0>
+  <Joint1>
+    <name>ksi1</name>   
+    <parameters>
+	<ksi1 type = "array">
+		<value>0</value>
+		<value>0</value>
+		<value>0.05</value>
+		<value>0</value>
+		<value>1</value>
+		<value>0</value>
+	</parameters>
+  </Joint1>
+  <Joint2>
+    <name>ksi2</name>   
+    <parameters>
+	<ksi1 type = "array">
+		<value>0</value>
+		<value>0</value>
+		<value>0.17</value>
+		<value>0</value>
+		<value>1</value>
+		<value>0</value>
+	</parameters>
+  </Joint2>
+  <Joint3>
+    <name>g0</name>   
+    <parameters>
+	<ksi1 type = "array">
+		<value>0,345</value>
+		<value>0</value>
+		<value>0</value>
+	</parameters>
+  </Joint3>
