@@ -302,66 +302,79 @@ int main(int argc, const char** argv)
 			v.Z += 1.0f;
 			vit2->setRotation(v);
 		}
+		//front right leg test
 		else if (active.IsKeyDown((irr::KEY_KEY_H)))
 		{
-			core::vector3df v = vit1->getRotation();
+			core::vector3df v = vit->getRotation();
 			v.Z -= 1.0f;
-			vit1->setRotation(v);
+			vit->setRotation(v);
 		}
 		else if (active.IsKeyDown((irr::KEY_KEY_J)))
 		{
-			core::vector3df v = vit1->getRotation();
+			core::vector3df v = vit->getRotation();
 			v.Z += 1.0f;
-			vit1->setRotation(v);
+			vit->setRotation(v);
 		}
 		else if (active.IsKeyDown((irr::KEY_KEY_N)))
 		{
-			core::vector3df v = vit->getRotation();
+			core::vector3df v = fe->getRotation();
+			core::vector3df x = fe->getPosition();
+			core::vector3df w = vit->getRotation();
+			w.Z -= 1.0f;
 			v.Z -= 1.0f;
-			vit->setRotation(v);
+			fe->setRotation(v);
+			vit->setRotation(w);
+			vit->setPosition(core::vector3df(6 + 11.7*sin((v.Z + 25.7)*PI / 180), -11.7*cos((v.Z + 25.7)*PI / 180), x.Z));
 		}
 		else if (active.IsKeyDown((irr::KEY_KEY_M)))
 		{
-			core::vector3df v = vit->getRotation();
+			core::vector3df v = fe->getRotation();
+			core::vector3df x = fe->getPosition();
+			core::vector3df w = vit->getRotation();
 			v.Z += 1.0f;
-			vit->setRotation(v);
+			w.Z += 1.0f;
+			fe->setRotation(v);
+			vit->setRotation(w);
+			vit->setPosition(core::vector3df(6 + 11.7*sin((v.Z + 25.7)*PI / 180), -11.7*cos((v.Z + 25.7)*PI / 180), x.Z));
 		}
 		//-------left side
-		else if (active.IsKeyDown((irr::KEY_KEY_T)))
-		{
-			core::vector3df v = vit5->getRotation();
-			v.Z += 1.0f;
-			vit5->setRotation(v);
-		}
-		else if (active.IsKeyDown((irr::KEY_KEY_R)))
-		{
-			core::vector3df v = vit5->getRotation();
-			v.Z -= 1.0f;
-			vit5->setRotation(v);
-		}
+		//front left leg test
 		else if (active.IsKeyDown((irr::KEY_KEY_G)))
 		{
-			core::vector3df v = vit4->getRotation();
+			core::vector3df v = vit3->getRotation();
 			v.Z += 1.0f;
-			vit4->setRotation(v);
+			vit3->setRotation(v);
 		}
 		else if (active.IsKeyDown((irr::KEY_KEY_F)))
 		{
-			core::vector3df v = vit4->getRotation();
+			core::vector3df v = vit3->getRotation();
 			v.Z -= 1.0f;
-			vit4->setRotation(v);
+			vit3->setRotation(v);
 		}
 		else if (active.IsKeyDown((irr::KEY_KEY_B)))
 		{
-			core::vector3df v = vit3->getRotation();
+
+			core::vector3df v = fe3->getRotation();
+			core::vector3df x = fe3->getPosition();
+			core::vector3df w = vit3->getRotation();
 			v.Z += 1.0f;
-			vit3->setRotation(v);
+			w.Z += 1.0f;
+			fe3->setRotation(v);
+			vit3->setRotation(w);
+			vit3->setPosition(core::vector3df(-(13.5 + 11.7*sin((v.Z - 25.7)*PI / 180)), 11.7*cos((v.Z - 25.7)*PI / 180), x.Z));
+
+
 		}
 		else if (active.IsKeyDown((irr::KEY_KEY_V)))
 		{
-			core::vector3df v = vit3->getRotation();
+			core::vector3df v = fe3->getRotation();
+			core::vector3df x = fe3->getPosition();
+			core::vector3df w = vit3->getRotation();
 			v.Z -= 1.0f;
-			vit3->setRotation(v);
+			w.Z -= 1.0f;
+			fe3->setRotation(v);
+			vit3->setRotation(w);
+			vit3->setPosition(core::vector3df(-(13.5 + 11.7*sin((v.Z - 25.7)*PI / 180)), 11.7*cos((v.Z - 25.7)*PI / 180), x.Z));
 		}
 		//---------------------leg test end
 		else if (active.IsKeyDown(irr::KEY_ESCAPE))
