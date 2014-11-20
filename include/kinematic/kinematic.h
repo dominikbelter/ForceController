@@ -46,11 +46,12 @@ namespace controller {
 			*/
 
             Kinematic(std::string configFilename, const std::string _name, Type _type) : name(_name), type(_type){
-				std::string filename = "../../resources/" + configFilename;
+				//std::string filename = "../../resources/" + configFilename;
+				std::string filename = "C:/Users/Norbert/Documents/GitHub/ForceController/resources/" + configFilename;
+				conf.LoadFile(filename.c_str());
 				if (conf.FirstChildElement()==nullptr)
 					std::cout << "unable to load Kinematic config file.\n";
 				else {
-					conf.LoadFile(filename.c_str());
 					tinyxml2::XMLNode * pRoot = conf.FirstChildElement("parameters");
 					float_type val;
 					switch (_type)
@@ -79,6 +80,7 @@ namespace controller {
 							pListElement = pListElement->NextSiblingElement("value");
 							g0.push_back(val);
 						}
+////////////////////////////////////////////////test/////////////////////////////////////////////////////////
 						for (int i = 0; i < linksNo; i++)
 						{
 							std::cout<<"Joint" + std::to_string(i)+": ";
@@ -104,7 +106,7 @@ namespace controller {
              /** Name of the kienematic model
              *
              * 
-             *@return name Nazwa pliku
+             *@return name Name of the kienematic model
              *
              */
             virtual const std::string& getName() const { return name; }
@@ -112,9 +114,9 @@ namespace controller {
             /** Compute forward kinematic, default (-1) -- the last joint
              *
              * 
-             *@param [in] configuration Wektor wspolrzednych wewnetrznych
-             *@param [in] linkNo Numer ogniwa
-             *@return Macierz rotacji i translacji
+             *@param [in] configuration Vector of displacements and joint angles
+             *@param [in] linkNo Link number
+             *@return Matrix of the position, orientation
              *
              */
             
@@ -123,9 +125,9 @@ namespace controller {
              /** Compute inverse kinematic, default (-1) -- the last joint
               *
               * 
-              *@param [in] linkPose Macierz translacji i rotacji
-              *@param [in] linkNo Numer ogniwa
-              *@return Wektor wspolrzednych konfiguracyjnych
+              *@param [in] linkPose Matrix of the position, orientation
+              *@param [in] linkNo Link number
+              *@return Vector of displacements and joint angles
               *
               */
             virtual std::vector<float_type> inverseKinematic(const Mat34& linkPose, unsigned int linkNo=-1) = 0;
@@ -133,8 +135,8 @@ namespace controller {
              /** Return set of link's poses
              *
              * 
-             *@param [in] configuration Wektor wspolrzednych wewnetrznych
-             *@return Macierz rotacji i translacji
+             *@param [in] configuration Vector of displacements and joint angles
+             *@return Vector of Matrix of the position, orientation for each joint
              *
              */
             virtual std::vector<Mat34> getState(const std::vector<float_type>& configuration) = 0;
@@ -143,6 +145,7 @@ namespace controller {
             virtual ~Kinematic() {
 				if (conf.FirstChildElement() != nullptr) delete[] ksi;
 			}
+
 
         protected:
             /// Board type

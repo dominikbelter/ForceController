@@ -55,9 +55,9 @@ class KinematicLie : public Kinematic {
          /** Compute forward kinematic, default (-1) -- the last joint
          *
          * 
-         *@param [in] configuration Wektor wspolrzednych wewnetrznych
-         *@param [in] linkNo Numer ogniwa
-         *@return Macierz rotacji i translacji
+         *@param [in] configuration Vector of displacements and joint angles
+         *@param [in] linkNo Link number
+         *@return Matrix of the position, orientation
          *
          */
         Mat34 forwardKinematic(const std::vector<float_type>& configuration, unsigned int linkNo=-1);
@@ -65,9 +65,9 @@ class KinematicLie : public Kinematic {
           /** Compute inverse kinematic, default (-1) -- the last joint
          *
          * 
-         *@param [in] linkPose Macierz translacji i rotacji
-         *@param [in] linkNo Numer ogniwa
-         *@return Wektor wspolrzednych konfiguracyjnych
+         *@param [in] linkPose Matrix of the position, orientation
+         *@param [in] linkNo Link number
+         *@return Vector of displacements and joint angles
          *
          */
         std::vector<float_type> inverseKinematic(const Mat34& linkPose, unsigned int linkNo=-1);
@@ -75,8 +75,8 @@ class KinematicLie : public Kinematic {
           /** Return set of link's poses
          *
          * 
-         *@param [in] configuration Wektor wspolrzednych wewnetrznych
-         *@return Macierz rotacji i translacji
+         *@param [in] configuration Vector of displacements and joint angles
+         *@return Vector of Matrix of the position, orientation for each joint
          *
          */
         std::vector<Mat34> getState(const std::vector<float_type>& configuration);
