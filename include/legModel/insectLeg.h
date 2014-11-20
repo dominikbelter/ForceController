@@ -52,7 +52,7 @@ class InsectLeg : public Leg
 		  }
 		  else
 		  {
-		      tinyxml2::XMLElement * parameters = config.FirstChildElement( "parameters" );
+              tinyxml2::XMLElement * parameters = config.FirstChildElement( "conf" );
 		      int param;
 		      parameters->QueryIntAttribute("linksNo", &param); linksNo = param;
 		      parameters->QueryIntAttribute("jointsNo", &param); jointsNo = param;
