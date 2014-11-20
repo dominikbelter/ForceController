@@ -16,7 +16,7 @@
 namespace controller {
 
                     Robot* createRobotMessor(void);
-                    Robot* createRobotMessor(std::string filename);
+                    Robot* createRobotMessor(std::string configFilename);
 
                      }
 
@@ -25,7 +25,10 @@ using namespace controller;
 class RobotMessor: public Robot
 {
 public:
-
+    /// Pointer
+    typedef std::unique_ptr<Robot> Ptr;
+    RobotMessor(void);
+    RobotMessor(std::string configFilename):Robot(configFilename, "RobotMessor", TYPE_MESSOR2){};
 
     /// Name of the robot model
     const std::string& getName() const { return name; }
@@ -50,9 +53,12 @@ public:
     ///Compute force in each joint of the legs, input configuration of the robot
     /**
     * @param vector<float_type>
-    * @return tmp
+    * @return torque
     */
     std::vector<float_type> computeCompliance(std::vector<float_type>);
+
+    ~RobotMessor(void);
+
 private:
 
 };

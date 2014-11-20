@@ -26,7 +26,7 @@ int main( int argc, const char** argv )
          kinematicModel = createKinematicLie("../resources/legModel.xml");
          std::cout << "Kinematic type: " << kinematicModel->getName() << "\n";
 
-         /*Robot* robot;
+         Robot* robot;
          robot = createRobotMessor("Messor2");
          std::cout << "Robot name: " << robot->getName() << "\n";
 
@@ -35,7 +35,7 @@ int main( int argc, const char** argv )
          board->setPosition(destinationConfiguration);
 
          std::vector<float_type> destinationCompliance = robot->computeCompliance(destinationConfiguration);
-         board->setTorqueLimit(destinationCompliance);*/
+         board->setTorqueLimit(destinationCompliance);
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;

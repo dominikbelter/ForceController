@@ -6,16 +6,28 @@ using namespace controller;
 
 
 
+RobotMessor::Ptr robotmessor;
+
+RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
+{
+
+}
+
+
+RobotMessor::~RobotMessor(void)
+{
+
+}
 
 ///Compute configuration of the robot for the reference motion
-std::vector<float_type> movePlatform(const Mat34& motion)
+std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 {
     std::vector<float_type> tmp;
      return tmp;
 }
 		
 ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
- std::vector<float_type> movePlatformNeutral(const Mat34 motion)
+ std::vector<float_type> RobotMessor::movePlatformNeutral(const Mat34 motion)
 {
      std::vector<float_type> tmp;
       return tmp;
@@ -28,10 +40,20 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
  }
 
 ///Compute force in each joint of the legs, input configuration of the robot
- std::vector<float_type> computeCompliance(std::vector<float_type>)
+ std::vector<float_type> RobotMessor::computeCompliance(std::vector<float_type>)
 {
    
-     std::vector<float_type> tmp;
-      return tmp;
+    std::vector<float_type> torque;
+      return torque;
 
 }
+
+ controller::Robot* controller::createRobotMessor(void) {
+     robotmessor.reset(new RobotMessor());
+     return robotmessor.get();
+ }
+
+ controller::Robot* controller::createRobotMessor(std::string filename) {
+     robotmessor.reset(new RobotMessor(filename));
+     return robotmessor.get();
+ }

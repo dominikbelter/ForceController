@@ -34,20 +34,71 @@ namespace controller {
 
             /// overloaded constructor
             Kinematic(const std::string _name, Type _type) : name(_name), type(_type) {};
+			/** Kinematic constructor
+			* 
+			* Structure of the target XML file:
+			* - Element "conf"
+			* - - Element "linksNo"
+			* - - Element "jointsNo"
+			* - Element "parameters"
+			* - - Element "JointX"        where X is the number of the joint(0 to jointsNo-1)
+			* - - Element "g0"
+			*/
 
             Kinematic(std::string configFilename, const std::string _name, Type _type) : name(_name), type(_type){
-                tinyxml2::XMLDocument config;
-                std::string filename = "../../resources/" + configFilename;
-                config.LoadFile(filename.c_str());
-                if (config.ErrorID())
-                    std::cout << "unable to load Kinematic config file.\n";
-                else {
-                    tinyxml2::XMLElement * parameters = config.FirstChildElement( "parameters" );
-                    int param;
-                    parameters->QueryIntAttribute("linksNo", &param); linksNo = param;
-                    parameters->QueryIntAttribute("jointsNo", &param); jointsNo = param;
-                    std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
-                }
+				std::string filename = "../../resources/" + configFilename;
+				if (conf.FirstChildElement()==nullptr)
+					std::cout << "unable to load Kinematic config file.\n";
+				else {
+					conf.LoadFile(filename.c_str());
+					tinyxml2::XMLNode * pRoot = conf.FirstChildElement("parameters");
+					float_type val;
+					switch (_type)
+					{
+					case controller::Kinematic::TYPE_LIE:
+						linksNo = std::stoi(conf.FirstChildElement("conf")->FirstChildElement("linksNo")->GetText());
+						jointsNo = std::stoi(conf.FirstChildElement("conf")->FirstChildElement("jointsNo")->GetText());
+						ksi = new std::vector<float_type>[linksNo];
+						for (int i = 0; i < linksNo; i++)
+						{
+							std::string tmp = "Joint" + std::to_string(i);
+							pElement = pRoot->FirstChildElement(tmp.c_str());
+							pListElement = pElement->FirstChildElement("value");
+							while (pListElement != nullptr)
+							{
+								parameters=pListElement->QueryDoubleText(&val);
+								pListElement = pListElement->NextSiblingElement("value");
+								ksi[i].push_back(val);
+							}
+						}
+						pElement = pRoot->FirstChildElement("g0");
+						pListElement = pElement->FirstChildElement("value");
+						while (pListElement != nullptr)
+						{
+							parameters = pListElement->QueryDoubleText(&val);
+							pListElement = pListElement->NextSiblingElement("value");
+							g0.push_back(val);
+						}
+						for (int i = 0; i < linksNo; i++)
+						{
+							std::cout<<"Joint" + std::to_string(i)+": ";
+							for (int j = 0; j < 6; j++)
+							{
+								std::cout << ksi[i][j] << " ";
+							}
+							std::cout << std::endl;
+						}
+						std::cout << "d0: ";
+						for (int j = 0; j < 3; j++)
+						{
+							std::cout << g0[j] << " ";
+						}
+						std::cout << std::endl;
+						break;
+					case controller::Kinematic::TYPE_DENAVIT_HARTNBERG:
+						break;
+					}
+				}				
             }
             
              /** Name of the kienematic model
@@ -89,7 +140,9 @@ namespace controller {
             virtual std::vector<Mat34> getState(const std::vector<float_type>& configuration) = 0;
 
             /// Virtual descrutor
-            virtual ~Kinematic() {}
+            virtual ~Kinematic() {
+				if (conf.FirstChildElement() != nullptr) delete[] ksi;
+			}
 
         protected:
             /// Board type
@@ -103,6 +156,16 @@ namespace controller {
 
             /// Number of links
             unsigned int linksNo;
+
+			//ksi tables
+			std::vector<float_type>* ksi;
+			//g0 table
+			std::vector<float_type> g0;
+
+			tinyxml2::XMLError parameters;
+			tinyxml2::XMLElement * pElement;
+			tinyxml2::XMLElement * pListElement;
+			tinyxml2::XMLDocument conf;
     };
 };
 
