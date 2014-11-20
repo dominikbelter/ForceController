@@ -43,8 +43,8 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
  std::vector<float_type> RobotMessor::computeCompliance(std::vector<float_type>)
 {
    
-    std::vector<float_type> tmp;
-      return tmp;
+    std::vector<float_type> torque;
+      return torque;
 
 }
 

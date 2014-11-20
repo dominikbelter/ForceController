@@ -53,7 +53,7 @@ public:
     ///Compute force in each joint of the legs, input configuration of the robot
     /**
     * @param vector<float_type>
-    * @return tmp
+    * @return torque
     */
     std::vector<float_type> computeCompliance(std::vector<float_type>);
 
