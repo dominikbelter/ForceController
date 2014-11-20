@@ -26,7 +26,7 @@ InsectLeg::~InsectLeg(void)
 
 /** Compute torque in each joint for given the force applied in the foot
 * @param [in] force Wskaznik na wektor sil dzialajacych w osiach x, y i z
-* @param [out] std::vector<float_type> wektor obciazen w poszczegolnych wezlach
+* @return std::vector<float_type> wektor obciazen w poszczegolnych wezlach
 */
 std::vector<float_type> InsectLeg::computLoad(Vec3& force)
 {
@@ -38,7 +38,7 @@ std::vector<float_type> InsectLeg::computLoad(Vec3& force)
 /** Compute forward kinematic, default (-1) -- the last joint
 * @param [in] configuration zmienne konfiguracyjne nogi
 * @param [in] linkNo liczba wezlow kinematycznych
-* @param [out] Mat34 macierz jednorodna nogi
+* @return Mat34 macierz jednorodna nogi
 */
 Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, unsigned int linkNo)
 {
@@ -48,7 +48,7 @@ Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, unsigne
 /** Compute inverse kinematic, default (-1) -- the last joint
 * @param [in] linkPose macierz jednorodna nogi
 * @param [in] linkNo liczba wezlow kinematycznych
-* @param [out] std::vector<float_type> zmienne konfiguracyjne nogi
+* @return std::vector<float_type> zmienne konfiguracyjne nogi
 */
 std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, unsigned int linkNo)
 {
@@ -56,7 +56,7 @@ std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, unsigned int
 }
 
 /** Bezargumentowy konstruktor obiektu typu Leg*
- * @param [out] controller::Leg* wskaznik na obiekt typu Leg
+ * @return controller::Leg* wskaznik na obiekt typu Leg
  */
 controller::Leg* controller::createInsectLeg(void) 
 {
@@ -66,7 +66,7 @@ controller::Leg* controller::createInsectLeg(void)
 
 /** Konstruktor obiektu typu Leg* przyjmujacy za argument polozenie pliku konfiguracyjnego typu xml
  * @param [in] filename wzgledna sciezka dostepu do pliku
- * @param [out] controller::Leg* wskaznik na obiekt typu Leg
+ * @return controller::Leg* wskaznik na obiekt typu Leg
  */
 controller::Leg* controller::createInsectLeg(std::string filename) 
 {
