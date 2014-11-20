@@ -2,6 +2,22 @@
 	<linksNo>3</linksNo> 
 	<jointsNo>3</jointsNo> 
   </conf>
+
+  <Link0>
+    <name>Coxa</name>
+    <parameters length="0.05"></parameters>
+  </Link0>
+
+  <Link1>
+    <name>Femur</name>
+    <parameters length="0.12"></parameters>
+  </Link1>
+
+  <Link2>
+    <name>Tibia</name>
+    <parameters length="0.175"></parameters>
+  </Link2>
+
   <parameters>
 	  <Joint0>
 		<name>ksi1</name> 
