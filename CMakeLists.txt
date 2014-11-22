@@ -115,8 +115,8 @@ FIND_PACKAGE(ZLIB)
 
 INCLUDE_DIRECTORIES(
    "/usr/include/irrlicht"
-   ${X11_INCLUDE_DIR}
-   ${ZLIB_INCLUDE_DIR}
+   #${X11_INCLUDE_DIR}
+   #${ZLIB_INCLUDE_DIR}
 )
 
 ###############################################################################
@@ -263,7 +263,7 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_BOARD)
 
         SET(DEMO_BOARD_SOURCES ./demoBoard.cpp)
         ADD_EXECUTABLE(demoBoard ${DEMO_BOARD_SOURCES})
-        TARGET_LINK_LIBRARIES(demoBoard Leg Board Robot Visualization)
+        TARGET_LINK_LIBRARIES(demoBoard Leg Board Robot Visualization dynamixel)
         INSTALL(TARGETS demoBoard RUNTIME DESTINATION bin)
         INSTALL(FILES ${DEMO_BOARD_FILES} DESTINATION bin)
 
@@ -271,7 +271,7 @@ endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_BOARD)
 
 ###############################################################################
 #
-# CONTROLLER BOARD DEMO executables
+# CONTROLLER LEG DEMO executables
 #
 ###############################################################################
 
