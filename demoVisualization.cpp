@@ -251,9 +251,10 @@ int main(int argc, const char** argv)
 
         manager->drawAll();
 
-		video->endScene();
 
+        video->endScene();
 
+//
     }
 
 
