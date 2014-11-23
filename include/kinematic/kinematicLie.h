@@ -35,7 +35,7 @@ using namespace controller;
 class KinematicLie : public Kinematic {
     public:
            
-        /** Definicja typu pointer
+        /** Type Ptr definition
         */   
         
         typedef std::unique_ptr<KinematicLie> Ptr;
@@ -44,7 +44,7 @@ class KinematicLie : public Kinematic {
         KinematicLie(void);
 
         /// Construction
-        KinematicLie(std::string configFilename) : Kinematic(configFilename, "Kienamtic Lie", TYPE_LIE){};
+        KinematicLie(std::string configFilename);
 
         /// Destructor
         ~KinematicLie(void);
@@ -82,7 +82,18 @@ class KinematicLie : public Kinematic {
         std::vector<Mat34> getState(const std::vector<float_type>& configuration);
 
     private:
-
+		//ksi tables
+		std::vector<std::vector<float_type>> ksi;
+		//g0 table
+		std::vector<float_type> g0;
+		/// number of joints
+		unsigned int jointsNo;
+		/// Number of links
+		unsigned int linksNo;
+		tinyxml2::XMLError parameters;
+		tinyxml2::XMLElement * pElement;
+		tinyxml2::XMLElement * pListElement;
+		tinyxml2::XMLDocument conf;
 
 };
 
