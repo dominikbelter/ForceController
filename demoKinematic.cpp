@@ -26,9 +26,9 @@ int main( int argc, const char** argv )
 		pose(1, 1) = 1;
 		pose(2, 2) = 1;
 		pose(3, 3) = 1;
-		pose(0, 3) = 0.05;
+		pose(0, 3) = 0.17;
 		pose(1, 3) = 0;
-		pose(2, 3) = -0.295;
+		pose(2, 3) = -0.175;
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
@@ -40,7 +40,8 @@ int main( int argc, const char** argv )
 		std::vector<float_type> tmp = demoKine->inverseKinematic(pose);
 		std::cout << "\nVector of displacements and joint angles:\n" << std::endl;
 		std::cout << "theta0 theta1 theta2" << std::endl;
-		std::cout << tmp[0] << " " << tmp[1]<<" "<<tmp[2] << std::endl;
+		std::cout << tmp[0] <<" "<<tmp[1]<<" "<<tmp[2]<< std::endl;
+		system("PAUSE");
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;

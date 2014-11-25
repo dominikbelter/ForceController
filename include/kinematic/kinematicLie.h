@@ -44,7 +44,7 @@ class KinematicLie : public Kinematic {
         KinematicLie(void);
 
         /// Construction
-        KinematicLie(std::string configFilename);
+		KinematicLie(std::string configFilename);
 
         /// Destructor
         ~KinematicLie(void);
