@@ -26,8 +26,8 @@ namespace controller {
 
             ///@param Visualizer type
             enum Type {
-                /// Insect
                 TYPE_GL,
+                TYPE_IRRLICHT,
             };
 
             /// overloaded constructor
