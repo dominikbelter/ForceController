@@ -32,14 +32,14 @@ class InsectLeg : public Leg
 		/// Pointer
 		typedef std::unique_ptr<InsectLeg> Ptr;
 	
-		/** Bezargumentowy konstruktor obiektu typu Leg*
-		 * @return controller::Leg* wskaznik na obiekt typu Leg
+		/** Constructor without arguments of Leg object*
+		 * @return controller::Leg* indicator to the Leg object
 		 */
 		InsectLeg(void);
 			
-		/** Konstruktor obiektu typu Leg* przyjmujacy za argument polozenie pliku konfiguracyjnego typu xml
-		 * @param [in] filename wzgledna sciezka dostepu do pliku
-		 * @return controller::Leg* wskaznik na obiekt typu Leg
+		/**Constructor of Leg object which argument is location of configuration file
+		 * @param [in] filename relative path to acces the file
+		 * @return controller::Leg* indicator to the Leg object
 		 */
 		InsectLeg(std::string configFilename) : Leg(configFilename, "Insect Leg", TYPE_INSECT)
 		{
@@ -82,22 +82,22 @@ class InsectLeg : public Leg
 		const std::string& getName() const { return name; }
 
 		/** Compute torque in each joint for given the force applied in the foot
-		* @param [in] force Wskaznik na wektor sil dzialajacych w osiach x, y i z
-		* @return std::vector<float_type> wektor obciazen w poszczegolnych wezlach
+		* @param [in] force Indicator to the force vector which works in x,y,z axis
+		* @return std::vector<float_type> load vector in individual nodes
 		*/
 		std::vector<float_type> computLoad(Vec3& force);
 
 		/** Compute forward kinematic, default (-1) -- the last joint
-		* @param [in] configuration zmienne konfiguracyjne nogi
-		* @param [in] linkNo liczba wezlow kinematycznych
-		* @return Mat34 macierz jednorodna nogi
+		* @param [in] configuration configuration variables legs
+		* @param [in] linkNo the number of nodes kinematic
+		* @return Mat34 homogeneous matrix legs
 		*/
 		Mat34 forwardKinematic(std::vector<float_type> configuration, unsigned int linkNo = -1);
 
 		/** Compute inverse kinematic, default (-1) -- the last joint
-		* @param [in] linkPose macierz jednorodna nogi
-		* @param [in] linkNo liczba wezlow kinematycznych
-		* @return std::vector<float_type> zmienne konfiguracyjne nogi
+		* @param [in] linkPose homogeneous matrix legs
+		* @param [in] linkNo the number of nodes kinematic
+		* @return std::vector<float_type> configuration variables legs
 		*/
 		std::vector<float_type> inverseKinematic(Mat34 linkPose, unsigned int linkNo = -1);
 
