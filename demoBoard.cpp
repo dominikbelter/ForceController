@@ -13,10 +13,11 @@
 // pawcio
 
 using namespace std;
+using namespace controller;
 
 int main( int argc, const char** argv )
 {
-    try {
+    /*try {
         Board* board = createBoardDynamixel();
          //Grabber* grabber;
          //grabber = createFileGrabber();
@@ -24,13 +25,16 @@ int main( int argc, const char** argv )
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
         return 1;
-    }
+    }*/
 
-    CDynamixel tmp;
+    //Board *object = createBoardDynamixel();
+    //object->setPosition(1,2,M_PI/4);
 
-    tmp.dxl_initialize(1,1);
-    tmp.dxl_write_word(0x02,0x18,0x0101);
-    tmp.dxl_terminate();
+    //CDynamixel tmp;
+
+    //tmp.dxl_initialize(1,1);
+    //tmp.dxl_write_word(0x02,0x18,0x0101);
+    //tmp.dxl_terminate();
 
 
 

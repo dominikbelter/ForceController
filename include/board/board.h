@@ -11,10 +11,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+//#include "../3rdParty/dynamixel/dynamixel.h"
 
 namespace controller {
     /// Board interface
-    class Board {
+    class Board{
         public:
 
             /// Board type
