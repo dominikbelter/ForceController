@@ -41,10 +41,10 @@ namespace controller {
             std::vector<float_type> computLoad(Vec3& force);
 
             /// Compute forward kinematic, default (-1) -- the last joint
-            virtual Mat34 forwardKinematic(std::vector<float_type> configuration, unsigned int linkNo=-1) = 0;
+						virtual Mat34 forwardKinematic(std::vector<float_type> configuration, int linkNo=-1) = 0;
 
             /// Compute forward kinematic, default (-1) -- the last joint
-            virtual std::vector<float_type> inverseKinematic(Mat34 linkPose, unsigned int linkNo=-1) = 0;
+						virtual std::vector<float_type> inverseKinematic(Mat34 linkPose, int linkNo=-1) = 0;
 
             /// Virtual descrutor
             virtual ~Leg() {}

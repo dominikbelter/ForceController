@@ -40,7 +40,7 @@ std::vector<float_type> InsectLeg::computLoad(Vec3& force)
 * @param [in] linkNo liczba wezlow kinematycznych
 * @return Mat34 macierz jednorodna nogi
 */
-Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, unsigned int linkNo)
+Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, int linkNo)
 {
 	Kinematic* demoKine;
 	demoKine = createKinematicLie("../resources/legModel.xml");
@@ -53,7 +53,7 @@ Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, unsigne
 * @param [in] linkNo liczba wezlow kinematycznych
 * @return std::vector<float_type> zmienne konfiguracyjne nogi
 */
-std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, unsigned int linkNo)
+std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, int linkNo)
 {
 	Kinematic* demoKine;
 	demoKine = createKinematicLie("../resources/legModel.xml");
