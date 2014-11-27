@@ -21,7 +21,9 @@ namespace controller
 	Leg* createInsectLeg(void);
 	/// create a single leg model (insect type) and load configuration from file
 	Leg* createInsectLeg(std::string filename);
-};
+	// /// returns number of links
+	// unsigned int getLinksNo();
+}
 
 using namespace controller;
 
@@ -51,27 +53,26 @@ class InsectLeg : public Leg
 		      std::cout << "unable to load Kinematic config file.\n";
 		  }
 		  else
-		  {
-              tinyxml2::XMLElement * parameters = config.FirstChildElement( "conf" );
-		      int param;
-		      parameters->QueryIntAttribute("linksNo", &param); linksNo = param;
-		      parameters->QueryIntAttribute("jointsNo", &param); jointsNo = param;
+			{
+				linksNo = std::stoi(config.FirstChildElement("conf")->FirstChildElement("linksNo")->GetText());
+				jointsNo = std::stoi(config.FirstChildElement("conf")->FirstChildElement("jointsNo")->GetText());
 
-		      float_type paramf;
-		      parameters = config.FirstChildElement("Link0");
-		      parameters = parameters->FirstChildElement( "parameters" );
-		      parameters->QueryDoubleAttribute("length", &paramf); lengths[0] = paramf;
-		      parameters = config.FirstChildElement("Link1");
-		      parameters = parameters->FirstChildElement( "parameters" );
-		      parameters->QueryDoubleAttribute("length", &paramf); lengths[1] = paramf;
-		      parameters = config.FirstChildElement("Link2");
-		      parameters = parameters->FirstChildElement( "parameters" );
-		      parameters->QueryDoubleAttribute("length", &paramf); lengths[2] = paramf;
+				tinyxml2::XMLElement * parameters;
+				float_type paramf;
+				parameters = config.FirstChildElement("Link0");
+				parameters = parameters->FirstChildElement( "parameters" );
+				parameters->QueryDoubleAttribute("length", &paramf); lengths[0] = paramf;
+				parameters = config.FirstChildElement("Link1");
+				parameters = parameters->FirstChildElement( "parameters" );
+				parameters->QueryDoubleAttribute("length", &paramf); lengths[1] = paramf;
+				parameters = config.FirstChildElement("Link2");
+				parameters = parameters->FirstChildElement( "parameters" );
+				parameters->QueryDoubleAttribute("length", &paramf); lengths[2] = paramf;
 
-		      std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
-		      std::cout << "Lenght1: " << lengths[0] << std::endl;
-		      std::cout << "Lenght2: " << lengths[1] << std::endl;
-		      std::cout << "Lenght3: " << lengths[2] << std::endl;
+				std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
+				std::cout << "Lenght1: " << lengths[0] << std::endl;
+				std::cout << "Lenght2: " << lengths[1] << std::endl;
+				std::cout << "Lenght3: " << lengths[2] << std::endl;
 		  }
 		}
 	
@@ -101,15 +102,20 @@ class InsectLeg : public Leg
 		*/
 		std::vector<float_type> inverseKinematic(Mat34 linkPose, unsigned int linkNo = -1);
 
-	private:
+	//	/** Returns number of links in leg
+	//	* @return unsigned int number of links
+	//	*/
+	//	unsigned int getLinksNo() const { return linksNo; }
+
+	//private:
 		/// number of joints
 		unsigned int jointsNo;
 
-                /// number of links
-                unsigned int linksNo;
+		/// number of links
+		unsigned int linksNo;
 
-                /// lengths of legs
-                float_type lengths[3];
+		/// lengths of legs
+		float_type lengths[3];
 
 };
 
