@@ -3,7 +3,7 @@
  * implementation - Kinematic model which uses Lie's groups
  *
  * @author Adam Czeszejkowski
- * @author Norbert Werbliñski
+ * @author Norbert Werblinski
  *
  */
  

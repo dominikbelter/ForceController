@@ -3,7 +3,7 @@
  * Kinematic interface
  *
  * @author Adam Czeszejkowski
- * @author Norbert Werbliñski
+ * @author Norbert Werblinski
  *
  */
  

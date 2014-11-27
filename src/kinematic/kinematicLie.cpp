@@ -13,7 +13,8 @@ KinematicLie::Ptr kinematicLie;
 KinematicLie::KinematicLie(void) : Kinematic("Kinematic Lie", TYPE_LIE) {
 }
 KinematicLie::KinematicLie(std::string configFilename) : Kinematic(configFilename, "Kienamtic Lie", TYPE_LIE){
-	std::string filename = "../../resources/" + configFilename;
+	//std::string filename = "../../resources/" + configFilename;
+	std::string filename = "C:/Users/Norbert/Documents/GitHub/ForceController/resources/" + configFilename;
 	conf.LoadFile(filename.c_str());
 	if (conf.FirstChildElement() == nullptr)
 		std::cout << "unable to load Kinematic config file.\n";
@@ -79,27 +80,24 @@ Mat34 KinematicLie::forwardKinematic(const std::vector<float_type>& configuratio
 *
 */
 std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, unsigned int linkNo){
-	std::vector<float_type> tmp;
+	std::vector<float_type> configVector;
 	std::vector<float_type> L; // lenhgts of links
-	L.push_back(0.05);
-	L.push_back(0.12);
-	L.push_back(0.175);
+	L.push_back(ksi[1][2]);
+	L.push_back(g0[0] - ksi[1][2] - ksi[2][2]);
+	L.push_back(ksi[2][2]);
 	float_type x = linkPose(0, 3);
 	float_type y = linkPose(1, 3);
 	float_type z = linkPose(2, 3);
-	float_type theta0 = atan2(y, x);
+	configVector.push_back(atan2(y, x));//theta0
 	switch (linkNo)
 	{
 	case 1:
 		{
-			tmp.push_back(theta0);
 			break;
 		}
 	case 2:
 		{
-			float_type theta1 = -atan2(z, x - L[0]);
-			tmp.push_back(theta0);
-			tmp.push_back(theta1);
+			  configVector.push_back(-atan2(z, x - L[0]));
 			break;
 		}
 	default:
@@ -110,19 +108,16 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 			float_type g = (pow(L[1], 2) + l2 - pow(L[2], 2)) / (2 * L[1] * l);
 			if (g > 1) g = 1;
 			else if (g < -1) g = -1;
-			float_type Y = acos(g);
-			float_type theta1 = -B + Y;
+			float_type Y = -acos(g);
+			configVector.push_back(-B + Y);//theta1
 			float_type p = (l2 - pow(L[1], 2) - pow(L[2], 2)) / (2 * L[1] * L[2]);
 			if (p > 1) p = 1;
 			else if (p < -1) p = -1;
-			float_type theta2 = -acos(p);
-			tmp.push_back(theta0);
-			tmp.push_back(theta1);
-			tmp.push_back(theta2);
+			configVector.push_back(-acos(p));//theta2
 			break;
 		}
 	}	
-    return tmp;
+	return configVector;
 }
 
 /// Return set of link's poses
