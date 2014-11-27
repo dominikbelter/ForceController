@@ -82,8 +82,8 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 	std::vector<float_type> configVector;
 	std::vector<float_type> L; // lenhgts of links
 	L.push_back(ksi[1][2]);
-	L.push_back(g0[0] - ksi[1][2] - ksi[2][2]);
-	L.push_back(ksi[2][2]);
+	L.push_back(ksi[2][2]-ksi[1][2]);
+	L.push_back(g0[0] - ksi[2][2]);
 	float_type x = linkPose(0, 3);
 	float_type y = linkPose(1, 3);
 	float_type z = linkPose(2, 3);
@@ -96,7 +96,7 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 		}
 	case 2:
 		{
-			  configVector.push_back(-atan2(z, x - L[0]));
+			  configVector.push_back(-atan2(z, x - L[0]));//theta1
 			break;
 		}
 	default:
