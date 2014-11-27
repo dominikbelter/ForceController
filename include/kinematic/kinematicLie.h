@@ -2,13 +2,11 @@
  *
  * implementation - Kinematic model which uses Lie's groups
  *
+ * @author Adam Czeszejkowski
+ * @author Norbert Werbliñski
+ *
  */
  
- /**
-* @author Adam Czeszejkowski
-* @author Norbert Werbliñski
-* @mainpage
-*/
 
 #ifndef KINEMATIC_LIE_H_INCLUDED
 #define KINEMATIC_LIE_H_INCLUDED

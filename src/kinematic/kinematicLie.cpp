@@ -13,8 +13,7 @@ KinematicLie::Ptr kinematicLie;
 KinematicLie::KinematicLie(void) : Kinematic("Kinematic Lie", TYPE_LIE) {
 }
 KinematicLie::KinematicLie(std::string configFilename) : Kinematic(configFilename, "Kienamtic Lie", TYPE_LIE){
-	//std::string filename = "../../resources/" + configFilename;
-	std::string filename = "C:/Users/Norbert/Documents/GitHub/ForceController/resources/" + configFilename;
+	std::string filename = "../../resources/" + configFilename;
 	conf.LoadFile(filename.c_str());
 	if (conf.FirstChildElement() == nullptr)
 		std::cout << "unable to load Kinematic config file.\n";
