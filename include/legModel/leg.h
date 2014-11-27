@@ -38,13 +38,18 @@ namespace controller {
             virtual const std::string& getName() const { return name; }
 
             ///Compute torque in each joint for given the force applied in the foot
-            std::vector<float_type> computLoad(Vec3& force);
+						std::vector<float_type> computLoad(Vec3& force, std::vector<float_type> config);
 
             /// Compute forward kinematic, default (-1) -- the last joint
 						virtual Mat34 forwardKinematic(std::vector<float_type> configuration, int linkNo=-1) = 0;
 
             /// Compute forward kinematic, default (-1) -- the last joint
 						virtual std::vector<float_type> inverseKinematic(Mat34 linkPose, int linkNo=-1) = 0;
+
+						/** Returns number of links in leg
+						* @return unsigned int number of links
+						*/
+						virtual int getLinksNo() const = 0;
 
             /// Virtual descrutor
             virtual ~Leg() {}

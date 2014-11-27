@@ -86,7 +86,7 @@ class InsectLeg : public Leg
 		* @param [in] force Indicator to the force vector which works in x,y,z axis
 		* @return std::vector<float_type> load vector in individual nodes
 		*/
-		std::vector<float_type> computLoad(Vec3& force);
+		std::vector<float_type> computLoad(Vec3& force, std::vector<float_type> config);
 
 		/** Compute forward kinematic, default (-1) -- the last joint
 		* @param [in] configuration configuration variables legs
@@ -102,12 +102,12 @@ class InsectLeg : public Leg
 		*/
 		std::vector<float_type> inverseKinematic(Mat34 linkPose, int linkNo = -1);
 
-	//	/** Returns number of links in leg
-	//	* @return unsigned int number of links
-	//	*/
-	//	unsigned int getLinksNo() const { return linksNo; }
+		/** Returns number of links in leg
+		* @return unsigned int number of links
+		*/
+		int getLinksNo() const { return linksNo; }
 
-	//private:
+	private:
 		/// number of joints
 		int jointsNo;
 
@@ -116,6 +116,29 @@ class InsectLeg : public Leg
 
 		/// lengths of legs
 		float_type lengths[3];
+
+		/// Jacobian of Messor leg
+		Mat33 computeJacobian_transposed(std::vector<float_type> config)
+		{
+			Mat33 temp;
+			float_type element;
+
+			element = -lengths[2] * sin(config[0]) * cos(config[1]) - lengths[1] * sin(config[0]);
+			temp(0, 0) = element;
+			element = -lengths[2] * cos(config[0]) * sin(config[1]);
+			temp(1, 0) = element;
+			temp(2, 0) = 0;
+			element = lengths[2] * cos(config[0]) * cos(config[1]) + lengths[1] * cos(config[0]);
+			temp(0, 1) = element;
+			element = -lengths[2] * sin(config[0]) * sin(config[1]);
+			temp(1, 1) = element;
+			temp(2, 1) = 0;
+			temp(0, 2) = 0;
+			temp(1, 2) = 0;
+			temp(2, 2) = 0;
+
+			return temp;
+		}
 
 };
 

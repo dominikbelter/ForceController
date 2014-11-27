@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 using namespace std;
+using namespace controller;
 
 int main( int argc, const char** argv )
 {
@@ -18,7 +19,7 @@ int main( int argc, const char** argv )
 		cout << "DEMO STEROWNIKA NOGI" << endl;
 
     Leg* legModel;
-    legModel = createInsectLeg("../resources/legModel.xml");
+		legModel = createInsectLeg("../resources/legModel.xml");
 		cout << "Leg type: " << legModel->getName() << endl << endl;
 
 		Mat34 linkPose;
@@ -38,12 +39,24 @@ int main( int argc, const char** argv )
 
 		cout << endl << "Configuration" << endl;
 		vector<float_type> config;
-		unsigned int linksNo = 3;//legModel->linksNo;
-		config.push_back(0);
-		config.push_back(0);
-		config.push_back(0);
+		int linksNo = legModel->getLinksNo();
 		config = legModel->inverseKinematic(linkPose, linksNo);
-		cout << config[0] << ", " << config[1] << ", " << config[2];
+		cout << config[0] << ", " << config[1] << ", " << config[2] << endl;
+
+		linkPose = legModel->forwardKinematic(config, linksNo);
+		cout << endl << "Forward Kinematic" << endl;
+		for (int i = 0; i < 3; ++i)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				cout << linkPose(i, j) << " ";
+			}
+			cout << endl;
+		}
+
+		/*Vec3 sila;
+		sila.operator new(1, 0, 0);
+		legModel->computLoad(sila, config);*/
 
     getchar();
   }
