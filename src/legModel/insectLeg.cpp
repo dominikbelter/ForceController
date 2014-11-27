@@ -12,7 +12,7 @@ using namespace controller;
 
 /// A single instance of insect leg
 InsectLeg::Ptr insectLeg;
-KinematicLie::Ptr kinematicLie;
+//KinematicLie::Ptr kinematicLie;
 
 InsectLeg::InsectLeg(void) : Leg("Insect Leg", TYPE_INSECT) 
 {
@@ -40,9 +40,12 @@ std::vector<float_type> InsectLeg::computLoad(Vec3& force)
 * @param [in] linkNo liczba wezlow kinematycznych
 * @return Mat34 macierz jednorodna nogi
 */
-Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, unsigned int linkNo)
+Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, int linkNo)
 {
-  return kinematicLie->forwardKinematic(configuration, linkNo);
+	Kinematic* demoKine;
+	demoKine = createKinematicLie("../resources/legModel.xml");
+	return demoKine->forwardKinematic(configuration, linkNo);
+	//return kinematicLie->forwardKinematic(configuration, linkNo);
 }
 
 /** Compute inverse kinematic, default (-1) -- the last joint
@@ -50,9 +53,12 @@ Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, unsigne
 * @param [in] linkNo liczba wezlow kinematycznych
 * @return std::vector<float_type> zmienne konfiguracyjne nogi
 */
-std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, unsigned int linkNo)
+std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, int linkNo)
 {
-  return kinematicLie->inverseKinematic(linkPose, linkNo);
+	Kinematic* demoKine;
+	demoKine = createKinematicLie("../resources/legModel.xml");
+	return demoKine->inverseKinematic(linkPose, linkNo);
+	//return kinematicLie->inverseKinematic(linkPose, linkNo);
 }
 
 /** Bezargumentowy konstruktor obiektu typu Leg*

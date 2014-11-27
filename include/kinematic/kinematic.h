@@ -2,13 +2,11 @@
  *
  * Kinematic interface
  *
+ * @author Adam Czeszejkowski
+ * @author Norbert Werbliñski
+ *
  */
  
- /**
-* @author Adam Czeszejkowski
-* @author Norbert Werbliñski
-* @mainpage
-*/
 
 #ifndef _KINEMATIC_H_
 #define _KINEMATIC_H_

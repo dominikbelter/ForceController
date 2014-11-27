@@ -35,7 +35,7 @@ using namespace controller;
 		typedef std::unique_ptr<VisualizerGL> Ptr;
 
 		/// overloaded constructor
-		VisualizerGL(const std::string _name) : Visualizer(_name, TYPE_GL) {};
+        VisualizerGL(const std::string _name) : Visualizer(_name, TYPE_GL) {}
 
 		VisualizerGL(std::string configFilename, const std::string _name) : Visualizer(configFilename, _name, TYPE_GL) {}
 

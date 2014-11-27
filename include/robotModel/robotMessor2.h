@@ -61,6 +61,23 @@ public:
 
 private:
 
+    float_type width_max;
+    float_type width_min;
+    float_type length;
+
+    Mat34 Ps0;
+    Mat34 Ps1;
+    Mat34 Ps2;
+    Mat34 Ps3;
+    Mat34 Ps4;
+    Mat34 Ps5;
+
+    Mat34 L0;
+    Mat34 L1;
+    Mat34 L2;
+    Mat34 L3;
+    Mat34 L4;
+    Mat34 L5;
 };
 
 #endif
