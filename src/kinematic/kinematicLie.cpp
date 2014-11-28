@@ -13,6 +13,7 @@ KinematicLie::Ptr kinematicLie;
 KinematicLie::KinematicLie(void) : Kinematic("Kinematic Lie", TYPE_LIE) {
 }
 KinematicLie::KinematicLie(std::string configFilename) : Kinematic(configFilename, "Kienamtic Lie", TYPE_LIE){
+
 	std::string filename = "../../resources/" + configFilename;
 	conf.LoadFile(filename.c_str());
 	if (conf.FirstChildElement() == nullptr)
@@ -68,10 +69,23 @@ KinematicLie::KinematicLie(std::string configFilename) : Kinematic(configFilenam
 KinematicLie::~KinematicLie(void) {
 }
 
-/// Compute forward kinematic, default (-1) -- the last joint
+/*Compute forward kinematic, default (-1) -- the last joint
+*temporary solution
+*!!!!WORKS ONLY FOR Messor 2!!!
+*/
 Mat34 KinematicLie::forwardKinematic(const std::vector<float_type>& configuration, unsigned int linkNo){
-	Mat34 tmp;
-	return tmp;
+	Mat34 fkmatrix;
+	fkmatrix.affine();
+	Eigen::Matrix4d e1, e2, e3, g0;
+	float_type O1 = configuration[0];
+	float_type O2 = configuration[1];
+	float_type O3 = configuration[2];
+	e1 << cos(O1), -sin(O1), 0, 0, sin(O1), cos(O1), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1;
+	e2 << cos(O2), 0, sin(O2), 0.05 * (1 - cos(O2)), 0, 1, 0, 0, -sin(O2), 0, cos(O2), 0.05 * sin(O2), 0, 0, 0, 1;
+	e3 << cos(O3), 0, sin(O3), 0.17*(1 - cos(O3)), 0, 1, 0, 0, -sin(O3), 0, cos(O3), 0.17*sin(O3), 0, 0, 0, 1;
+	g0 << 1, 0, 0 ,0.345, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1;
+	fkmatrix = e1*e2*e3*g0;
+	return fkmatrix;
 }
 
 /*Compute inverse kinematic, default (-1) -- the last joint
@@ -112,7 +126,7 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 			float_type p = (l2 - pow(L[1], 2) - pow(L[2], 2)) / (2 * L[1] * L[2]);
 			if (p > 1) p = 1;
 			else if (p < -1) p = -1;
-			configVector.push_back(-acos(p));//theta2
+			configVector.push_back(acos(p));//theta2
 			break;
 		}
 	}	
