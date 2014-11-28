@@ -27,7 +27,9 @@ int main( int argc, const char** argv )
         return 1;
     }
 
+    //DB powinno byc: Board *board = new BoardDynamixel();
     BoardDynamixel *demo = new BoardDynamixel();
+    //DB 10 jest nieprawidlowym parametrem, legNo powinien byc z przedzialu 0-5, a servoNo z przedzialu 0-2.
     demo->setPosition(1, 10, M_PI/4);   //move 1st leg, 10 joint, about 45deg
     delete demo;
 

@@ -57,6 +57,7 @@ using namespace controller;
         ~VisualizerIrrlicht() {}
 
     private:
+        //DB przypisanie wartosci w konstruktorze
         bool debug = false;
 
         irr::video::IVideoDriver* video;
@@ -68,6 +69,8 @@ using namespace controller;
         irr::scene::ICameraSceneNode* camera;
         irr::scene::ISceneManager * manager;
 
+        //DB prosze tutaj tylko zadeklarowac stala, a inicjalizowac w konstruktorze za pomoca listy
+        //DB nienajlepsza nazwa zmiennej: lepiej np. boxSize;
         const irr::f32 size = 0.01;
 
         /** Draws a signle leg
