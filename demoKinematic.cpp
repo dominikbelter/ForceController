@@ -41,7 +41,6 @@ int main( int argc, const char** argv )
 		std::cout << "\nVector of displacements and joint angles:\n" << std::endl;
 		std::cout << "theta0 theta1 theta2" << std::endl;
 		std::cout << tmp[0] <<" "<<tmp[1]<<" "<<tmp[2]<< std::endl;
-		system("PAUSE");
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;

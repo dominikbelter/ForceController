@@ -13,6 +13,7 @@
 // pawcio
 
 using namespace std;
+using namespace controller;
 
 int main( int argc, const char** argv )
 {
@@ -26,14 +27,9 @@ int main( int argc, const char** argv )
         return 1;
     }
 
-    CDynamixel tmp;
-
-    tmp.dxl_initialize(1,1);
-    tmp.dxl_write_word(0x02,0x18,0x0101);
-    tmp.dxl_terminate();
-
-
-
+    BoardDynamixel *demo = new BoardDynamixel();
+    demo->setPosition(1, 10, M_PI/4);   //move 1st leg, 10 joint, about 45deg
+    delete demo;
 
     return 0;
 }

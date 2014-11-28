@@ -10,8 +10,13 @@ RobotMessor::Ptr robotmessor;
 
 RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 {
+  /*  width_max = 0.1025; ///distance from center to middle leg
+    width_min = 0.052; /// distance from x to front leg
+    length = 0.12; ///distance front legs from x
+    */
 
 }
+
 
 
 RobotMessor::~RobotMessor(void)
@@ -35,7 +40,16 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 
  /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)
 std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> configuration){
-     std::vector<Mat34> tmp;
+
+   /*
+   Ps0=L0*forwardKinematic(configuration, linkNo);
+   Ps1=L1*forwardKinematic(configuration, linkNo);
+   Ps2=L2*forwardKinematic(configuration, linkNo);
+   Ps3=L3*forwardKinematic(configuration, linkNo);
+   Ps4=L4*forwardKinematic(configuration, linkNo);
+   Ps5=L5*forwardKinematic(configuration, linkNo);
+   */
+    std::vector<Mat34> tmp;
      return tmp;
  }
 

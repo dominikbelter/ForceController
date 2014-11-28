@@ -12,8 +12,10 @@
 #include <chrono>
 #include <memory>
 #include <mutex>
+#include "../3rdParty/dynamixel/dynamixel.h"
 
-
+#define DEFAULT_BAUDNUM 1
+#define MOVE_SERWOMOTOR 0x18
 namespace controller {
 
     /// create a single board controller (with usb2dynamixel)
@@ -22,11 +24,18 @@ namespace controller {
 
 using namespace controller;
 
+
 /**
  * \brief Board implementation.
  */
-class BoardDynamixel : public Board {
+class BoardDynamixel : public Board{
     public:
+        /// Default values of angles for serwomotors.
+        int zero_angle[18];
+        /// Default offset values of angles for serwomotors.
+         int angle_offset[18];
+
+
         /// Pointer
         typedef std::unique_ptr<BoardDynamixel> Ptr;
 
@@ -43,6 +52,7 @@ class BoardDynamixel : public Board {
          * \return Return error value.
          */
         unsigned int setPosition(unsigned char legNo, unsigned char jointNo, float_type angle);
+        //CDynamixel obiect;
         /**
          * \brief Set reference position value for all serwomotors in particular leg.
          * \param legNo Leg number.
@@ -286,7 +296,8 @@ class BoardDynamixel : public Board {
         void setDefault(void);
 
     private:
-
+        /// Two objects for executing the operations
+        CDynamixel dynamixelMotors[2];
 
 };
 
