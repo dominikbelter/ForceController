@@ -57,7 +57,7 @@ using namespace controller;
         ~VisualizerIrrlicht() {}
 
     private:
-        bool debug;
+        bool debug = false;
 
         irr::video::IVideoDriver* video;
         irr::scene::IMeshBuffer* coxaMeshBuffer;
@@ -77,11 +77,20 @@ using namespace controller;
         */
         void drawLeg(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration);
 
+        void drawLeg1(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration);
+
+
         /** Rotates and transforms the space
         * @param vector3d<f32> radians
         * @param vector3d<f32> position
         */
         void ourTransform(irr::core::vector3d<irr::f32> radians, irr::core::vector3d<irr::f32> position);
+
+        /** Tranforms Mat34 to Irrlicht
+        * @param const Mat34& robotPose robotPose
+        */
+        void mat34ToIrrlichtTransform(const Mat34& robotPose);
+
 
         /** Rotates and transforms the space
         * @param f32 xRad

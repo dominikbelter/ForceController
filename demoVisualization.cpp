@@ -39,14 +39,61 @@ int main(int argc, const char** argv)
     std::vector<float_type> configuration;
 
     for(int i=0; i<18 ; i++) {
-        configuration.push_back(PI/10);
+        configuration.push_back(PI/8);
     }
 
 
 
-    visualizer->drawRobot(robotPose, configuration);
 
-    getchar();
+    /*
+               // Z
+
+             robotPoseTest(0,0) = sqrt2;
+             robotPoseTest(0,2) = sqrt2;
+             robotPoseTest(2,0) = -sqrt2;
+             robotPoseTest(2,2) = sqrt2;
+             robotPoseTest(1,1) = 1;
+             robotPoseTest(3,3) = 1;
+
+             // X
+
+             robotPoseTest2(0,0) = 1;
+             robotPoseTest2(1,1) = sqrt2;
+             robotPoseTest2(1,2) = -sqrt2;
+             robotPoseTest2(2,1) = sqrt2;
+             robotPoseTest2(2,2) = sqrt2;
+             robotPoseTest2(3,3) = 1;
+    */
+
+/*
+               float sqrt2 = sqrt(2)/2;
+
+             robotPose(0,0) = sqrt2;
+             robotPose(0,1) = -1/2;
+             robotPose(0,2) = 1/2;
+             robotPose(1,0) = sqrt2;
+             robotPose(1,1) = 1/2;
+             robotPose(1,2) = -1/2;
+             robotPose(2,1) = sqrt2;
+             robotPose(2,2) = sqrt2;
+
+   //          robotPose.Identity();
+*/
+
+
+    for(int i=0 ; i<4 ; i++) {
+        for(int j=0 ; j<4 ; j++) {
+            robotPose(i,j) = 0;
+        }
+    }
+
+    robotPose(0,0) = 1;
+    robotPose(1,1) = 1;
+    robotPose(2,2) = 1;
+    robotPose(3,3) = 1;
+
+
+    visualizer->drawRobot(robotPose, configuration);
 
     return 0;
 

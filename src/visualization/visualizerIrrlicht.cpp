@@ -1,5 +1,5 @@
 #include "../include/visualization/visualizerIrrlicht.h"
-
+#include <math.h>
 
 using namespace controller;
 using namespace std;
@@ -13,14 +13,53 @@ using namespace gui;
 /// A single instance of VisualizerGL
 VisualizerIrrlicht::Ptr visualizerIrrlicht;
 
+
+
+void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
+
+    core::matrix4 mat;
+
+    float alfa, beta, gamma;
+
+    gamma = atan(robotPose(2,1)/robotPose(2,2));
+    alfa =  atan(robotPose(1,0)/robotPose(0,0));
+    beta= atan(-robotPose(2,0)/sqrt(1-robotPose(2,0)*robotPose(2,0)));
+
+    if(isnan(gamma))
+        gamma=0;
+    if(isnan(alfa))
+        alfa =0;
+    if(isnan(beta))
+        beta=0;
+
+
+    mat.setRotationRadians(vector3d<f32>(alfa, beta, gamma));
+    mat.setTranslation(vector3d<f32>(robotPose(1,3), robotPose(2,3), robotPose(0,3)));
+
+    if(debug)
+        cout << alfa << endl << beta<< endl << gamma << endl;
+
+
+   ourTransform(alfa,beta,gamma, robotPose(0,3), robotPose(1,3), robotPose(2,3));
+
+}
+
+
 void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) {
+
+    int i = 0;
+    int y =0;
     while (true) {
             video->beginScene(true, true, video::SColor(255, 0, 10, 200));
             video->setMaterial(videoMaterial);
 
 
+
             drawAxis();
-            drawBody(vector3d<f32>(0, 0, 0), vector3d<f32>(PI / 2, 0, 0));
+
+           mat34ToIrrlichtTransform(robotPose);
+
+           drawBody(vector3d<f32>(0, 0, 0), vector3d<f32>(PI / 2, 0, 0));
 
 
             drawLeg(1, vector3d<f32>(0, 0, 0), vector3d<f32>(0, 0, 0), configuration);
@@ -34,8 +73,11 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
             manager->drawAll();
 
 
+
             video->endScene();
-        }
+
+
+    }
 }
 
 controller::Visualizer* controller::createVisualizerIrrlicht(const std::string _name, int width, int height) {
@@ -69,8 +111,8 @@ int VisualizerIrrlicht::initialize(int width, int height) {
 
     camera = manager->addCameraSceneNode();
     device->getCursorControl()->setVisible(false);
-    camera->setPosition(core::vector3df(20, 20, 20));
-    camera->setTarget(core::vector3df(-5, 0, 0));
+    camera->setPosition(core::vector3df(40, 40, 30));
+    camera->setTarget(core::vector3df(0, 0, 0));
     camera->setFarValue(9000);
 
     //Loading model
@@ -99,6 +141,11 @@ int VisualizerIrrlicht::initialize(int width, int height) {
 
 }
 
+
+void VisualizerIrrlicht::drawLeg1(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration) {
+
+}
+
 void VisualizerIrrlicht::drawLeg(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration) {
 
     core::matrix4  oldTransform;
@@ -106,6 +153,7 @@ void VisualizerIrrlicht::drawLeg(int legIndex,  irr::core::vector3d<irr::f32> po
     oldTransform = video->getTransform(video::ETS_WORLD);
 
     ourTransform(radians, position);
+
 
 
     ourTransform(0, PI / 2, configuration.at(3*(legIndex - 1) + 0), 0, 0, 0);
@@ -120,7 +168,8 @@ void VisualizerIrrlicht::drawLeg(int legIndex,  irr::core::vector3d<irr::f32> po
 
     video->drawMeshBuffer(vitulusMeshBuffer);
 
-    video->setTransform(video::ETS_WORLD, oldTransform);
+   video->setTransform(video::ETS_WORLD, oldTransform);
+
 }
 
 void VisualizerIrrlicht::ourTransform(irr::core::vector3d<irr::f32> radians, irr::core::vector3d<irr::f32> position) {
