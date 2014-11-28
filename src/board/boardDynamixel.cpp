@@ -52,6 +52,9 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
 unsigned int BoardDynamixel::setPosition(unsigned char legNo, const std::vector<float_type>& angle){
 
     std::vector <float> angleLocal;
+    //DB lepszy sposób na kopiowanie fragmentu wektora:
+    //DB vector<float_type> angleLocal(angle.begin(), angle.begin+3);
+    //DB w tym przypadku jednak kopiowanie zawartosci jest niepotrzebne
     for(int i = 0; i < 3 ; i++){    //typical duplication of vector doesnt work :(
         angleLocal[i] = angle[i];
     }

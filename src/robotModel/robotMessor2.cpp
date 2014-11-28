@@ -49,6 +49,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
    Ps4=L4*forwardKinematic(configuration, linkNo);
    Ps5=L5*forwardKinematic(configuration, linkNo);
    */
+    //DB brakuje jeszcze dodania obliczonych pozycji do wektora tmp.
     std::vector<Mat34> tmp;
      return tmp;
  }
