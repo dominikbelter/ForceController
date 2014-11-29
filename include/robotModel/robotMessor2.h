@@ -3,7 +3,7 @@
 * @author Emil Waledziak
 * @author Jerzy Wiatrow
 * @author Marcin Zgolinski
-* @mainpage
+* 
 */
 
 #ifndef _ROBOTMESSOR_H_INCLUDED
@@ -22,6 +22,8 @@ namespace controller {
 
 using namespace controller;
 
+///Class RobotMessor includes all functions required for creating robot model
+
 class RobotMessor: public Robot
 {
 public:
@@ -35,19 +37,23 @@ public:
 
     ///Compute configuration of the robot for the reference motion
     /**
-    * @param motion - specified motion
+    * @param motion - standard robotic matrix 3x4, which includes robot Rotation and Translation
     * @return tmp
     */
     std::vector<float_type> movePlatform(const Mat34& motion);
 
     ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
     /**
-    * @param motion - specified motion
+    * @param motion - standard robotic matrix 3x4, which includes robot Rotation and Translation to neutral pose
     * @return tmp
     */
     std::vector<float_type> movePlatformNeutral(const Mat34 motion);
 
     /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)
+	/**
+	* @param configuration - configuration off all actual positions of servomechanisms in robot legs
+	* @return name - return position of all servomechanisms in legs and end of the legs
+	*/
     std::vector<Mat34> conputeLinksPosition(std::vector<float_type> configuration);
 
     ///Compute force in each joint of the legs, input configuration of the robot
