@@ -17,12 +17,15 @@
 
 namespace controller 
 {
-	/// create a single leg model (insect type)
+	/** Constructor without arguments of Leg object*
+	 * @return controller::Leg* indicator to the Leg object
+	 */
 	Leg* createInsectLeg(void);
-	/// create a single leg model (insect type) and load configuration from file
+	/** Constructor of Leg object which argument is location of configuration file
+	 * @param [in] filename relative path to acces the file
+	 * @return controller::Leg* indicator to the Leg object
+	 */
 	Leg* createInsectLeg(std::string filename);
-	// /// returns number of links
-	// unsigned int getLinksNo();
 }
 
 using namespace controller;
@@ -39,7 +42,7 @@ class InsectLeg : public Leg
 		 */
 		InsectLeg(void);
 			
-		/**Constructor of Leg object which argument is location of configuration file
+		/** Constructor of Leg object which argument is location of configuration file
 		 * @param [in] filename relative path to acces the file
 		 * @return controller::Leg* indicator to the Leg object
 		 */
@@ -79,11 +82,14 @@ class InsectLeg : public Leg
 		/// Destructor
 		~InsectLeg(void);
 	
-		/// Name of the leg model
+		/** Returns name of the leg model
+		 * @return (const std::string&) name of the leg model
+		 */
 		const std::string& getName() const { return name; }
 
 		/** Compute torque in each joint for given the force applied in the foot
 		* @param [in] force Indicator to the force vector which works in x,y,z axis
+		* @param [in] config vector of joints parameters of leg
 		* @return std::vector<float_type> load vector in individual nodes
 		*/
 		std::vector<float_type> computLoad(Vec3& force, std::vector<float_type> config);
@@ -103,7 +109,7 @@ class InsectLeg : public Leg
 		std::vector<float_type> inverseKinematic(Mat34 linkPose, int linkNo = -1);
 
 		/** Returns number of links in leg
-		* @return unsigned int number of links
+		* @return int number of links
 		*/
 		int getLinksNo() const { return linksNo; }
 

@@ -6,8 +6,6 @@
 
 #include "../include/legModel/insectLeg.h"
 #include "../include/kinematic/kinematicLie.h"
-#include "../include/board/board.h"
-#include "../include/board/boardDynamixel.h"
 #include <iostream>
 
 using namespace controller;
@@ -28,6 +26,7 @@ InsectLeg::~InsectLeg(void)
 
 /** Compute torque in each joint for given the force applied in the foot
 * @param [in] force Indicator to the force vector which works in x,y,z axis
+* @param [in] config vector of joints parameters of leg
 * @return std::vector<float_type> load vector in individual nodes
 */
 std::vector<float_type> InsectLeg::computLoad(Vec3& force, std::vector<float_type> config)
@@ -77,8 +76,8 @@ std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, int linkNo)
 	//return kinematicLie->inverseKinematic(linkPose, linkNo);
 }
 
-/** Bezargumentowy konstruktor obiektu typu Leg*
- * @return controller::Leg* wskaznik na obiekt typu Leg
+/** Constructor without arguments of Leg object*
+ * @return controller::Leg* indicator to the Leg object
  */
 controller::Leg* controller::createInsectLeg(void) 
 {
@@ -86,9 +85,9 @@ controller::Leg* controller::createInsectLeg(void)
   return insectLeg.get();
 }
 
-/** Konstruktor obiektu typu Leg* przyjmujacy za argument polozenie pliku konfiguracyjnego typu xml
- * @param [in] filename wzgledna sciezka dostepu do pliku
- * @return controller::Leg* wskaznik na obiekt typu Leg
+/** Constructor of Leg object which argument is location of configuration file
+ * @param [in] filename relative path to acces the file
+ * @return controller::Leg* indicator to the Leg object
  */
 controller::Leg* controller::createInsectLeg(std::string filename) 
 {
