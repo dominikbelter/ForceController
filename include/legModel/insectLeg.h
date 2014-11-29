@@ -43,7 +43,7 @@ class InsectLeg : public Leg
 		InsectLeg(void);
 			
 		/** Constructor of Leg object which argument is location of configuration file
-		 * @param [in] filename relative path to acces the file
+		 * @param [in] configFilename relative path to acces the file
 		 * @return controller::Leg* indicator to the Leg object
 		 */
 		InsectLeg(std::string configFilename) : Leg(configFilename, "Insect Leg", TYPE_INSECT)
