@@ -1,5 +1,6 @@
 #include "../include/robotModel/robotMessor2.h"
 #include <iostream>
+#include "../include/legModel/insectLeg.h"
 
 using namespace controller;
 
