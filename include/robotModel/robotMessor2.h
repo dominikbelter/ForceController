@@ -84,6 +84,8 @@ private:
     Mat34 L3;
     Mat34 L4;
     Mat34 L5;
+
+	vector<Mat34> L_all;
 };
 
 #endif
