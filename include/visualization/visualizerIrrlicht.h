@@ -2,11 +2,8 @@
 *
 * Visualizer interface
 */
-/**
-* @author Tomasz Walczewski
-* @author Sebastian Drogowski
-* @mainpage
-*/
+
+
 #ifndef _VISUALIZERIRRLICHT_H_
 #define _VISUALIZERIRRLICHT_H_
 
@@ -41,12 +38,12 @@ using namespace controller;
         VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height);
 
         /** Name of the Robot
-        * @param string name
+        * @param string& name
         */
         const std::string& getName() const { return name; }
 
         /** Draws a robot
-        * @param Mat34 robotPose
+        * @param Mat34& robotPose
         * @param vector<float_type> configuration
         */
         void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration);

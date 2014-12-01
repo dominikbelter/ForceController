@@ -14,6 +14,17 @@ using namespace gui;
 VisualizerIrrlicht::Ptr visualizerIrrlicht;
 
 
+//DB inicjalizacja stalych i zmiennych przez liste: ": Visualizer(_name, TYPE_IRRLICHT), size(0.01)"
+VisualizerIrrlicht::VisualizerIrrlicht(const std::string _name, int width, int height) : Visualizer(_name, TYPE_IRRLICHT) {
+	initialize(width, height);
+}
+
+
+//DB inicjalizacja stalych i zmiennych przez liste: ", size(0.01)"
+VisualizerIrrlicht::VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height) : Visualizer(configFilename, _name, TYPE_IRRLICHT), size(0.01) {
+	initialize(width, height);
+}
+
 
 void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
 
@@ -90,17 +101,7 @@ controller::Visualizer* controller::createVisualizerIrrlicht(std::string configF
     return visualizerIrrlicht.get();
 }
 
-//DB konstruktor na poczatek pliku
-//DB inicjalizacja stalych i zmiennych przez liste: ": Visualizer(_name, TYPE_IRRLICHT), size(0.01)"
-VisualizerIrrlicht::VisualizerIrrlicht(const std::string _name, int width, int height) : Visualizer(_name, TYPE_IRRLICHT) {
-    initialize(width, height);
-}
 
-//DB konstruktor na poczatek pliku
-//DB inicjalizacja stalych i zmiennych przez liste: ", size(0.01)"
-VisualizerIrrlicht::VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height) : Visualizer(configFilename, _name, TYPE_IRRLICHT), size(0.01) {
-    initialize(width, height);
-}
 
 int VisualizerIrrlicht::initialize(int width, int height) {
     IrrlichtDevice *device =

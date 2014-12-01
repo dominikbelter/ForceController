@@ -4,11 +4,7 @@
  */
 
 
-/**
-* @author Tomasz Walczewski
-* @author Sebastian Drogowski
-* @mainpage
-*/
+
 
 #ifndef _VISUALIZER_H_
 #define _VISUALIZER_H_
@@ -43,7 +39,7 @@ namespace controller {
             virtual const std::string& getName() const { return name; }
 
 			/** Drawing a robot
-            * @param Mat34 robotPose - position of the robot
+            * @param Mat34& robotPose - position of the robot
             * @param vector<float_type> configuration - configuration of the robot
 			*/
             virtual void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) = 0;
