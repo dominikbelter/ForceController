@@ -135,8 +135,12 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 
 /// Return set of link's poses
 std::vector<Mat34> KinematicLie::getState(const std::vector<float_type>& configuration){
-	std::vector<Mat34> tmp;
-	return tmp;
+	std::vector<Mat34> linksPoses;
+	for (int i = 0; i < linksNo; i++)
+	{
+		linksPoses.push_back(forwardKinematic(configuration, i));
+	}
+	return linksPoses;
 }
 
 controller::Kinematic* controller::createKinematicLie(void) {
