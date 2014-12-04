@@ -19,8 +19,8 @@
 
 
 namespace controller {
-    Visualizer* createVisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize);
-    Visualizer* createVisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 axisBoxSize);
+    Visualizer* createVisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize, bool debug);
+    Visualizer* createVisualizerIrrlicht(std::string configFilename, const std::string _name);
 };
 
 using namespace controller;
@@ -35,18 +35,18 @@ using namespace controller;
         typedef std::unique_ptr<VisualizerIrrlicht> Ptr;
 
         /// overloaded constructor
-        VisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize);
+        VisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize, bool debug);
 
-        VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 axisBoxSize);
+        VisualizerIrrlicht(std::string configFilename, const std::string _name );
 
         /** Name of the Robot
-        * @param string& name
+        * @param name
         */
         const std::string& getName() const { return name; }
 
         /** Draws a robot
-        * @param Mat34& robotPose
-        * @param vector<float_type> configuration
+        * @param robotPose
+        * @param configuration
         */
         void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration);
 
@@ -56,8 +56,7 @@ using namespace controller;
         ~VisualizerIrrlicht() {}
 
     private:
-        //DB przypisanie wartosci w konstruktorze
-        bool debug = false;
+        bool debug;
 
         MyEventReceiver receiver;
         IrrlichtDevice *device;
@@ -71,40 +70,36 @@ using namespace controller;
         irr::scene::ICameraSceneNode* camera;
         irr::scene::ISceneManager * manager;
 
-
-
-        //DB prosze tutaj tylko zadeklarowac stala, a inicjalizowac w konstruktorze za pomoca listy
-        //DB nienajlepsza nazwa zmiennej: lepiej np. boxSize;
         const irr::f32 axisBoxSize;
 
         /** Draws a signle leg
-        * @param int legIndex
-        * @param Vec3 position
-        * @param Vec3 rotation
+        * @param  legIndex
+        * @param  position
+        * @param  rotation
         */
         void drawLeg(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration);
 
 
 
         /** Rotates and transforms the space
-        * @param vector3d<f32> radians
-        * @param vector3d<f32> position
+        * @param radians
+        * @param position
         */
         void ourTransform(irr::core::vector3d<irr::f32> radians, irr::core::vector3d<irr::f32> position);
 
         /** Tranforms Mat34 to Irrlicht
-        * @param const Mat34& robotPose robotPose
+        * @param robotPose robotPose
         */
         void mat34ToIrrlichtTransform(const Mat34& robotPose);
 
 
         /** Rotates and transforms the space
-        * @param f32 xRad
-        * @param f32 yRad
-        * @param f32 zRad
-        * @param f32 xTrans
-        * @param f32 yTrans
-        * @param f32 zTrans
+        * @param xRad
+        * @param yRad
+        * @param zRad
+        * @param xTrans
+        * @param yTrans
+        * @param zTrans
         */
         void ourTransform(irr::f32 xRad, irr::f32 yRad, irr::f32 zRad, irr::f32 xTrans, irr::f32 yTrans, irr::f32 zTrans);
 
@@ -114,8 +109,8 @@ using namespace controller;
         void drawAxis();
 
         /** Draws robot body
-        * @param vector3d<f32> radians
-        * @param vector3d<f32> position
+        * @param radians
+        * @param position
         */
         void drawBody(irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians);
 
@@ -124,12 +119,12 @@ using namespace controller;
         int initialize(int width, int height);
 
         /** Sets camera target
-         *  @param irr::core::vector3df target
+         *  @param target
         */
         void setCameraTarget(irr::core::vector3df target);
 
         /** Sets camera position
-         *  @param irr::core::vector3df target
+         *  @param position
         */
         void setCameraPosition(irr::core::vector3df position);
 
