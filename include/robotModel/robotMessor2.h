@@ -59,9 +59,9 @@ public:
     ///Compute force in each joint of the legs, input configuration of the robot
     /**
     * @param vector<float_type>
-    * @return torque
+    * @return TF.susceptibility - return susceptibility in each servomotor
     */
-    std::vector<float_type> computeCompliance(std::vector<float_type>);
+    std::vector<float_type> computeCompliance(const std::vector<float_type> configuration);
 
     ~RobotMessor(void);
 

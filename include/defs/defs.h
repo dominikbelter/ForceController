@@ -32,11 +32,16 @@ namespace controller {
     typedef Eigen::Transform<double, 3, Eigen::Affine> Mat34;
 
     class TorqueForce {
+    public:
         ///force values
         Vec3 force;
 
         ///torque values
         Vec3 torque;
+
+        ///susceptibility values
+        std::vector<float_type> susceptibility;
+
     };
 
     /// Board controller state

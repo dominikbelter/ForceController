@@ -198,11 +198,11 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
  }
 
 ///Compute force in each joint of the legs, input configuration of the robot
- std::vector<float_type> RobotMessor::computeCompliance(std::vector<float_type>)
+ std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)
 {
-   
-    std::vector<float_type> torque;
-      return torque;
+     TorqueForce TF;
+
+      return TF.susceptibility;
 
 }
 
