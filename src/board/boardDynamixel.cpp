@@ -12,9 +12,10 @@ BoardDynamixel::Ptr boardDynamixel;
 
 BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIXEL) {
     //Every operation is executed on two objects in the same time (One object on one side of port)
-    for(int i=0 ; i < 2 ; i++){
+    /*for(int i=0 ; i < 2 ; i++){
        int result =  dynamixelMotors[i].dxl_initialize(i+1, DEFAULT_BAUDNUM);
-    }
+    }*/
+//    int result =  dynamixelMotors[0].dxl_initialize(0+1, DEFAULT_BAUDNUM);
 
     zero_angle[0]=450; zero_angle[1]=240; zero_angle[2]=1140;
     zero_angle[3]=0; zero_angle[4]=240; zero_angle[5]=1140;
@@ -41,10 +42,11 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
     angle = angle*10;
     angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])*0.341333 + 512;
 
-    CDynamixel *pointMotor = &dynamixelMotors[legNo < 3 ?0:1 ];
-    pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
-    pointMotor->dxl_terminate();     //end of transmision    
-    delete pointMotor;
+    CDynamixel pointMotor;
+    pointMotor.dxl_initialize(0+1, DEFAULT_BAUDNUM);
+    pointMotor.dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
+    pointMotor.dxl_terminate();     //end of transmision
+    //delete pointMotor;
     return 0;
 }
 

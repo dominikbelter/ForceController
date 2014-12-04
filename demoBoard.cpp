@@ -19,7 +19,7 @@ int main( int argc, const char** argv )
 {
     int deg;
 
-    Board *demo = new BoardDynamixel();
+    Board *demo = createBoardDynamixel();
     while (true){
 
         cout<<"Enter degree"<<endl;
@@ -29,7 +29,7 @@ int main( int argc, const char** argv )
         }
         demo->setPosition(1, 0, (M_PI*deg)/180);   //move 1st leg, 0 joint, about 45deg
     }
-    delete demo;
+
 
     return 0;
 }
