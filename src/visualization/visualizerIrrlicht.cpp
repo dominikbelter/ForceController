@@ -29,7 +29,7 @@ VisualizerIrrlicht::VisualizerIrrlicht(const std::string _name, int width, int h
 }
 
 
-
+///DB ten konstruktor powinien wczytywać ustawienia z pliku XML
 VisualizerIrrlicht::VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 _axisBoxSize) : axisBoxSize(_axisBoxSize), Visualizer(configFilename, _name, TYPE_IRRLICHT) {
     initialize(width, height);
 }
@@ -41,6 +41,7 @@ void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
 
     float alfa, beta, gamma;
 
+    /// DB lepiej atan2
     gamma = atan(robotPose(2,1)/robotPose(2,2));
     alfa =  atan(robotPose(1,0)/robotPose(0,0));
     beta= atan(-robotPose(2,0)/sqrt(1-robotPose(2,0)*robotPose(2,0)));

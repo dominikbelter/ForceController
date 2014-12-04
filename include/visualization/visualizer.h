@@ -33,7 +33,7 @@ namespace controller {
 
             }
 
-			/** Name of the Robot
+            /** Name of the Visualizer
             * @return string name
 			*/
             virtual const std::string& getName() const { return name; }
