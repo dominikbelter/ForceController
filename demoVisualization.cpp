@@ -30,12 +30,15 @@ int main(int argc, const char** argv)
     Visualizer* visualizer;
 
     try {
-        visualizer= createVisualizerIrrlicht("Test", 1920, 1024, 0.01);
+      //  visualizer= createVisualizerIrrlicht("Test", 1920, 1024, 0.01, true);
+           visualizer= createVisualizerIrrlicht("configVisualization.xml", "TEST");
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
         return 1;
     }
+
+
 
     Mat34 robotPose;
     std::vector<float_type> configuration;
@@ -44,8 +47,7 @@ int main(int argc, const char** argv)
         configuration.push_back(PI/8);
     }
 
-
-
+ //   (static_cast<VisualizerIrrlicht*>(visualizer))->setDebugMode(true);
 
     /*
                // Z
@@ -80,9 +82,11 @@ int main(int argc, const char** argv)
              robotPose(2,2) = sqrt2;
 
    //          robotPose.Identity();
+
 */
 
-    ///DB zamiast kolejnych 10 linii kodu wystarczy jedna: robotPose.setIdentity();
+// setIdentity w bledny sposob tworzy macierz jednostkowa
+
     for(int i=0 ; i<4 ; i++) {
         for(int j=0 ; j<4 ; j++) {
             robotPose(i,j) = 0;
@@ -96,6 +100,8 @@ int main(int argc, const char** argv)
 
 
     visualizer->drawRobot(robotPose, configuration);
+
+
 
     return 0;
 

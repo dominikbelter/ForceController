@@ -24,16 +24,35 @@ VisualizerIrrlicht::Ptr visualizerIrrlicht;
 
 
 
-VisualizerIrrlicht::VisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 _axisBoxSize) : axisBoxSize(_axisBoxSize), Visualizer(_name, TYPE_IRRLICHT) {
+VisualizerIrrlicht::VisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 _axisBoxSize, bool _debug) : debug(_debug) , axisBoxSize(_axisBoxSize), Visualizer(_name, TYPE_IRRLICHT) {
     initialize(width, height);
 }
 
 
-///DB ten konstruktor powinien wczytywać ustawienia z pliku XML
-VisualizerIrrlicht::VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 _axisBoxSize) : axisBoxSize(_axisBoxSize), Visualizer(configFilename, _name, TYPE_IRRLICHT) {
-    initialize(width, height);
-}
+VisualizerIrrlicht::VisualizerIrrlicht(std::string configFilename, const std::string _name) : axisBoxSize(0.01) , Visualizer(configFilename, _name, TYPE_IRRLICHT) {
 
+    int width, height;
+
+    tinyxml2::XMLDocument config;
+
+
+    std::string filename = "../../resources/" + configFilename;
+    config.LoadFile(filename.c_str());
+    if (config.FirstChildElement() == nullptr)
+        std::cout << "unable to load Kinematic config file.\n";
+    else {
+        width = std::stoi(config.FirstChildElement("width")->GetText());
+        height = std::stoi(config.FirstChildElement("height")->GetText());
+
+        int debugResult = std::stoi(config.FirstChildElement("debug")->GetText());
+        if(debugResult == 1)
+            debug = true;
+        else
+            debug = false;
+
+    }
+    initialize(width,height);
+}
 
 void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
 
@@ -103,6 +122,7 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
                        camera->setPosition(pos);
                    } else
 
+           if(debug) {
            if(receiver.IsKeyDown(irr::KEY_KEY_T)) {
              configuration[0] = configuration[0] + PI/50;
            } else
@@ -121,6 +141,7 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
                if(receiver.IsKeyDown(irr::KEY_KEY_V)) {
                configuration[2] = configuration[2] - PI/50;
             }
+           }
 
 
             video->beginScene(true, true, video::SColor(255, 0, 10, 200));
@@ -156,13 +177,13 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
     device->drop();
 }
 
-controller::Visualizer* controller::createVisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize) {
-    visualizerIrrlicht.reset(new VisualizerIrrlicht(_name, width, height, axisBoxSize));
+controller::Visualizer* controller::createVisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize, bool debug) {
+    visualizerIrrlicht.reset(new VisualizerIrrlicht(_name, width, height, axisBoxSize, debug));
     return visualizerIrrlicht.get();
 }
 
-controller::Visualizer* controller::createVisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 axisBoxSize) {
-    visualizerIrrlicht.reset(new VisualizerIrrlicht(configFilename, _name, width, height, axisBoxSize));
+controller::Visualizer* controller::createVisualizerIrrlicht(std::string configFilename, const std::string _name) {
+   visualizerIrrlicht.reset(new VisualizerIrrlicht(configFilename, _name));
     return visualizerIrrlicht.get();
 }
 
