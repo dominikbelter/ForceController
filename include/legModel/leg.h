@@ -38,7 +38,7 @@ namespace controller {
             virtual const std::string& getName() const { return name; }
 
             ///Compute torque in each joint for given the force applied in the foot
-						std::vector<float_type> computLoad(Vec3& force, std::vector<float_type> config);
+						virtual std::vector<float_type> computLoad(Vec3& force, std::vector<float_type> config) = 0;
 
             /// Compute forward kinematic, default (-1) -- the last joint
 						virtual Mat34 forwardKinematic(std::vector<float_type> configuration, int linkNo=-1) = 0;
