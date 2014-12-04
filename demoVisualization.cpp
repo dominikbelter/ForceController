@@ -82,7 +82,7 @@ int main(int argc, const char** argv)
    //          robotPose.Identity();
 */
 
-
+    ///DB zamiast kolejnych 10 linii kodu wystarczy jedna: robotPose.setIdentity();
     for(int i=0 ; i<4 ; i++) {
         for(int j=0 ; j<4 ; j++) {
             robotPose(i,j) = 0;
