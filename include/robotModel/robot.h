@@ -64,7 +64,7 @@ namespace controller {
             * @param vector<float_type>
             * @return tmp
             */
-            virtual std::vector<float_type> computeCompliance(std::vector<float_type>) = 0;
+            virtual std::vector<float_type> computeCompliance(const std::vector<float_type> configuration) = 0;
 
             /// Virtual descrutor
             virtual ~Robot() {}
