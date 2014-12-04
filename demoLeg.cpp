@@ -58,7 +58,7 @@ int main( int argc, const char** argv )
 		//Vec3 &sila2 = sila;
 		vector<float_type> qload;
 
-		qload = legModel->computLoad(sila, config);
+        //qload = legModel->computLoad(sila, config);
 		cout << qload[0] << ", " << qload[1] << ", " << qload[2] << endl;
 
     getchar();
