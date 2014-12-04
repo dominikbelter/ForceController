@@ -5,6 +5,8 @@
 #include <irrlicht.h>
 
 
+
+
 // Irrlicht installation
 //
 // sudo apt-get install libIrrlicht1.8 libIrrlicht-dev
@@ -28,7 +30,7 @@ int main(int argc, const char** argv)
     Visualizer* visualizer;
 
     try {
-        visualizer= createVisualizerIrrlicht("Test", 1920, 1024);
+        visualizer= createVisualizerIrrlicht("Test", 1920, 1024, 0.01);
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;

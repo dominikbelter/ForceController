@@ -1,6 +1,10 @@
 #include "../include/visualization/visualizerIrrlicht.h"
 #include <math.h>
 
+
+#include "driverChoice.h"
+
+
 using namespace controller;
 using namespace std;
 using namespace irr;
@@ -10,19 +14,24 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
-/// A single instance of VisualizerGL
+
+
+
+
+
+/// A single instance of VisualizerIrrlicht
 VisualizerIrrlicht::Ptr visualizerIrrlicht;
 
 
-//DB inicjalizacja stalych i zmiennych przez liste: ": Visualizer(_name, TYPE_IRRLICHT), size(0.01)"
-VisualizerIrrlicht::VisualizerIrrlicht(const std::string _name, int width, int height) : Visualizer(_name, TYPE_IRRLICHT) {
-	initialize(width, height);
+
+VisualizerIrrlicht::VisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 _axisBoxSize) : axisBoxSize(_axisBoxSize), Visualizer(_name, TYPE_IRRLICHT) {
+    initialize(width, height);
 }
 
 
-//DB inicjalizacja stalych i zmiennych przez liste: ", size(0.01)"
-VisualizerIrrlicht::VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height) : Visualizer(configFilename, _name, TYPE_IRRLICHT), size(0.01) {
-	initialize(width, height);
+
+VisualizerIrrlicht::VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 _axisBoxSize) : axisBoxSize(_axisBoxSize), Visualizer(configFilename, _name, TYPE_IRRLICHT) {
+    initialize(width, height);
 }
 
 
@@ -58,17 +67,70 @@ void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
 
 void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) {
 
-    int i = 0;
-    int y =0;
-    while (true) {
+    while (device->run()) {
+
+
+
+           if(receiver.IsKeyDown(irr::KEY_KEY_Q)) {
+               vector3df pos = camera->getPosition();
+               pos.X = pos.X + 1;
+               camera->setPosition(pos);
+           } else
+           if(receiver.IsKeyDown(irr::KEY_KEY_W)) {
+               vector3df pos = camera->getPosition();
+               pos.X = pos.X - 1;
+               camera->setPosition(pos);
+           } else
+               if(receiver.IsKeyDown(irr::KEY_KEY_A)) {
+                   vector3df pos = camera->getPosition();
+                   pos.Y = pos.Y + 1;
+                   camera->setPosition(pos);
+               } else
+               if(receiver.IsKeyDown(irr::KEY_KEY_S)) {
+                   vector3df pos = camera->getPosition();
+                   pos.Y = pos.Y - 1;
+                   camera->setPosition(pos);
+               } else
+                   if(receiver.IsKeyDown(irr::KEY_KEY_Z)) {
+                       vector3df pos = camera->getPosition();
+                       pos.Z = pos.Z + 1;
+                       camera->setPosition(pos);
+                   } else
+                   if(receiver.IsKeyDown(irr::KEY_KEY_X)) {
+                       vector3df pos = camera->getPosition();
+                       pos.Z = pos.Z - 1;
+                       camera->setPosition(pos);
+                   } else
+
+           if(receiver.IsKeyDown(irr::KEY_KEY_T)) {
+             configuration[0] = configuration[0] + PI/50;
+           } else
+               if(receiver.IsKeyDown(irr::KEY_KEY_R)) {
+               configuration[0] = configuration[0] - PI/50;
+             } else
+               if(receiver.IsKeyDown(irr::KEY_KEY_G)) {
+               configuration[1] = configuration[1] + PI/50;
+             } else
+               if(receiver.IsKeyDown(irr::KEY_KEY_F)) {
+               configuration[1] = configuration[1] - PI/50;
+             } else
+               if(receiver.IsKeyDown(irr::KEY_KEY_B)) {
+                 configuration[2] = configuration[2] + PI/50;
+            } else
+               if(receiver.IsKeyDown(irr::KEY_KEY_V)) {
+               configuration[2] = configuration[2] - PI/50;
+            }
+
+
             video->beginScene(true, true, video::SColor(255, 0, 10, 200));
             video->setMaterial(videoMaterial);
 
 
 
+
             drawAxis();
 
-           mat34ToIrrlichtTransform(robotPose);
+            mat34ToIrrlichtTransform(robotPose);
 
            drawBody(vector3d<f32>(0, 0, 0), vector3d<f32>(PI / 2, 0, 0));
 
@@ -89,24 +151,29 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
 
 
     }
+
+    device->drop();
 }
 
-controller::Visualizer* controller::createVisualizerIrrlicht(const std::string _name, int width, int height) {
-    visualizerIrrlicht.reset(new VisualizerIrrlicht(_name, width, height));
+controller::Visualizer* controller::createVisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize) {
+    visualizerIrrlicht.reset(new VisualizerIrrlicht(_name, width, height, axisBoxSize));
     return visualizerIrrlicht.get();
 }
 
-controller::Visualizer* controller::createVisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height) {
-    visualizerIrrlicht.reset(new VisualizerIrrlicht(configFilename, _name, width, height));
+controller::Visualizer* controller::createVisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 axisBoxSize) {
+    visualizerIrrlicht.reset(new VisualizerIrrlicht(configFilename, _name, width, height, axisBoxSize));
     return visualizerIrrlicht.get();
 }
 
 
 
 int VisualizerIrrlicht::initialize(int width, int height) {
-    IrrlichtDevice *device =
+
+
+
+    device =
         createDevice(video::EDT_SOFTWARE, dimension2d<u32>(width, height), 16,
-        false, false, false); //, &receiver);
+        false, false, false, &receiver);
     if (!device)
         return 1;
 
@@ -134,6 +201,8 @@ int VisualizerIrrlicht::initialize(int width, int height) {
     femurMeshBuffer = femur->getMeshBuffer(meshMaterial);
     korpusMeshBuffer = korpus->getMeshBuffer(meshMaterial);
 
+
+
     manager->getMeshManipulator()->makePlanarTextureMapping(coxaMeshBuffer, 0.04f);
     manager->getMeshManipulator()->makePlanarTextureMapping(vitulusMeshBuffer, 0.04f);
     manager->getMeshManipulator()->makePlanarTextureMapping(femurMeshBuffer, 0.04f);
@@ -146,10 +215,6 @@ int VisualizerIrrlicht::initialize(int width, int height) {
 
 }
 
-
-void VisualizerIrrlicht::drawLeg1(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration) {
-
-}
 
 void VisualizerIrrlicht::drawLeg(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration) {
 
@@ -219,9 +284,9 @@ void VisualizerIrrlicht::ourTransform(irr::f32 xRad, irr::f32 yRad, irr::f32 zRa
 
 void VisualizerIrrlicht::drawAxis() {
     if (debug) {
-        video->draw3DBox(aabbox3d<f32>(-size, -size, 0, size, size, 10), SColor(100, 255, 0, 0));
-        video->draw3DBox(aabbox3d<f32>(0, -size, -size, 10, size, size), SColor(100, 0, 255, 0));
-        video->draw3DBox(aabbox3d<f32>(-size, 0, -size, size, 10, size), SColor(100, 255, 255, 255));
+        video->draw3DBox(aabbox3d<f32>(-axisBoxSize, -axisBoxSize, 0, axisBoxSize, axisBoxSize, 10), SColor(100, 255, 0, 0));
+        video->draw3DBox(aabbox3d<f32>(0, -axisBoxSize, -axisBoxSize, 10, axisBoxSize, axisBoxSize), SColor(100, 0, 255, 0));
+        video->draw3DBox(aabbox3d<f32>(-axisBoxSize, 0, -axisBoxSize, axisBoxSize, 10, axisBoxSize), SColor(100, 255, 255, 255));
     }
 }
 

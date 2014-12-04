@@ -7,6 +7,7 @@
 #ifndef _VISUALIZERIRRLICHT_H_
 #define _VISUALIZERIRRLICHT_H_
 
+
 #include "irrlicht.h"
 #include "../defs/defs.h"
 #include "../../3rdParty/tinyXML/tinyxml2.h"
@@ -14,12 +15,13 @@
 #include <string>
 #include <vector>
 #include "visualizer.h"
+#include "../include/visualization/myeventreceiver.h"
+
 
 namespace controller {
-    Visualizer* createVisualizerIrrlicht(const std::string _name, int width, int height);
-    Visualizer* createVisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height);
+    Visualizer* createVisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize);
+    Visualizer* createVisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 axisBoxSize);
 };
-
 
 using namespace controller;
 
@@ -33,9 +35,9 @@ using namespace controller;
         typedef std::unique_ptr<VisualizerIrrlicht> Ptr;
 
         /// overloaded constructor
-        VisualizerIrrlicht(const std::string _name, int width, int height);
+        VisualizerIrrlicht(const std::string _name, int width, int height, irr::f32 axisBoxSize);
 
-        VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height);
+        VisualizerIrrlicht(std::string configFilename, const std::string _name, int width, int height, irr::f32 axisBoxSize);
 
         /** Name of the Robot
         * @param string& name
@@ -57,6 +59,9 @@ using namespace controller;
         //DB przypisanie wartosci w konstruktorze
         bool debug = false;
 
+        MyEventReceiver receiver;
+        IrrlichtDevice *device;
+
         irr::video::IVideoDriver* video;
         irr::scene::IMeshBuffer* coxaMeshBuffer;
         irr::scene::IMeshBuffer* vitulusMeshBuffer;
@@ -66,9 +71,11 @@ using namespace controller;
         irr::scene::ICameraSceneNode* camera;
         irr::scene::ISceneManager * manager;
 
+
+
         //DB prosze tutaj tylko zadeklarowac stala, a inicjalizowac w konstruktorze za pomoca listy
         //DB nienajlepsza nazwa zmiennej: lepiej np. boxSize;
-        const irr::f32 size = 0.01;
+        const irr::f32 axisBoxSize;
 
         /** Draws a signle leg
         * @param int legIndex
@@ -77,7 +84,6 @@ using namespace controller;
         */
         void drawLeg(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration);
 
-        void drawLeg1(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration);
 
 
         /** Rotates and transforms the space
@@ -129,6 +135,8 @@ using namespace controller;
 
 
     };
+
+
 
 
 #endif // _VISUALIZERIRRLICHT_H_
