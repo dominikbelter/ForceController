@@ -110,8 +110,10 @@ class KinematicLie : public Kinematic {
 		/// number of joints
 		unsigned int jointsNo;
 		/// Number of links
-		unsigned int linksNo;
+        unsigned int linksNo;
+        //DB prosze dodac opisy zmiennych bedacych elementami klasy
 		tinyxml2::XMLError parameters;
+        //DB czy te zmienne nie powinny byc lokalne (wystepuja tylko w konstruktorze)
 		tinyxml2::XMLElement * pElement;
 		tinyxml2::XMLElement * pListElement;
 		tinyxml2::XMLDocument conf;

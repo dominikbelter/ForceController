@@ -11,6 +11,7 @@ RobotMessor::Ptr robotmessor;
 
 RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 {
+    //DB wartosci tych parametrow powinny byc zdefiniowane w pliku konfiguracyjnym
 	width_max = 0.1025; ///distance from center to middle leg
 	width_min = 0.052; /// distance from x to front leg
 	length = 0.12; ///distance front legs from x
@@ -113,12 +114,14 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
 
 	Leg* Leg0;
-	Leg0 = createInsectLeg();
+    Leg0 = createInsectLeg();
+    //DB to wydaje sie niepotrzebne
 	Robot* Rob;
 	Rob = createRobotMessor();
 
 
 	//-----------------------------------------
+    ///DB zamiast h<18 lepiej: h<configuration.size()
 	for (int h = 0; h<18; h + 3)
 	{
 		for (int j = 0; j<3; j++)

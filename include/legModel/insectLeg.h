@@ -127,6 +127,7 @@ class InsectLeg : public Leg
 		Mat33 computeJacobian_transposed(std::vector<float_type> config)
 		{
 			Mat33 temp;
+            //DB lepiej zrezygnowac ze zmiennej element i od razu wpisywac wynik do macierzy
 			float_type element;
 
 			element = -lengths[2] * sin(config[0]) * cos(config[1]) - lengths[1] * sin(config[0]);

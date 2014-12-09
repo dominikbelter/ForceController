@@ -40,6 +40,8 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
 
     angle = angle*180/M_PI;
     angle = angle*10;
+    //DB prosze zdefiniowac osobno stale, np.: static const float_type DEG2DYNAMIXEL;
+    // inicjalizacji dokonujemy w konstruktorze za pomoca listy
     angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])*0.341333 + 512;
 
     CDynamixel pointMotor;
