@@ -33,11 +33,15 @@ using namespace controller;
 class BoardDynamixel : public Board{
     public:
         /// Default values of angles for serwomotors.
+        // DB lepiej: std::vector<float_type> zeroAngle;
+        // DB trzeba jednak pamietac, ze nowa tablica zawiera katy w radianach
         int zero_angle[18];
         /// Default offset values of angles for serwomotors.
+        // DB lepiej: std::vector<float_type> angleOffset;
+        // DB trzeba jednak pamietac, ze nowa tablica zawiera katy w radianach
          int angle_offset[18];
 
-
+        static const float_type DEG2DYNAMIXEL;
         /// Pointer
         typedef std::unique_ptr<BoardDynamixel> Ptr;
 

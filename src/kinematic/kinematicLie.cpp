@@ -13,55 +13,41 @@ KinematicLie::Ptr kinematicLie;
 KinematicLie::KinematicLie(void) : Kinematic("Kinematic Lie", TYPE_LIE) {
 }
 KinematicLie::KinematicLie(std::string configFilename) : Kinematic(configFilename, "Kienamtic Lie", TYPE_LIE){
-
+	tinyxml2::XMLError parameters;
+	tinyxml2::XMLElement * pElement;
+	tinyxml2::XMLElement * pListElement;
+	tinyxml2::XMLDocument conf;
 	std::string filename = "../../resources/" + configFilename;
 	conf.LoadFile(filename.c_str());
 	if (conf.FirstChildElement() == nullptr)
 		std::cout << "unable to load Kinematic config file.\n";
 	else {
-		tinyxml2::XMLNode * pRoot = conf.FirstChildElement("parameters");
-		float_type val;
-		linksNo = std::stoi(conf.FirstChildElement("conf")->FirstChildElement("linksNo")->GetText());
-		jointsNo = std::stoi(conf.FirstChildElement("conf")->FirstChildElement("jointsNo")->GetText());
-		//ksi = new std::vector<float_type>[linksNo];
-		for (int i = 0; i < linksNo; i++)
-		{
-			std::string tmp = "Joint" + std::to_string(i);
-			pElement = pRoot->FirstChildElement(tmp.c_str());
+			tinyxml2::XMLNode * pRoot = conf.FirstChildElement("parameters");
+			float_type val;
+			linksNo = std::stoi(conf.FirstChildElement("conf")->FirstChildElement("linksNo")->GetText());
+			jointsNo = std::stoi(conf.FirstChildElement("conf")->FirstChildElement("jointsNo")->GetText());
+			for (int i = 0; i < linksNo; i++)
+			{
+				std::string tmp = "Joint" + std::to_string(i);
+				pElement = pRoot->FirstChildElement(tmp.c_str());
+				pListElement = pElement->FirstChildElement("value");
+				std::vector<float_type> tmpV;
+				while (pListElement != nullptr)
+				{
+					parameters = pListElement->QueryDoubleText(&val);
+					pListElement = pListElement->NextSiblingElement("value");
+					tmpV.push_back(val);
+				}
+				ksi.push_back(tmpV);
+			}
+			pElement = pRoot->FirstChildElement("g0");
 			pListElement = pElement->FirstChildElement("value");
-			std::vector<float_type> tmpV;
 			while (pListElement != nullptr)
 			{
 				parameters = pListElement->QueryDoubleText(&val);
 				pListElement = pListElement->NextSiblingElement("value");
-				tmpV.push_back(val);
+				g0.push_back(val);
 			}
-			ksi.push_back(tmpV);
-		}
-		pElement = pRoot->FirstChildElement("g0");
-		pListElement = pElement->FirstChildElement("value");
-		while (pListElement != nullptr)
-		{
-			parameters = pListElement->QueryDoubleText(&val);
-			pListElement = pListElement->NextSiblingElement("value");
-			g0.push_back(val);
-		}
-		////////////////////////////////////////////////test/////////////////////////////////////////////////////////
-		//for (int i = 0; i < linksNo; i++)
-		//{
-		//std::cout << "Joint" + std::to_string(i) + ": ";
-		//for (int j = 0; j < 6; j++)
-		//{
-		//std::cout << ksi[i][j] << " ";
-		//}
-		//std::cout << std::endl;
-		//}
-		//std::cout << "d0: ";
-		//for (int j = 0; j < 3; j++)
-		//{
-		//std::cout << g0[j] << " ";
-		//}
-		//std::cout << std::endl;	
 		}
 }
 
@@ -70,21 +56,28 @@ KinematicLie::~KinematicLie(void) {
 }
 
 /*Compute forward kinematic, default (-1) -- the last joint
-*temporary solution
-*!!!!WORKS ONLY FOR Messor 2!!!
+*
+*
 */
 Mat34 KinematicLie::forwardKinematic(const std::vector<float_type>& configuration, unsigned int linkNo){
 	Mat34 fkmatrix;
-	fkmatrix.affine();
-	Eigen::Matrix4d e1, e2, e3, g0;
-	float_type O1 = configuration[0];
-	float_type O2 = configuration[1];
-	float_type O3 = configuration[2];
-	e1 << cos(O1), -sin(O1), 0, 0, sin(O1), cos(O1), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1;
-	e2 << cos(O2), 0, sin(O2), 0.05 * (1 - cos(O2)), 0, 1, 0, 0, -sin(O2), 0, cos(O2), 0.05 * sin(O2), 0, 0, 0, 1;
-	e3 << cos(O3), 0, sin(O3), 0.17*(1 - cos(O3)), 0, 1, 0, 0, -sin(O3), 0, cos(O3), 0.17*sin(O3), 0, 0, 0, 1;
-	g0 << 1, 0, 0 ,0.345, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1;
-	fkmatrix = e1*e2*e3*g0;
+	fkmatrix.setIdentity();
+	if (linkNo == -1 || linkNo == linksNo)
+	{
+		for (int i = 0; i < linksNo; i++)
+		{
+			fkmatrix *= createEMatrix(ksi[i], configuration[i]);
+		}
+		fkmatrix *= createGMatrix(g0);
+	}
+	else
+	{
+		for (int i = 0; i < linkNo; i++)
+		{
+			fkmatrix *= createEMatrix(ksi[i], configuration[i]);
+		}
+		fkmatrix *= createGMatrix(ksi[linkNo]);
+	}
 	return fkmatrix;
 }
 
