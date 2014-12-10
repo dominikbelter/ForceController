@@ -23,9 +23,9 @@ int main( int argc, const char** argv )
 		cout << "Leg type: " << legModel->getName() << endl << endl;
 
 		Mat34 linkPose;
-		linkPose(0, 0) = 1; linkPose(0, 1) = 0; linkPose(0, 2) = 0; linkPose(0, 3) = 0.05;
-		linkPose(1, 0) = 0; linkPose(1, 1) = 1; linkPose(1, 2) = 0; linkPose(1, 3) = 0.12;
-		linkPose(2, 0) = 0; linkPose(2, 1) = 0; linkPose(2, 2) = 1; linkPose(2, 3) = 0.06;
+		linkPose(0, 0) = 0; linkPose(0, 1) = 0; linkPose(0, 2) = 1; linkPose(0, 3) = 0.15;
+		linkPose(1, 0) = 0; linkPose(1, 1) = 1; linkPose(1, 2) = 0; linkPose(1, 3) = -0.03;
+		linkPose(2, 0) = -1; linkPose(2, 1) = 0; linkPose(2, 2) = 0; linkPose(2, 3) = -0.09;
 
 		cout << "Destination Position" << endl;
 		for (int i = 0; i < 3; ++i)
@@ -58,7 +58,7 @@ int main( int argc, const char** argv )
 		vector<float_type> qload;
 
 		qload = legModel->computLoad(sila, config);
-		cout << endl << qload[0] << ", " << qload[1] << ", " << qload[2] << endl;
+		cout << endl << "Computed loads: " << qload[0] << ", " << qload[1] << ", " << qload[2] << endl;
 
     getchar();
   }

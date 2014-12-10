@@ -16,12 +16,46 @@ InsectLeg::Ptr insectLeg;
 
 InsectLeg::InsectLeg(void) : Leg("Insect Leg", TYPE_INSECT) 
 {
+	legKine = createKinematicLie();
+}
 
+InsectLeg::InsectLeg(std::string configFilename) : Leg(configFilename, "Insect Leg", TYPE_INSECT)
+{
+	tinyxml2::XMLDocument config;
+	std::string filename = "../../resources/" + configFilename;
+	config.LoadFile(filename.c_str());
+	if (config.ErrorID())
+	{
+		std::cout << "unable to load Kinematic config file.\n";
+	}
+	else
+	{
+		linksNo = std::stoi(config.FirstChildElement("conf")->FirstChildElement("linksNo")->GetText());
+		jointsNo = std::stoi(config.FirstChildElement("conf")->FirstChildElement("jointsNo")->GetText());
+
+		tinyxml2::XMLElement * parameters;
+		float_type paramf;
+		parameters = config.FirstChildElement("Link0");
+		parameters = parameters->FirstChildElement( "parameters" );
+		parameters->QueryDoubleAttribute("length", &paramf); lengths[0] = paramf;
+		parameters = config.FirstChildElement("Link1");
+		parameters = parameters->FirstChildElement( "parameters" );
+		parameters->QueryDoubleAttribute("length", &paramf); lengths[1] = paramf;
+		parameters = config.FirstChildElement("Link2");
+		parameters = parameters->FirstChildElement( "parameters" );
+		parameters->QueryDoubleAttribute("length", &paramf); lengths[2] = paramf;
+
+		std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
+		std::cout << "Lenght1: " << lengths[0] << std::endl;
+		std::cout << "Lenght2: " << lengths[1] << std::endl;
+		std::cout << "Lenght3: " << lengths[2] << std::endl;
+	}
+	legKine = createKinematicLie("../resources/legModel.xml");
 }
 
 InsectLeg::~InsectLeg(void) 
 {
-
+	legKine->~Kinematic();
 }
 
 /** Compute torque in each joint for given the force applied in the foot
@@ -31,7 +65,7 @@ InsectLeg::~InsectLeg(void)
 */
 std::vector<float_type> InsectLeg::computLoad(Vec3& force, std::vector<float_type> config)
 {
-	using namespace Eigen;
+	//using namespace Eigen;
 	std::vector<float_type> result;
 	float_type temp;
 	Mat33 jacobian;
@@ -47,7 +81,7 @@ std::vector<float_type> InsectLeg::computLoad(Vec3& force, std::vector<float_typ
 		result.push_back(temp);
 	}
 
-  return result;
+	return result;
 }
 
 /** Compute forward kinematic, default (-1) -- the last joint
@@ -57,10 +91,7 @@ std::vector<float_type> InsectLeg::computLoad(Vec3& force, std::vector<float_typ
 */
 Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, int linkNo)
 {
-	Kinematic* demoKine;
-	demoKine = createKinematicLie("../resources/legModel.xml");
-	return demoKine->forwardKinematic(configuration, linkNo);
-	//return kinematicLie->forwardKinematic(configuration, linkNo);
+	return legKine->forwardKinematic(configuration, linkNo);
 }
 
 /** Compute inverse kinematic, default (-1) -- the last joint
@@ -70,10 +101,25 @@ Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, int lin
 */
 std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, int linkNo)
 {
-	Kinematic* demoKine;
-	demoKine = createKinematicLie("../resources/legModel.xml");
-	return demoKine->inverseKinematic(linkPose, linkNo);
-	//return kinematicLie->inverseKinematic(linkPose, linkNo);
+	return legKine->inverseKinematic(linkPose, linkNo);
+}
+
+/// Jacobian of Messor leg
+Mat33 InsectLeg::computeJacobian_transposed(std::vector<float_type> config)
+{
+	Mat33 temp;
+
+	temp(0, 0) = -lengths[2] * sin(config[0]) * cos(config[1]) - lengths[1] * sin(config[0]);
+	temp(1, 0) = -lengths[2] * cos(config[0]) * sin(config[1]);
+	temp(2, 0) = 0;
+	temp(0, 1) = lengths[2] * cos(config[0]) * cos(config[1]) + lengths[1] * cos(config[0]);
+	temp(1, 1) = -lengths[2] * sin(config[0]) * sin(config[1]);
+	temp(2, 1) = 0;
+	temp(0, 2) = 0;
+	temp(1, 2) = 0;
+	temp(2, 2) = 0;
+
+	return temp;
 }
 
 /** Constructor without arguments of Leg object*
@@ -81,8 +127,8 @@ std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, int linkNo)
  */
 controller::Leg* controller::createInsectLeg(void) 
 {
-  insectLeg.reset(new InsectLeg());
-  return insectLeg.get();
+	insectLeg.reset(new InsectLeg());
+	return insectLeg.get();
 }
 
 /** Constructor of Leg object which argument is location of configuration file
@@ -91,6 +137,6 @@ controller::Leg* controller::createInsectLeg(void)
  */
 controller::Leg* controller::createInsectLeg(std::string filename) 
 {
-  insectLeg.reset(new InsectLeg(filename));
+	insectLeg.reset(new InsectLeg(filename));
   return insectLeg.get();
 }

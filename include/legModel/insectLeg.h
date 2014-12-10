@@ -46,38 +46,7 @@ class InsectLeg : public Leg
 		 * @param [in] configFilename relative path to acces the file
 		 * @return controller::Leg* indicator to the Leg object
 		 */
-		InsectLeg(std::string configFilename) : Leg(configFilename, "Insect Leg", TYPE_INSECT)
-		{
-		  tinyxml2::XMLDocument config;
-		  std::string filename = "../../resources/" + configFilename;
-		  config.LoadFile(filename.c_str());
-		  if (config.ErrorID())
-		  {
-		      std::cout << "unable to load Kinematic config file.\n";
-		  }
-		  else
-			{
-				linksNo = std::stoi(config.FirstChildElement("conf")->FirstChildElement("linksNo")->GetText());
-				jointsNo = std::stoi(config.FirstChildElement("conf")->FirstChildElement("jointsNo")->GetText());
-
-				tinyxml2::XMLElement * parameters;
-				float_type paramf;
-				parameters = config.FirstChildElement("Link0");
-				parameters = parameters->FirstChildElement( "parameters" );
-				parameters->QueryDoubleAttribute("length", &paramf); lengths[0] = paramf;
-				parameters = config.FirstChildElement("Link1");
-				parameters = parameters->FirstChildElement( "parameters" );
-				parameters->QueryDoubleAttribute("length", &paramf); lengths[1] = paramf;
-				parameters = config.FirstChildElement("Link2");
-				parameters = parameters->FirstChildElement( "parameters" );
-				parameters->QueryDoubleAttribute("length", &paramf); lengths[2] = paramf;
-
-				std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
-				std::cout << "Lenght1: " << lengths[0] << std::endl;
-				std::cout << "Lenght2: " << lengths[1] << std::endl;
-				std::cout << "Lenght3: " << lengths[2] << std::endl;
-		  }
-		}
+		InsectLeg(std::string configFilename);
 	
 		/// Destructor
 		~InsectLeg(void);
@@ -120,32 +89,14 @@ class InsectLeg : public Leg
 		/// number of links
 		int linksNo;
 
+		/// kinematic model of leg
+		Kinematic* legKine;
+
 		/// lengths of legs
 		float_type lengths[3];
 
 		/// Jacobian of Messor leg
-		Mat33 computeJacobian_transposed(std::vector<float_type> config)
-		{
-			Mat33 temp;
-            //DB lepiej zrezygnowac ze zmiennej element i od razu wpisywac wynik do macierzy
-			float_type element;
-
-			element = -lengths[2] * sin(config[0]) * cos(config[1]) - lengths[1] * sin(config[0]);
-			temp(0, 0) = element;
-			element = -lengths[2] * cos(config[0]) * sin(config[1]);
-			temp(1, 0) = element;
-			temp(2, 0) = 0;
-			element = lengths[2] * cos(config[0]) * cos(config[1]) + lengths[1] * cos(config[0]);
-			temp(0, 1) = element;
-			element = -lengths[2] * sin(config[0]) * sin(config[1]);
-			temp(1, 1) = element;
-			temp(2, 1) = 0;
-			temp(0, 2) = 0;
-			temp(1, 2) = 0;
-			temp(2, 2) = 0;
-
-			return temp;
-		}
+		Mat33 computeJacobian_transposed(std::vector<float_type> config);
 
 };
 
