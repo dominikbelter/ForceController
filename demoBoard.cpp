@@ -31,6 +31,7 @@ int main( int argc, const char** argv )
         demo->setPosition(1, 0, (M_PI*deg)/180);   //move 1st leg, 0 joint, about 45deg
         demo->setPosition(4, 0, (M_PI*deg)/180);   //move 1st leg, 0 joint, about 45deg
         demo->readPosition(1, 1, kat);
+        cout<<"Kat: "<<kat;
 
     }
 

@@ -17,6 +17,7 @@
 #define DEFAULT_BAUDNUM 1
 #define MOVE_SERWOMOTOR 0x1E
 #define P_PRESENT_POSITION_L 36
+#define TORQUE 40
 
 namespace controller {
 

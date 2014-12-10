@@ -242,6 +242,11 @@ unsigned int BoardDynamixel::readCurrent(const std::vector<float_type>& servoCur
 
 /// Returns torque/load from servo
 unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
+    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    if (legNo<3)
+       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE);
+    else
+        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE);
     return 0;
 }
 
