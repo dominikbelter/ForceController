@@ -15,7 +15,9 @@
 #include "../3rdParty/dynamixel/dynamixel.h"
 
 #define DEFAULT_BAUDNUM 1
-#define MOVE_SERWOMOTOR 0x18
+#define MOVE_SERWOMOTOR 0x1E
+#define P_PRESENT_POSITION_L 36
+
 namespace controller {
 
     /// create a single board controller (with usb2dynamixel)

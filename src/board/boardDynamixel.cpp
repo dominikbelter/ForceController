@@ -6,16 +6,15 @@
 #include "board/board.h"
 
 using namespace controller;
-
+using namespace std;
 /// A single instance of BoardDynamixel
 BoardDynamixel::Ptr boardDynamixel;
 
 BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIXEL) {
     //Every operation is executed on two objects in the same time (One object on one side of port)
-    /*for(int i=0 ; i < 2 ; i++){
+    for(int i=0 ; i < 2 ; i++){
        int result =  dynamixelMotors[i].dxl_initialize(i+1, DEFAULT_BAUDNUM);
-    }*/
-//    int result =  dynamixelMotors[0].dxl_initialize(0+1, DEFAULT_BAUDNUM);
+    }
 
     zero_angle[0]=450; zero_angle[1]=240; zero_angle[2]=1140;
     zero_angle[3]=0; zero_angle[4]=240; zero_angle[5]=1140;
@@ -33,7 +32,12 @@ BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIX
 }
 
 BoardDynamixel::~BoardDynamixel(void) {
+    for(int i = 0; i < 2;  i++){
+        CDynamixel *pointMotor = &dynamixelMotors[i];
+        pointMotor->dxl_terminate();     //end of transmision
+    }
 }
+
 
 /// Set reference position value for servomotor, returns error value
 unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char jointNo, float_type angle){
@@ -42,24 +46,20 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
     angle = angle*10;
     angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])*0.341333 + 512;
 
-    CDynamixel pointMotor;
-    pointMotor.dxl_initialize(0+1, DEFAULT_BAUDNUM);
-    pointMotor.dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
-    pointMotor.dxl_terminate();     //end of transmision
-    //delete pointMotor;
+    CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
+    pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
+
     return 0;
 }
 
 /// Set reference position value for servomotors, returns error value
 unsigned int BoardDynamixel::setPosition(unsigned char legNo, const std::vector<float_type>& angle){
-
-    std::vector <float> angleLocal;
-    //DB lepszy sposób na kopiowanie fragmentu wektora:
-    //DB vector<float_type> angleLocal(angle.begin(), angle.begin+3);
-    //DB w tym przypadku jednak kopiowanie zawartosci jest niepotrzebne
+    vector <float_type> angleLocal;
+    // angleLocal(angle.begin(), angle.begin()+3); //nie dziala
     for(int i = 0; i < 3 ; i++){    //typical duplication of vector doesnt work :(
         angleLocal[i] = angle[i];
     }
+
     CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
     if(legNo < 3){
         for(int i=0; i<3; i++ ){    // i -> jointNo
@@ -80,8 +80,6 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, const std::vector<
         }
     }
 
-    pointMotor->dxl_terminate();     //end of transmision
-    delete pointMotor;
     return 0;
 }
 
@@ -174,7 +172,14 @@ unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqu
 }
 
 /// Returns current position of the servomotor, returns error value
-unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle){
+unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle){ 
+
+    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    if (legNo<3)
+        angle = (object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L)-512)/0.341333;
+    else
+        angle = -(object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L)-512)/0.341333;
+
     return 0;
 }
 
