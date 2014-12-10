@@ -13,7 +13,10 @@ KinematicLie::Ptr kinematicLie;
 KinematicLie::KinematicLie(void) : Kinematic("Kinematic Lie", TYPE_LIE) {
 }
 KinematicLie::KinematicLie(std::string configFilename) : Kinematic(configFilename, "Kienamtic Lie", TYPE_LIE){
-
+	tinyxml2::XMLError parameters;
+	tinyxml2::XMLElement * pElement;
+	tinyxml2::XMLElement * pListElement;
+	tinyxml2::XMLDocument conf;
 	std::string filename = "../../resources/" + configFilename;
 	conf.LoadFile(filename.c_str());
 	if (conf.FirstChildElement() == nullptr)
@@ -23,7 +26,6 @@ KinematicLie::KinematicLie(std::string configFilename) : Kinematic(configFilenam
 			float_type val;
 			linksNo = std::stoi(conf.FirstChildElement("conf")->FirstChildElement("linksNo")->GetText());
 			jointsNo = std::stoi(conf.FirstChildElement("conf")->FirstChildElement("jointsNo")->GetText());
-			//ksi = new std::vector<float_type>[linksNo];
 			for (int i = 0; i < linksNo; i++)
 			{
 				std::string tmp = "Joint" + std::to_string(i);

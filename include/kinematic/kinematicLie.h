@@ -103,21 +103,22 @@ class KinematicLie : public Kinematic {
 			e.col(3) << g[0], g[1], g[2], 1;
 			return e;
 		}
-		//ksi tables
+		/** ksi tables
+		* contains vector of ksi vectors loaded from file legModel.xml
+		*/
 		std::vector<std::vector<float_type>> ksi;
-		//g0 table
+		/** g0 table
+		* contains g0 vector loaded from file legModel.xml
+		*/
 		std::vector<float_type> g0;
-		/// number of joints
+		/** number of joints
+		* loaded from file legModel.xml
+		*/
 		unsigned int jointsNo;
-		/// Number of links
+		/** Number of links
+		* loaded from file legModel.xml
+		*/
         unsigned int linksNo;
-        //DB prosze dodac opisy zmiennych bedacych elementami klasy
-		tinyxml2::XMLError parameters;
-        //DB czy te zmienne nie powinny byc lokalne (wystepuja tylko w konstruktorze)
-		tinyxml2::XMLElement * pElement;
-		tinyxml2::XMLElement * pListElement;
-		tinyxml2::XMLDocument conf;
-
 };
 
 #endif // BOARDDYNAMIXEL_H_INCLUDED
