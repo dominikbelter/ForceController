@@ -12,7 +12,6 @@ using namespace controller;
 
 /// A single instance of insect leg
 InsectLeg::Ptr insectLeg;
-//KinematicLie::Ptr kinematicLie;
 
 InsectLeg::InsectLeg(void) : Leg("Insect Leg", TYPE_INSECT) 
 {
@@ -65,20 +64,13 @@ InsectLeg::~InsectLeg(void)
 */
 std::vector<float_type> InsectLeg::computLoad(Vec3& force, std::vector<float_type> config)
 {
-	//using namespace Eigen;
 	std::vector<float_type> result;
-	float_type temp;
-	Mat33 jacobian;
+	Vec3 torque;
+	torque.vector() = -computeJacobian_transposed(config) * force.vector();
 
-	jacobian = computeJacobian_transposed(config);
-
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 3; i++)
 	{
-		temp = 0;
-		temp += -jacobian(i, 0) * force.x();
-		temp += -jacobian(i, 1) * force.y();
-		temp += -jacobian(i, 2) * force.z();
-		result.push_back(temp);
+		result.push_back(torque.vector().data()[i]);
 	}
 
 	return result;
