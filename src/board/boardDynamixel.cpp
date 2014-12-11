@@ -219,9 +219,10 @@ unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqu
 
 /// Returns current position of the servomotor, returns error value
 unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle){ 
-
+    float_type ang;
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-        angle = (object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L)-512)/0.341333;
+        ang = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
+        angle = (-((ang-512)/0.341333))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
     return 0;
 }
 
