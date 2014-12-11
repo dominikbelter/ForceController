@@ -18,7 +18,11 @@
 #define MOVE_SERWOMOTOR 0x1E
 #define P_PRESENT_POSITION_L 36
 #define TORQUE 40
+<<<<<<< HEAD
 #define SET_COMPLIANCE_SLOPE 0x40
+=======
+#define MOVING_SPEED 32
+>>>>>>> 502232077e8cd927f12dfe2cf7018b8112c4e2e6
 
 namespace controller {
 
