@@ -46,10 +46,14 @@ option(BUILD_CONTROLLER_DEMO_ROBOT "Build Robot Controller program and libraries
 mark_as_advanced(BUILD_CONTROLLER_DEMO_ROBOT)
 option(BUILD_CONTROLLER_DEMO_VISUALIZATION "Build Visualization program and libraries" YES)
 mark_as_advanced(BUILD_CONTROLLER_DEMO_VISUALIZATION)
+option(BUILD_CONTROLLER_DEMO_VISUALIZATION_SERVER "Build Server for Visualization" YES)
+mark_as_advanced(BUILD_CONTROLLER_DEMO_VISUALIZATION_SERVER)
+option(BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT "Build Client for Visualization" YES)
+mark_as_advanced(BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT)
 
 #additional dependencies
-# Boost
-#FIND_PACKAGE(Boost COMPONENTS system filesystem thread)
+#Boost
+FIND_PACKAGE(Boost COMPONENTS system filesystem thread asio)
 # OpenCV
 # FIND_PACKAGE(OpenCV REQUIRED)
 # include_directories( ${OpenCV_INCLUDE_DIRS} )
@@ -334,3 +338,35 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION)
         INSTALL(FILES ${DEMO_VISUALIZATION_FILES} DESTINATION bin)
 
 endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION)
+
+
+###############################################################################
+#
+# CONTROLLER SERVER VISUALIZATION DEMO executables
+#
+###############################################################################
+if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION_SERVER)
+
+        SET(DEMO_VISUALIZATION_SERVER_SOURCES ./demoVisualizationServer.cpp)
+        ADD_EXECUTABLE(demoVisualizationServer ${DEMO_VISUALIZATION_SERVER_SOURCES})
+        TARGET_LINK_LIBRARIES(demoVisualizationServer Leg Board Robot Visualization Irrlicht ${Boost_ASIO_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+        INSTALL(TARGETS demoVisualizationServer RUNTIME DESTINATION bin)
+        INSTALL(FILES ${DEMO_VISUALIZATION_SERVER_FILES} DESTINATION bin)
+
+endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION_SERVER)
+
+
+###############################################################################
+#
+# CONTROLLER CLIENT VISUALIZATION DEMO executables
+#
+###############################################################################
+if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT)
+
+        SET(DEMO_VISUALIZATION_CLIENT_SOURCES ./demoVisualizationClient.cpp)
+        ADD_EXECUTABLE(demoVisualizationClient ${DEMO_VISUALIZATION_CLIENT_SOURCES})
+        TARGET_LINK_LIBRARIES(demoVisualizationClient Leg Board Robot Visualization Irrlicht ${Boost_ASIO_LIBRARY} ${Boost_SYSTEM_LIBRARY} )
+        INSTALL(TARGETS demoVisualizationClient RUNTIME DESTINATION bin)
+        INSTALL(FILES ${DEMO_VISUALIZATION_CLIENT_FILES} DESTINATION bin)
+
+endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT)

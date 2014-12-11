@@ -20,13 +20,13 @@
 
 using namespace std;
 
+#ifndef __DO_NOT_USE_VISUALIZER__
+
 struct visualizationPointers
 {
 	Board* board;
 	Visualizer* visualizer;
 };
-
-#ifndef __DO_NOT_USE_VISUALIZER__
 
 void updatePlatformPosition(visualizationPointers* args)
 {
