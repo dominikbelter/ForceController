@@ -13,6 +13,58 @@ RobotMessor::Ptr robotmessor;
 
 RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 {
+	//Translation for each Leg
+
+	Leg0 = createInsectLeg("../resources/legModel.xml");
+
+	width_max = 0.1025; ///distance from center to middle leg
+	width_min = 0.052; /// distance from x to front leg
+	length = 0.12; ///distance front legs from x
+
+	L0.setIdentity();
+	L0(0, 3) = width_min;
+	L0(1, 3) = length;
+	L0(2, 3) = 0;
+
+	L1.setIdentity();
+	L1(0, 3) = width_max;
+	L1(1, 3) = 0;
+	L1(2, 3) = 0;
+
+	L2.setIdentity();
+	L2(0, 3) = width_min;
+	L2(1, 3) = -length;
+	L2(2, 3) = 0;
+
+	L3.setIdentity();
+	L3(0, 3) = -width_min;
+	L3(1, 3) = -length;
+	L3(2, 3) = 0;
+
+	L4.setIdentity();
+	L4(0, 3) = -width_max;
+	L4(1, 3) = 0;
+	L4(2, 3) = 0;
+
+	L5.setIdentity();
+	L5(0, 3) = -width_min;
+	L5(1, 3) = length;
+	L5(2, 3) = 0;
+
+	L_all.push_back(L0);
+	L_all.push_back(L1);
+	L_all.push_back(L2);
+	L_all.push_back(L3);
+	L_all.push_back(L4);
+	L_all.push_back(L5);
+
+	OldMotion.setIdentity();
+	OldMotion(0, 3) = 0;
+	OldMotion(1, 3) = 0;
+	OldMotion(2, 3) = 0;
+
+
+
 
 }
 
@@ -20,46 +72,6 @@ RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 
 RobotMessor::~RobotMessor(void)
 {
-    //Translation for each Leg
-
-    L0.setIdentity();
-    L0(0, 3) = width_min;
-    L0(1, 3) = length;
-    L0(2, 3) = 0;
-
-    L1.setIdentity();
-    L1(0, 3) = width_max;
-    L1(1, 3) = 0;
-    L1(2, 3) = 0;
-
-    L2.setIdentity();
-    L2(0, 3) = width_min;
-    L2(1, 3) = -length;
-    L2(2, 3) = 0;
-
-    L3.setIdentity();
-    L3(0, 3) = -width_min;
-    L3(1, 3) = -length;
-    L3(2, 3) = 0;
-
-    L4.setIdentity();
-    L4(0, 3) = -width_max;
-    L4(1, 3) = 0;
-    L4(2, 3) = 0;
-
-    L5.setIdentity();
-    L5(0, 3) = -width_min;
-    L5(1, 3) = length;
-    L5(2, 3) = 0;
-
-    L_all.push_back(L0);
-    L_all.push_back(L1);
-    L_all.push_back(L2);
-    L_all.push_back(L3);
-    L_all.push_back(L4);
-    L_all.push_back(L5);
-
-
 
 }
 
@@ -67,21 +79,16 @@ RobotMessor::~RobotMessor(void)
 std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 {
 	std::vector<float_type> conf, conf2;
+	Mat34 actleg, newmotion;
 
-
-	Leg* Leg0;
-	Leg0 = createInsectLeg();
-	Robot* Rob;
-	Rob = createRobotMessor();
-	Mat34 tmp;
-
+	newmotion = OldMotion*motion;
 	//-----------------------------------------
 
 	for (int i = 0; i<6; i++)
 	{
 
-		tmp = motion*L_all[i];
-		conf2 = Leg0->inverseKinematic(tmp);
+		actleg = newmotion*L_all[i];
+		conf2 = Leg0->inverseKinematic(actleg);
 		conf.push_back(conf2[0]);
 		conf.push_back(conf2[1]);
 		conf.push_back(conf2[2]);
@@ -89,7 +96,7 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 
 	//-------------------------------------------
 
-
+	OldMotion = newmotion;
 	return conf;
 }
 		
@@ -101,7 +108,8 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 }
 
  /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)
-std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> configuration){
+std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> configuration)
+{
 
 	std::vector<Mat34> linksPos;
 	std::vector<float_type> conf;
@@ -109,18 +117,8 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
 
 
-
-
-	Leg* Leg0;
-    Leg0 = createInsectLeg();
-    //DB to wydaje sie niepotrzebne
-	Robot* Rob;
-	Rob = createRobotMessor();
-
-
 	//-----------------------------------------
-    ///DB zamiast h<18 lepiej: h<configuration.size()
-    for (int h = 0; h<configuration.size(); h + 3)
+	for (int h = 0; h<configuration.size(); h + 3)
 	{
 		for (int j = 0; j<3; j++)
 		{
@@ -142,7 +140,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 	//-------------------------------------------
 
 	return linksPos;
- }
+}
 
 ///Compute force in each joint of the legs, input configuration of the robot
  std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)

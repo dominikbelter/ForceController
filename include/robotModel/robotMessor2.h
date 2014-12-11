@@ -67,25 +67,23 @@ public:
 
 private:
 
-    float_type width_max= 0.1025; ///distance from center to middle leg
-    float_type width_min=0.052; /// distance from x to front leg
-    float_type length = 0.12; ///distance front legs from x
+	float_type width_max; ///distance from center to middle leg
+	float_type width_min; /// distance from x to front leg
+	float_type length; ///distance front legs from x
 
-    Mat34 Ps0;
-    Mat34 Ps1;
-    Mat34 Ps2;
-    Mat34 Ps3;
-    Mat34 Ps4;
-    Mat34 Ps5;
 
-    Mat34 L0;
-    Mat34 L1;
-    Mat34 L2;
-    Mat34 L3;
-    Mat34 L4;
-    Mat34 L5;
+	Mat34 L0;
+	Mat34 L1;
+	Mat34 L2;
+	Mat34 L3;
+	Mat34 L4;
+	Mat34 L5;
 
-	std::vector<Mat34> L_all;
+	Mat34 OldMotion; ///matrix include oldmotion robot, start with...
+
+	std::vector<Mat34> L_all; ///vector include translations for all legs from robot center
+	Leg* Leg0;
+
 
 };
 
