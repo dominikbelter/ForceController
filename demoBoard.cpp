@@ -34,7 +34,8 @@ int main( int argc, const char** argv )
         demo->readPosition(1, 1, kat);
         demo->readTorque(1,1, moment);
 
-        cout<<"Kat: "<<kat;
+        cout << "Kat: "<< kat << endl
+              << "Moment: " << moment << endl;
 
     }
 
