@@ -80,7 +80,7 @@ int main( int argc, const char** argv )
          visualizationPointers ptrs;
 
 		 try {
-			 visualizer = createVisualizerIrrlicht("VisualizerWindow", 1920, 1024, 0.01);
+             visualizer = createVisualizerIrrlicht("VisualizerWindow", 1920, 1024, 0.01, false);
 	         ptrs.board = board;
 	         ptrs.visualizer = visualizer;
 	         std::thread visualizerThread(updatePlatformPosition,&ptrs);
