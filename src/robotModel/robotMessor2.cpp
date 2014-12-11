@@ -153,7 +153,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
      Leg* leg;
      leg = createInsectLeg();
-     TorqueForce TF;
+     TorqueForce TF1,TF2,TF3,TF4,TF5,TF6;
      //Coefficient matrix of force and torque equations
      typedef Eigen::Matrix<float_type,6,6> Mat66;
      typedef Eigen::Matrix<float_type,6,1> Mat16;
@@ -258,15 +258,45 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
      Fz(3,0)=x(3,0)*l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
      Fz(4,0)=x(4,0)*l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
      Fz(5,0)=x(5,0)*l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
-     for(int i=0;i<6;i++){
+    /* for(int i=0;i<6;i++){
      FZ.push_back(Fz(i,0));
      FX.push_back(Fx(i,0));
      FY.push_back(Fy(i,0));
-     }
-     //Torque
-     //TF.torque=leg->computLoad(TF.force,configuration);
+     }*/
+     TF1.force.x()=Fx(0,0);
+     TF1.force.y()=Fy(0,0);
+     TF1.force.z()=Fz(0,0);
 
-      return FZ;
+     TF2.force.x()=Fx(1,0);
+     TF2.force.y()=Fy(1,0);
+     TF2.force.z()=Fz(1,0);
+
+     TF3.force.x()=Fx(2,0);
+     TF3.force.y()=Fy(2,0);
+     TF3.force.z()=Fz(2,0);
+
+     TF4.force.x()=Fx(3,0);
+     TF4.force.y()=Fy(3,0);
+     TF4.force.z()=Fz(3,0);
+
+     TF5.force.x()=Fx(4,0);
+     TF5.force.y()=Fy(4,0);
+     TF5.force.z()=Fz(4,0);
+
+     TF6.force.x()=Fx(5,0);
+     TF6.force.y()=Fy(5,0);
+     TF6.force.z()=Fz(5,0);
+
+     //Torque
+     std::vector<float_type> torque1,torque2,torque3,torque4,torque5,torque6,TORQUE;
+    torque1=leg->computLoad(TF1.force,configuration);
+    torque2=leg->computLoad(TF2.force,configuration);
+    torque3=leg->computLoad(TF3.force,configuration);
+    torque4=leg->computLoad(TF4.force,configuration);
+    torque5=leg->computLoad(TF5.force,configuration);
+    torque6=leg->computLoad(TF6.force,configuration);
+    //TORQUE.insert(torque1.begin(),torque1.end(),torque2.begin(),torque2.end(),torque3.begin(),torque3.end(),torque4.begin(),torque4.end(),torque5.begin(),torque5.end(),torque6.begin(),torque6.end());
+      return torque1;
 
 }
 
