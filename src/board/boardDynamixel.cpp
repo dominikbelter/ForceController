@@ -221,7 +221,7 @@ unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqu
 unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle){ 
 
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-        angle = (object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L)-512)/0.341333;
+    angle = (object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L)-512)/0.341333;
     return 0;
 }
 
@@ -287,6 +287,8 @@ unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char joint
        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE);
     else
         servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE);
+
+    cout << "MaxTorque: " <<object->dxl_read_word(legNo*10+jointNo, 0x0E) << endl;   //0x0E - Max Torque
     return 0;
 }
 
