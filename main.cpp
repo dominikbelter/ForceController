@@ -10,6 +10,8 @@
 #include <thread>
 #include <time.h>
 
+#define __DO_NOT_USE_VISUALIZER__
+
 
 /*
  Paulina Jankowska
@@ -23,6 +25,8 @@ struct visualizationPointers
 	Board* board;
 	Visualizer* visualizer;
 };
+
+#ifndef __DO_NOT_USE_VISUALIZER__
 
 void updatePlatformPosition(visualizationPointers* args)
 {
@@ -52,6 +56,8 @@ void updatePlatformPosition(visualizationPointers* args)
 	}
 }
 
+#endif
+
 
 int main( int argc, const char** argv )
 {
@@ -75,6 +81,8 @@ int main( int argc, const char** argv )
          std::vector<float_type> destinationCompliance = robot->computeCompliance(destinationConfiguration);
          board->setTorqueLimit(destinationCompliance);
 
+#ifndef __DO_NOT_USE_VISUALIZER__
+
          Visualizer* visualizer;
 
          visualizationPointers ptrs;
@@ -89,6 +97,7 @@ int main( int argc, const char** argv )
 			 std::cerr << ex.what() << std::endl;
 			 return 1;
 		 }
+#endif
 
     }
     catch (const std::exception& ex) {
