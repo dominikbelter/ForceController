@@ -16,17 +16,17 @@ int main( int argc, const char** argv )
         Robot* Rob;
         Rob = createRobotMessor();
 
-        std::vector<float_type> configuration,Fz;
+        std::vector<float_type> configuration,F1;
 
         configuration.push_back(5);
 
-        Fz=Rob->computeCompliance(configuration);
+        F1=Rob->computeCompliance(configuration);
            std::cout<<""<<std::endl;
            std::cout<<"wyniki Fz:"<<std::endl;
            std::cout<<""<<std::endl;
-        for(int i=0;i<6;i++)
+        for(int i=0;i<3;i++)
         {
-            cout<<Fz[i]<<endl;
+            cout<<F1[i]<<endl;
 
         }
     }
