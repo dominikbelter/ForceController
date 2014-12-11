@@ -67,9 +67,9 @@ public:
 
 private:
 
-    float_type width_max;
-    float_type width_min;
-    float_type length;
+    float_type width_max= 0.1025; ///distance from center to middle leg
+    float_type width_min=0.052; /// distance from x to front leg
+    float_type length = 0.12; ///distance front legs from x
 
     Mat34 Ps0;
     Mat34 Ps1;
@@ -86,6 +86,7 @@ private:
     Mat34 L5;
 
 	std::vector<Mat34> L_all;
+
 };
 
 #endif

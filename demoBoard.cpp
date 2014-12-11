@@ -20,6 +20,7 @@ int main( int argc, const char** argv )
     //testy
     int deg;
     float_type kat = 0;
+    float_type moment = 0;
     Board *demo = createBoardDynamixel();
     while (true){
 
@@ -29,9 +30,12 @@ int main( int argc, const char** argv )
             break;
         }
         demo->setPosition(1, 0, (M_PI*deg)/180);   //move 1st leg, 0 joint, about 45deg
-        demo->setPosition(4, 0, (M_PI*deg)/180);   //move 1st leg, 0 joint, about 45deg
+        //demo->setPosition(4, 0, (M_PI*deg)/180);   //move 1st leg, 0 joint, about 45deg
         demo->readPosition(1, 1, kat);
-        cout<<"Kat: "<<kat;
+        demo->readTorque(1,1, moment);
+
+        cout << "Kat: "<< kat << endl
+              << "Moment: " << moment << endl;
 
     }
 
