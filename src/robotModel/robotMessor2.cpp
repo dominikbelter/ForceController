@@ -8,54 +8,11 @@ using namespace controller;
 
 
 
+
 RobotMessor::Ptr robotmessor;
 
 RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 {
-    //DB wartosci tych parametrow powinny byc zdefiniowane w pliku konfiguracyjnym
-	width_max = 0.1025; ///distance from center to middle leg
-	width_min = 0.052; /// distance from x to front leg
-	length = 0.12; ///distance front legs from x
-
-	//Translation for each Leg
-
-	L0.setIdentity();
-	L0(0, 3) = width_min;
-	L0(1, 3) = length;
-	L0(2, 3) = 0;
-
-	L1.setIdentity();
-	L1(0, 3) = width_max;
-	L1(1, 3) = 0;
-	L1(2, 3) = 0;
-
-	L2.setIdentity();
-	L2(0, 3) = width_min;
-	L2(1, 3) = -length;
-	L2(2, 3) = 0;
-
-	L3.setIdentity();
-	L3(0, 3) = -width_min;
-	L3(1, 3) = -length;
-	L3(2, 3) = 0;
-
-	L4.setIdentity();
-	L4(0, 3) = -width_max;
-	L4(1, 3) = 0;
-	L4(2, 3) = 0;
-
-	L5.setIdentity();
-	L5(0, 3) = -width_min;
-	L5(1, 3) = length;
-	L5(2, 3) = 0;
-
-	L_all.push_back(L0);
-	L_all.push_back(L1);
-	L_all.push_back(L2);
-	L_all.push_back(L3);
-	L_all.push_back(L4);
-	L_all.push_back(L5);
-
 
 }
 
@@ -63,6 +20,46 @@ RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 
 RobotMessor::~RobotMessor(void)
 {
+    //Translation for each Leg
+
+    L0.setIdentity();
+    L0(0, 3) = width_min;
+    L0(1, 3) = length;
+    L0(2, 3) = 0;
+
+    L1.setIdentity();
+    L1(0, 3) = width_max;
+    L1(1, 3) = 0;
+    L1(2, 3) = 0;
+
+    L2.setIdentity();
+    L2(0, 3) = width_min;
+    L2(1, 3) = -length;
+    L2(2, 3) = 0;
+
+    L3.setIdentity();
+    L3(0, 3) = -width_min;
+    L3(1, 3) = -length;
+    L3(2, 3) = 0;
+
+    L4.setIdentity();
+    L4(0, 3) = -width_max;
+    L4(1, 3) = 0;
+    L4(2, 3) = 0;
+
+    L5.setIdentity();
+    L5(0, 3) = -width_min;
+    L5(1, 3) = length;
+    L5(2, 3) = 0;
+
+    L_all.push_back(L0);
+    L_all.push_back(L1);
+    L_all.push_back(L2);
+    L_all.push_back(L3);
+    L_all.push_back(L4);
+    L_all.push_back(L5);
+
+
 
 }
 
@@ -123,7 +120,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
 	//-----------------------------------------
     ///DB zamiast h<18 lepiej: h<configuration.size()
-	for (int h = 0; h<18; h + 3)
+    for (int h = 0; h<configuration.size(); h + 3)
 	{
 		for (int j = 0; j<3; j++)
 		{
