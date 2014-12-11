@@ -115,6 +115,15 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
 
 /// Set reference speed value for servomotor, returns error value
 unsigned int BoardDynamixel::setSpeed(unsigned char legNo, unsigned char jointNo, float_type speed){
+    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    if (legNo<3){
+            object->dxl_write_word(legNo*10 + jointNo, MOVING_SPEED, speed*9);
+    }
+        else{
+            object->dxl_write_word(legNo*10 + jointNo, MOVING_SPEED, speed*9);
+    }
+
+
     return 0;
 }
 
