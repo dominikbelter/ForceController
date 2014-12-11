@@ -317,7 +317,7 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_ROBOT)
 
         SET(DEMO_ROBOT_SOURCES ./demoRobot.cpp)
         ADD_EXECUTABLE(demoRobot ${DEMO_ROBOT_SOURCES})
-        TARGET_LINK_LIBRARIES(demoRobot Leg Board Robot Visualization)
+        TARGET_LINK_LIBRARIES(demoRobot Leg Board Robot Visualization Irrlicht)
         INSTALL(TARGETS demoRobot RUNTIME DESTINATION bin)
         INSTALL(FILES ${DEMO_ROBOT_FILES} DESTINATION bin)
 

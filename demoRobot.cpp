@@ -22,7 +22,7 @@ int main( int argc, const char** argv )
 {
     try {
 
-		/*
+
 		Mat34 testmoveplatform, testmoveplatform2;
 
 		testmoveplatform.setIdentity();
@@ -82,8 +82,8 @@ int main( int argc, const char** argv )
 		getchar();
 		//visualizer->drawRobot(robotPose, configuration2);
 		return 0;
-		*/
 
+/*
 
 
         Robot* Rob;
@@ -102,7 +102,7 @@ int main( int argc, const char** argv )
             cout<<F1[i]<<endl;
 
         }
-    }
+*/    }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
         return 1;
