@@ -90,7 +90,7 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
 
     /* how many elements have this vector?
        - angle for every joint? 18
-       - angle for joint in every leg? 6
+
     */
 
   /*  std::vector <float> angleLocal;
@@ -145,16 +145,55 @@ unsigned int BoardDynamixel::setComplianceMargin(const std::vector<float_type> m
 
 /// Set compiance slope [1,254] - the area with the reduced torque, returns error value
 unsigned int BoardDynamixel::setComplianceSlope(unsigned char legNo, unsigned char jointNo, float_type slope){
+    if(slope < 1){
+        slope = 1;
+    }else if(slope > 254){
+        slope = 254;
+    }
+    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    pMotor->dxl_write_word(legNo*10+jointNo, SET_COMPLIANCE_SLOPE, slope);
     return 0;
 }
 
 /// Set compiance slope [1,254] - the area with the reduced torque, returns error value
 unsigned int BoardDynamixel::setComplianceSlope(unsigned char legNo, const std::vector<float_type>& slope){
+
+    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    if(legNo < 3){
+        for(int i=0; i<3; i++ ){        // i -> jointNo
+            pMotor->dxl_write_word(legNo*10+i, SET_COMPLIANCE_SLOPE, slope[i]);
+        }
+    }else{
+        for(int i = 3; i < 6; i++){     // i -> jointNo
+            pMotor->dxl_write_word(legNo*10+i, SET_COMPLIANCE_SLOPE, slope[i]);
+        }
+    }
+
     return 0;
 }
 
 /// Set compiance slope [1,254] - the area with the reduced torque, returns error value
 unsigned int BoardDynamixel::setComplianceSlope(const std::vector<float_type>& slope){
+    CDynamixel *pMotorR = &dynamixelMotors[0];
+    CDynamixel *pMotorL = &dynamixelMotors[1];
+    int tmp = 0;
+    int cnt = 0;
+    for(int i = 0; i < 18; i++){
+        if(i < 9){  //Right side of Mesor
+            tmp = i%3;
+            if(!(i%3) && i != 0){
+                cnt++;
+            }
+            pMotorR->dxl_write_word(cnt*10+tmp, SET_COMPLIANCE_SLOPE, slope[i]);
+        }else{      //Left side of Mesor
+            tmp = i%3;
+            if(!i%3){
+                cnt++;
+            }
+            pMotorL->dxl_write_word(cnt*10+tmp, SET_COMPLIANCE_SLOPE, slope[i]);
+        }
+
+    }
     return 0;
 }
 
