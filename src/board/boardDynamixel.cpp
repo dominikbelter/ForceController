@@ -42,6 +42,7 @@ BoardDynamixel::~BoardDynamixel(void) {
 /// Set reference position value for servomotor, returns error value
 unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char jointNo, float_type angle){
 
+
     angle = angle*180/M_PI;
     angle = angle*10;
     //DB prosze zdefiniowac osobno stale, np.: static const float_type DEG2DYNAMIXEL;
@@ -49,6 +50,7 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
     angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])*0.341333 + 512;
 
     CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
+    cout << "Kat przed wyslaniem: " << angle << endl;
     pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
 
     return 0;
@@ -218,13 +220,13 @@ unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqu
 }
 
 /// Returns current position of the servomotor, returns error value
-unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle){ 
+unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle){
     float_type ang_odt;
     float_type ang;
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-
+    cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
     ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
-    ang = (-((ang_odt-512)/0.341333))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
+    ang = (((ang_odt-512)/(-0.341333)))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
     return 0;
 }
@@ -329,4 +331,3 @@ controller::Board* controller::createBoardDynamixel(void) {
     boardDynamixel.reset(new BoardDynamixel());
     return boardDynamixel.get();
 }
-
