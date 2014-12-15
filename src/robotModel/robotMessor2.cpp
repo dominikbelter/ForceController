@@ -118,7 +118,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
 
 	//-----------------------------------------
-	for (int h = 0; h<configuration.size(); h + 3)
+    for (int h = 0; h<configuration.size(); h=h + 3)
 	{
 		for (int j = 0; j<3; j++)
 		{
@@ -132,10 +132,11 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
 		linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, -1));
 
-		for (int k = 0; k>3; k++)
+        for (int k = 0; k<3; k++)
 		{
 			conf.pop_back();
 		}
+
 	}
 	//-------------------------------------------
 

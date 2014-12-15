@@ -90,7 +90,7 @@ int main( int argc, const char** argv )
         Rob = createRobotMessor();
 
         std::vector<float_type> configuration,T;
-        //std::vector<Mat34> pos;
+        std::vector<Mat34> pos;
         for(int i=0;i<18;i++)
          {
         configuration.push_back(i*2);
@@ -106,8 +106,8 @@ int main( int argc, const char** argv )
 
         }
 
-       //pos=Rob->conputeLinksPosition(configuration);
-       //std::cout<<"dziala "<<pos[1](0,0)<<std::endl;
+       pos=Rob->conputeLinksPosition(configuration);
+       std::cout<<"dziala "<<pos[1](0,0)<<std::endl;
        return 0;
    }
     catch (const std::exception& ex) {
