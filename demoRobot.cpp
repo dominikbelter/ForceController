@@ -23,7 +23,7 @@ int main( int argc, const char** argv )
     try {
 
 
-       /* Mat34 testmoveplatform, testmoveplatform2;
+        Mat34 testmoveplatform, testmoveplatform2;
 
 		testmoveplatform.setIdentity();
 		testmoveplatform(0, 3) = 0;
@@ -43,13 +43,13 @@ int main( int argc, const char** argv )
 
 		std::vector<float_type> configuration, configuration2, Fz;
 
-        configuration.push_back(18);
-        configuration = Rob->movePlatform(testmoveplatform);
-        cout << configuration[0] << endl << configuration[1] << endl << configuration[2] << endl;
-		cout << configuration[3] << endl << configuration[4] << endl << configuration[5] << endl;
-		cout << configuration[12] << endl << configuration[13] << endl << configuration[14] << endl;
-		cout << configuration[15] << endl << configuration[16] << endl << configuration[17] << endl;
-        getchar();
+        //configuration.push_back(18);
+       // configuration = Rob->movePlatform(testmoveplatform);
+       // cout << configuration[0] << endl << configuration[1] << endl << configuration[2] << endl;
+        //cout << configuration[3] << endl << configuration[4] << endl << configuration[5] << endl;
+        //cout << configuration[12] << endl << configuration[13] << endl << configuration[14] << endl;
+        //cout << configuration[15] << endl << configuration[16] << endl << configuration[17] << endl;
+       // getchar();
 
         configuration2.push_back(18);
         configuration2 = Rob->movePlatform(testmoveplatform2);
@@ -71,20 +71,23 @@ int main( int argc, const char** argv )
 		robotPose(2, 2) = 1;
 		robotPose(3, 3) = 1;
 
-		for (int i = 0; i<6; i++)
+
+
+        // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
+        for (int i = 0; i<6; i++)
 		{
-			configuration[i + 0] = 0;
-			configuration[i + 1] = 0.4189;
-			configuration[i + 2] = 1.1989;
+            configuration.push_back(0);
+            configuration.push_back(0.4189);
+            configuration.push_back(-1.1989);
 		}
 
         visualizer->drawRobot(robotPose, configuration);
 		getchar();
 		//visualizer->drawRobot(robotPose, configuration2);
-        return 0;*/
+        return 0;
 
 
-
+/*
 
         Robot* Rob;
         Rob = createRobotMessor();
@@ -109,6 +112,7 @@ int main( int argc, const char** argv )
        pos=Rob->conputeLinksPosition(configuration);
        std::cout<<"dziala "<<pos[1](0,0)<<std::endl;
        return 0;
+       */
    }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
