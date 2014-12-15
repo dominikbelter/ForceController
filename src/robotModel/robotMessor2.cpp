@@ -127,7 +127,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
 		for (int i = 0; i<3; i++)
 		{
-			linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, 0));
+            linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, 0));
 		}
 
 		linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, -1));
@@ -146,8 +146,8 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
  std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)
 {
 
-     Leg* leg;
-     leg = createInsectLeg();
+    // Leg* leg;
+    // leg = createInsectLeg("../resources/legModel.xml");
      TorqueForce TF1,TF2,TF3,TF4,TF5,TF6;
      //Coefficient matrix of force and torque equations
      typedef Eigen::Matrix<float_type,6,6> Mat66;
@@ -158,7 +158,8 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
      std::vector<float_type> l1,l2,l3,l4,l5,l6,FZ,FX,FY;
      float m=2,g=9.81,F=m*g;
 
-    /* pos=conputeLinksPosition(configuration);
+     /*pos=conputeLinksPosition(configuration);
+
      int j=0;
      for(int i=3; i<pos.size(); i+4)
      {
@@ -253,11 +254,12 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
      Fz(3,0)=x(3,0)*l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
      Fz(4,0)=x(4,0)*l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
      Fz(5,0)=x(5,0)*l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
-    /* for(int i=0;i<6;i++){
+     /*for(int i=0;i<6;i++){
      FZ.push_back(Fz(i,0));
      FX.push_back(Fx(i,0));
      FY.push_back(Fy(i,0));
      }*/
+
      TF1.force.x()=Fx(0,0);
      TF1.force.y()=Fy(0,0);
      TF1.force.z()=Fz(0,0);
@@ -283,15 +285,21 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
      TF6.force.z()=Fz(5,0);
 
      //Torque
-     std::vector<float_type> torque1,torque2,torque3,torque4,torque5,torque6,TORQUE;
-    torque1=leg->computLoad(TF1.force,configuration);
-    torque2=leg->computLoad(TF2.force,configuration);
-    torque3=leg->computLoad(TF3.force,configuration);
-    torque4=leg->computLoad(TF4.force,configuration);
-    torque5=leg->computLoad(TF5.force,configuration);
-    torque6=leg->computLoad(TF6.force,configuration);
-    //TORQUE.insert(torque1.begin(),torque1.end(),torque2.begin(),torque2.end(),torque3.begin(),torque3.end(),torque4.begin(),torque4.end(),torque5.begin(),torque5.end(),torque6.begin(),torque6.end());
-      return torque1;
+    std::vector<float_type> torque1,torque2,torque3,torque4,torque5,torque6,TORQUE;
+    torque1=Leg0->computLoad(TF1.force,configuration);
+    torque2=Leg0->computLoad(TF2.force,configuration);
+    torque3=Leg0->computLoad(TF3.force,configuration);
+    torque4=Leg0->computLoad(TF4.force,configuration);
+    torque5=Leg0->computLoad(TF5.force,configuration);
+    torque6=Leg0->computLoad(TF6.force,configuration);
+    TORQUE.insert(TORQUE.end(),torque1.begin(),torque1.end());
+    TORQUE.insert(TORQUE.end(),torque2.begin(),torque2.end());
+    TORQUE.insert(TORQUE.end(),torque3.begin(),torque3.end());
+    TORQUE.insert(TORQUE.end(),torque4.begin(),torque4.end());
+    TORQUE.insert(TORQUE.end(),torque5.begin(),torque5.end());
+    TORQUE.insert(TORQUE.end(),torque6.begin(),torque6.end());
+
+    return TORQUE;
 
 }
 

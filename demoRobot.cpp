@@ -23,7 +23,7 @@ int main( int argc, const char** argv )
     try {
 
 
-		Mat34 testmoveplatform, testmoveplatform2;
+       /* Mat34 testmoveplatform, testmoveplatform2;
 
 		testmoveplatform.setIdentity();
 		testmoveplatform(0, 3) = 0;
@@ -37,22 +37,22 @@ int main( int argc, const char** argv )
 
 		Robot* Rob;
 		Rob = createRobotMessor();
-		Visualizer* visualizer;
-		visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
+        Visualizer* visualizer;
+        visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
 
 
 		std::vector<float_type> configuration, configuration2, Fz;
 
-		configuration.push_back(18);
-		configuration = Rob->movePlatform(testmoveplatform);
-		cout << configuration[0] << endl << configuration[1] << endl << configuration[2] << endl;
+        configuration.push_back(18);
+        configuration = Rob->movePlatform(testmoveplatform);
+        cout << configuration[0] << endl << configuration[1] << endl << configuration[2] << endl;
 		cout << configuration[3] << endl << configuration[4] << endl << configuration[5] << endl;
 		cout << configuration[12] << endl << configuration[13] << endl << configuration[14] << endl;
 		cout << configuration[15] << endl << configuration[16] << endl << configuration[17] << endl;
-		getchar();
+        getchar();
 
-		configuration2.push_back(18);
-		configuration2 = Rob->movePlatform(testmoveplatform2);
+        configuration2.push_back(18);
+        configuration2 = Rob->movePlatform(testmoveplatform2);
 
 
 
@@ -78,31 +78,38 @@ int main( int argc, const char** argv )
 			configuration[i + 2] = 1.1989;
 		}
 
-		visualizer->drawRobot(robotPose, configuration);
+        visualizer->drawRobot(robotPose, configuration);
 		getchar();
 		//visualizer->drawRobot(robotPose, configuration2);
-		return 0;
+        return 0;*/
 
-/*
+
 
 
         Robot* Rob;
         Rob = createRobotMessor();
 
-        std::vector<float_type> configuration,F1;
+        std::vector<float_type> configuration,T;
+        //std::vector<Mat34> pos;
+        for(int i=0;i<18;i++)
+         {
+        configuration.push_back(i*2);
+         }
 
-        configuration.push_back(5);
-
-        F1=Rob->computeCompliance(configuration);
            std::cout<<""<<std::endl;
-           std::cout<<"wyniki Fz:"<<std::endl;
+           std::cout<<"Torque:"<<std::endl;
            std::cout<<""<<std::endl;
-        for(int i=0;i<3;i++)
+           T=Rob->computeCompliance(configuration);
+       for(int i=0;i<18;i++)
         {
-            cout<<F1[i]<<endl;
+            std::cout<<T[i]<<std::endl;
 
         }
-*/    }
+
+       //pos=Rob->conputeLinksPosition(configuration);
+       //std::cout<<"dziala "<<pos[1](0,0)<<std::endl;
+       return 0;
+   }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
         return 1;
