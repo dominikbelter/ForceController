@@ -50,6 +50,8 @@ option(BUILD_CONTROLLER_DEMO_VISUALIZATION_SERVER "Build Server for Visualizatio
 mark_as_advanced(BUILD_CONTROLLER_DEMO_VISUALIZATION_SERVER)
 option(BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT "Build Client for Visualization" YES)
 mark_as_advanced(BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT)
+option(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY "Build Susceptibility program and libraries" YES)
+mark_as_advanced(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
 
 #additional dependencies
 #Boost
@@ -370,3 +372,19 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT)
         INSTALL(FILES ${DEMO_VISUALIZATION_CLIENT_FILES} DESTINATION bin)
 
 endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT)
+
+
+###############################################################################
+#
+# CONTROLLER SUSCEPTIBILITY DEMO executables
+#
+###############################################################################
+if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
+
+        SET(DEMO_SUSCEPTIBILITY_SOURCES ./demoSusceptibility.cpp)
+        ADD_EXECUTABLE(demoSusceptibility ${DEMO_SUSCEPTIBILITY_SOURCES})
+        TARGET_LINK_LIBRARIES(demoSusceptibility Leg Board Robot Visualization Irrlicht)
+        INSTALL(TARGETS demoSusceptibility RUNTIME DESTINATION bin)
+        INSTALL(FILES ${DEMO_SUSCEPTIBILITY_SOURCES} DESTINATION bin)
+
+endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
