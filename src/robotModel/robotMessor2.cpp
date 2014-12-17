@@ -147,160 +147,167 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
  std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)
 {
 
-    // Leg* leg;
-    // leg = createInsectLeg("../resources/legModel.xml");
-     TorqueForce TF1,TF2,TF3,TF4,TF5,TF6;
-     //Coefficient matrix of force and torque equations
-     typedef Eigen::Matrix<float_type,6,6> Mat66;
-     typedef Eigen::Matrix<float_type,6,1> Mat16;
-     Mat16 B,x,Fx,Fy,Fz;
-     Mat66 A;
-     std::vector<Mat34> pos,pos2;
-     std::vector<float_type> l1,l2,l3,l4,l5,l6,FZ,FX,FY;
-     float m=2,g=9.81,F=m*g;
+        // Leg* leg;
+        // leg = createInsectLeg("../resources/legModel.xml");
+         TorqueForce TF1,TF2,TF3,TF4,TF5,TF6;
+         //Coefficient matrix of force and torque equations
+         typedef Eigen::Matrix<float_type,6,6> Mat66;
+         typedef Eigen::Matrix<float_type,6,1> Mat16;
+         Mat16 B,x,Fx,Fy,Fz;
+         Mat66 A;
+         std::vector<Mat34> pos,pos2;
+         std::vector<float_type> l1,l2,l3,l4,l5,l6,FZ,FX,FY;
+         float m=2,g=9.81,F=m*g;
 
-     /*pos=conputeLinksPosition(configuration);
+         /*pos=conputeLinksPosition(configuration);
 
-     int j=0;
-     for(int i=3; i<pos.size(); i+4)
-     {
-       pos2[j]=pos[i];
-       j++;
-     }
-     for(int i=0;i<3;i++)
-     {
-     l1.push_back(pos2[0](i,3));
-     l2.push_back(-1*pos2[1](i,3));
-     l3.push_back(pos2[2](i,3));
-     l4.push_back(pos2[3](i,3));
-     l5.push_back(-1*pos2[4](i,3));
-     l6.push_back(pos2[5](i,3));
-     }*/
+         for(int i=3; i<pos.size(); i+=4)
+         {
+           pos2.push_back(pos[i]);
 
-     l1.push_back(-0.35);l1.push_back(0.25);l1.push_back(-0.2);
-     l2.push_back(0.25);l2.push_back(-0.1);l2.push_back(0.2);
-     l3.push_back(-0.3);l3.push_back(-0.2);l3.push_back(-0.2);
-     l4.push_back(0.32);l4.push_back(-0.25);l4.push_back(-0.2);
-     l5.push_back(-0.3);l5.push_back(0.1);l5.push_back(0.2);
-     l6.push_back(0.3);l6.push_back(0.3);l6.push_back(-0.2);
-     //equation of Torque y
-     A(0,0)=((l1[0]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
-     A(0,1)=((l2[0]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
-     A(0,2)=((l3[0]*(l3[2]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2))))+(l3[2]*(l3[0]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2)))));
-     A(0,3)=(-(l4[0]*(l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))-(l4[2]*(l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2)))));
-     A(0,4)=(-(l5[0]*(l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))-(l5[2]*(l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2)))));
-     A(0,5)=(-(l6[0]*(l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))-(l6[2]*(l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2)))));
-     //equation of Torque x
-     A(1,0)=((l1[1]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
-     A(1,1)=((l2[1]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
-     A(1,2)=((l3[1]*(l3[2]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2))))+(l3[2]*(l3[1]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2)))));
-     A(1,3)=(-(l4[1]*(l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))-(l4[2]*(l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2)))));
-     A(1,4)=(-(l5[1]*(l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))-(l5[2]*(l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2)))));
-     A(1,5)=(-(l6[1]*(l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))-(l6[2]*(l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2)))));
-     //equation of Torque z
-     A(2,0)=((l1[0]*(l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[1]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
-     A(2,1)=((l2[0]*(l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[1]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
-     A(2,2)=((l3[0]*(l3[1]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2))))+(l3[1]*(l3[0]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2)))));
-     A(2,3)=(-(l4[0]*(l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))-(l4[1]*(l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2)))));
-     A(2,4)=(-(l5[0]*(l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))-(l5[1]*(l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2)))));
-     A(2,5)=(-(l6[0]*(l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))-(l6[1]*(l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2)))));
-     //equation of Force z
-     A(3,0)=l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
-     A(3,1)=l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
-     A(3,2)=l3[2]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
-     A(3,3)=l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
-     A(3,4)=l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
-     A(3,5)=l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
-     //equation of Force x
-     A(4,0)=l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
-     A(4,1)=l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
-     A(4,2)=l3[0]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
-     A(4,3)=l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
-     A(4,4)=l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
-     A(4,5)=l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
-     //equation of Force y
-     A(5,0)=l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
-     A(5,1)=l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
-     A(5,2)=l3[1]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
-     A(5,3)=l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
-     A(5,4)=l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
-     A(5,5)=l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
-     //vector of results
-     B(0,0)=0;
-     B(1,0)=0;
-     B(2,0)=0;
-     B(3,0)=F;
-     B(4,0)=0;
-     B(5,0)=0;
-     //solution (x -> f1,f2,...,f6)
-     x = A.colPivHouseholderQr().solve(B);
-     //projection of forces
-     Fx(0,0)=x(0,0)*l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
-     Fx(1,0)=x(1,0)*l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
-     Fx(2,0)=x(2,0)*l3[0]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
-     Fx(3,0)=x(3,0)*l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
-     Fx(4,0)=x(4,0)*l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
-     Fx(5,0)=x(5,0)*l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+         }
 
-     Fy(0,0)=x(0,0)*l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
-     Fy(1,0)=x(1,0)*l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
-     Fy(2,0)=x(2,0)*l3[1]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
-     Fy(3,0)= x(3,0)*l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
-     Fy(4,0)=x(4,0)*l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
-     Fy(5,0)=x(5,0)*l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+         for(int i=0;i<3;i++)
+         {
+         l1.push_back(pos2[0](i,3));
+         l2.push_back(-1*pos2[1](i,3));
+         l3.push_back(pos2[2](i,3));
+         l4.push_back(pos2[3](i,3));
+         l5.push_back(-1*pos2[4](i,3));
+         l6.push_back(pos2[5](i,3));
+         }
 
-     Fz(0,0)=x(0,0)*l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
-     Fz(1,0)=x(1,0)*l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
-     Fz(2,0)=x(2,0)*l3[2]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
-     Fz(3,0)=x(3,0)*l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
-     Fz(4,0)=x(4,0)*l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
-     Fz(5,0)=x(5,0)*l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
-     /*for(int i=0;i<6;i++){
-     FZ.push_back(Fz(i,0));
-     FX.push_back(Fx(i,0));
-     FY.push_back(Fy(i,0));
-     }*/
+         l1[2]=-l1[2];
+         l2[2]=-l2[2];
+         l3[2]=-l3[2];
+         l4[2]=-l4[2];
+         l5[2]=-l5[2];
+         l6[2]=-l6[2];
+          std::cout<<l1[1]<<"  "<<l2[1]<<"  "<<l3[1]<<"  "<<l4[1]<<"  "<<l5[1]<<"  "<<l6[1]<<"  "<<std::endl;*/
+         l1.push_back(-0.35);l1.push_back(0.25);l1.push_back(-0.2);
+         l2.push_back(0.25);l2.push_back(-0.1);l2.push_back(0.2);
+         l3.push_back(-0.3);l3.push_back(-0.2);l3.push_back(-0.2);
+         l4.push_back(0.32);l4.push_back(-0.25);l4.push_back(-0.2);
+         l5.push_back(-0.3);l5.push_back(0.1);l5.push_back(0.2);
+         l6.push_back(0.3);l6.push_back(0.3);l6.push_back(-0.2);
+         //equation of Torque y
+         A(0,0)=((l1[0]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
+         A(0,1)=((l2[0]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
+         A(0,2)=((l3[0]*(l3[2]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2))))+(l3[2]*(l3[0]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2)))));
+         A(0,3)=(-(l4[0]*(l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))-(l4[2]*(l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2)))));
+         A(0,4)=(-(l5[0]*(l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))-(l5[2]*(l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2)))));
+         A(0,5)=(-(l6[0]*(l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))-(l6[2]*(l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2)))));
+         //equation of Torque x
+         A(1,0)=((l1[1]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
+         A(1,1)=((l2[1]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
+         A(1,2)=((l3[1]*(l3[2]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2))))+(l3[2]*(l3[1]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2)))));
+         A(1,3)=(-(l4[1]*(l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))-(l4[2]*(l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2)))));
+         A(1,4)=(-(l5[1]*(l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))-(l5[2]*(l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2)))));
+         A(1,5)=(-(l6[1]*(l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))-(l6[2]*(l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2)))));
+         //equation of Torque z
+         A(2,0)=((l1[0]*(l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[1]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
+         A(2,1)=((l2[0]*(l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[1]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
+         A(2,2)=((l3[0]*(l3[1]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2))))+(l3[1]*(l3[0]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2)))));
+         A(2,3)=(-(l4[0]*(l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))-(l4[1]*(l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2)))));
+         A(2,4)=(-(l5[0]*(l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))-(l5[1]*(l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2)))));
+         A(2,5)=(-(l6[0]*(l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))-(l6[1]*(l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2)))));
+         //equation of Force z
+         A(3,0)=l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
+         A(3,1)=l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
+         A(3,2)=l3[2]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
+         A(3,3)=l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
+         A(3,4)=l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
+         A(3,5)=l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+         //equation of Force x
+         A(4,0)=l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
+         A(4,1)=l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
+         A(4,2)=l3[0]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
+         A(4,3)=l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
+         A(4,4)=l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
+         A(4,5)=l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+         //equation of Force y
+         A(5,0)=l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
+         A(5,1)=l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
+         A(5,2)=l3[1]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
+         A(5,3)=l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
+         A(5,4)=l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
+         A(5,5)=l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+         //vector of results
+         B(0,0)=0;
+         B(1,0)=0;
+         B(2,0)=0;
+         B(3,0)=F;
+         B(4,0)=0;
+         B(5,0)=0;
+         //solution (x -> f1,f2,...,f6)
+         x = A.colPivHouseholderQr().solve(B);
+         //projection of forces
+         Fx(0,0)=x(0,0)*l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
+         Fx(1,0)=x(1,0)*l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
+         Fx(2,0)=x(2,0)*l3[0]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
+         Fx(3,0)=x(3,0)*l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
+         Fx(4,0)=x(4,0)*l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
+         Fx(5,0)=x(5,0)*l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
 
-     TF1.force.x()=Fx(0,0);
-     TF1.force.y()=Fy(0,0);
-     TF1.force.z()=Fz(0,0);
+         Fy(0,0)=x(0,0)*l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
+         Fy(1,0)=x(1,0)*l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
+         Fy(2,0)=x(2,0)*l3[1]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
+         Fy(3,0)= x(3,0)*l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
+         Fy(4,0)=x(4,0)*l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
+         Fy(5,0)=x(5,0)*l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
 
-     TF2.force.x()=Fx(1,0);
-     TF2.force.y()=Fy(1,0);
-     TF2.force.z()=Fz(1,0);
+         Fz(0,0)=x(0,0)*l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
+         Fz(1,0)=x(1,0)*l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
+         Fz(2,0)=x(2,0)*l3[2]/sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
+         Fz(3,0)=x(3,0)*l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
+         Fz(4,0)=x(4,0)*l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
+         Fz(5,0)=x(5,0)*l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+         /*for(int i=0;i<6;i++){
+         FZ.push_back(Fz(i,0));
+         FX.push_back(Fx(i,0));
+         FY.push_back(Fy(i,0));
+         }*/
 
-     TF3.force.x()=Fx(2,0);
-     TF3.force.y()=Fy(2,0);
-     TF3.force.z()=Fz(2,0);
+         TF1.force.x()=Fx(0,0);
+         TF1.force.y()=Fy(0,0);
+         TF1.force.z()=Fz(0,0);
 
-     TF4.force.x()=Fx(3,0);
-     TF4.force.y()=Fy(3,0);
-     TF4.force.z()=Fz(3,0);
+         TF2.force.x()=Fx(1,0);
+         TF2.force.y()=Fy(1,0);
+         TF2.force.z()=Fz(1,0);
 
-     TF5.force.x()=Fx(4,0);
-     TF5.force.y()=Fy(4,0);
-     TF5.force.z()=Fz(4,0);
+         TF3.force.x()=Fx(2,0);
+         TF3.force.y()=Fy(2,0);
+         TF3.force.z()=Fz(2,0);
 
-     TF6.force.x()=Fx(5,0);
-     TF6.force.y()=Fy(5,0);
-     TF6.force.z()=Fz(5,0);
+         TF4.force.x()=Fx(3,0);
+         TF4.force.y()=Fy(3,0);
+         TF4.force.z()=Fz(3,0);
 
-     //Torque
-    std::vector<float_type> torque1,torque2,torque3,torque4,torque5,torque6,TORQUE;
-    torque1=Leg0->computLoad(TF1.force,configuration);
-    torque2=Leg0->computLoad(TF2.force,configuration);
-    torque3=Leg0->computLoad(TF3.force,configuration);
-    torque4=Leg0->computLoad(TF4.force,configuration);
-    torque5=Leg0->computLoad(TF5.force,configuration);
-    torque6=Leg0->computLoad(TF6.force,configuration);
-    TORQUE.insert(TORQUE.end(),torque1.begin(),torque1.end());
-    TORQUE.insert(TORQUE.end(),torque2.begin(),torque2.end());
-    TORQUE.insert(TORQUE.end(),torque3.begin(),torque3.end());
-    TORQUE.insert(TORQUE.end(),torque4.begin(),torque4.end());
-    TORQUE.insert(TORQUE.end(),torque5.begin(),torque5.end());
-    TORQUE.insert(TORQUE.end(),torque6.begin(),torque6.end());
+         TF5.force.x()=Fx(4,0);
+         TF5.force.y()=Fy(4,0);
+         TF5.force.z()=Fz(4,0);
 
-    return TORQUE;
+         TF6.force.x()=Fx(5,0);
+         TF6.force.y()=Fy(5,0);
+         TF6.force.z()=Fz(5,0);
+
+         //Torque
+        std::vector<float_type> torque1,torque2,torque3,torque4,torque5,torque6,TORQUE;
+        torque1=Leg0->computLoad(TF1.force,configuration);
+        torque2=Leg0->computLoad(TF2.force,configuration);
+        torque3=Leg0->computLoad(TF3.force,configuration);
+        torque4=Leg0->computLoad(TF4.force,configuration);
+        torque5=Leg0->computLoad(TF5.force,configuration);
+        torque6=Leg0->computLoad(TF6.force,configuration);
+        TORQUE.insert(TORQUE.end(),torque1.begin(),torque1.end());
+        TORQUE.insert(TORQUE.end(),torque2.begin(),torque2.end());
+        TORQUE.insert(TORQUE.end(),torque3.begin(),torque3.end());
+        TORQUE.insert(TORQUE.end(),torque4.begin(),torque4.end());
+        TORQUE.insert(TORQUE.end(),torque5.begin(),torque5.end());
+        TORQUE.insert(TORQUE.end(),torque6.begin(),torque6.end());
+
+        return TORQUE;
 
 }
 
