@@ -306,16 +306,45 @@ void BoardDynamixel::readContact(const std::vector<bool> contact){
 
 /// Returns current from servo
 unsigned int BoardDynamixel::readCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent){
+    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    servoCurrent = pMotor->dxl_read_word(legNo*10 + jointNo, PRESENT_VOLTAGE);
+    servoCurrent = servoCurrent/10;
+
     return 0;
 }
 
 /// Returns current from servo
-unsigned int BoardDynamixel::readCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent){
+unsigned int BoardDynamixel::readCurrent(unsigned char legNo, std::vector<float_type>& servoCurrent){
+    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    for(int i=0; i<3; i++){
+        servoCurrent.push_back( pMotor->dxl_read_word(legNo*10 + i, PRESENT_VOLTAGE) );
+        servoCurrent[i] = servoCurrent[i] / 10;
+    }
     return 0;
 }
 
 /// Returns current from servo
-unsigned int BoardDynamixel::readCurrent(const std::vector<float_type>& servoCurrent){
+unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent){
+    CDynamixel *pMotorR = &dynamixelMotors[0];
+    CDynamixel *pMotorL = &dynamixelMotors[1];
+    int tmp = 0;
+    int cnt = 0;
+    for(int i = 0; i < 18; i++){
+        if(i < 9){  //Right side of Mesor
+            tmp = i%3;
+            if(!(i%3) && i != 0){
+                cnt++;
+            }
+            servoCurrent.push_back( pMotorR->dxl_read_word( cnt*10+tmp, PRESENT_VOLTAGE ) );
+        }else{      //Left side of Mesor
+            tmp = i%3;
+            if(!i%3){
+                cnt++;
+            }
+            servoCurrent.push_back( pMotorL->dxl_read_word( cnt*10+tmp, PRESENT_VOLTAGE ) );
+        }
+    servoCurrent[i] = servoCurrent[i]/10;
+    }
     return 0;
 }
 

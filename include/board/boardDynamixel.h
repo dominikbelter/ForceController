@@ -20,6 +20,7 @@
 #define TORQUE 40
 #define SET_COMPLIANCE_SLOPE 0x40
 #define MOVING_SPEED 32
+#define PRESENT_VOLTAGE 42
 
 namespace controller {
 
@@ -245,14 +246,14 @@ class BoardDynamixel : public Board{
          * \param &servoCurrent Current values.
          * \return Return error value.
          */
-        unsigned int readCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent);
+        unsigned int readCurrent(unsigned char legNo, std::vector<float_type>& servoCurrent);
 
         /**
          * \brief Returns current value from servos.
          * \param &servoCurrent Current values.
          * \return Return error value.
          */
-        unsigned int readCurrent(const std::vector<float_type>& servoCurrent);
+        unsigned int readCurrent(std::vector<float_type>& servoCurrent);
 
         /**
          * \brief Returns torque(load) value from servo.

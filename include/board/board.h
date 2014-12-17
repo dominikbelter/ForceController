@@ -211,13 +211,13 @@ namespace controller {
          * \param &servoCurrent Current values.
          * \return Return error value.
          */
-            virtual unsigned int readCurrent(unsigned char legNo, const std::vector<float_type>& servoCurrent) = 0;
+            virtual unsigned int readCurrent(unsigned char legNo, std::vector<float_type>& servoCurrent) = 0;
             /**
          * \brief Returns current value from servos.
          * \param &servoCurrent Current values.
          * \return Return error value.
          */
-            virtual unsigned int readCurrent(const std::vector<float_type>& servoCurrent) = 0;
+            virtual unsigned int readCurrent( std::vector<float_type>& servoCurrent) = 0;
 
             /**
          * \brief Returns torque(load) value from servo.
