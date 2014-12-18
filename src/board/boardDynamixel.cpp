@@ -339,18 +339,58 @@ unsigned int BoardDynamixel::readTorque(const std::vector<float_type>& servoTorq
 
 /// Set servo Offset
 void BoardDynamixel::setOffset(unsigned char legNo, unsigned char jointNo, float_type offset){
+    float_type localOffset = offset;
+    localOffset = localOffset * (180/M_PI);
 
-
+    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    localOffset += angle_offset[legNo*10+jointNo];
+    pMotor->dxl_write_word( legNo*10+jointNo, MOVE_SERWOMOTOR, localOffset );
 }
 
 /// Set servo Offset
 void BoardDynamixel::setOffset(unsigned char legNo, const std::vector<float_type> offset){
+    vector <float_type> localOffset;
+    for(int i=0; i<3; i++){
+       localOffset[i] = offset[i];
+       localOffset[i] = localOffset[i] * (180/M_PI);
+    }
 
+    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    for(int i=0; i<3; i++){
+         localOffset[i] += angle_offset[legNo*10+i];
+         pMotor->dxl_write_word( legNo*10+i, MOVE_SERWOMOTOR, localOffset[i] );
+    }
 }
 
 /// Set servo Offset
 void BoardDynamixel::setOffset(const std::vector<float_type> offset){
+    vector <float_type> localOffset;
+    for(int i=0; i<18; i++){
+       localOffset[i] = offset[i];
+       localOffset[i] = localOffset[i] * (180/M_PI);
+    }
+    CDynamixel *pMotorR = &dynamixelMotors[0];
+    CDynamixel *pMotorL = &dynamixelMotors[1];
+    int tmp = 0;
+    int cnt = 0;
+    for(int i = 0; i < 18; i++){
+        if(i < 9){  //Right side of Mesor
+            tmp = i%3;
+            if(!(i%3) && i != 0){
+                cnt++;
+            }
+            localOffset[i] += angle_offset[cnt*10+tmp];
+            pMotorR->dxl_write_word( cnt*10+tmp, MOVE_SERWOMOTOR, localOffset[i] );
+        }else{      //Left side of Mesor
+            tmp = i%3;
+            if(!i%3){
+                cnt++;
+            }
+            localOffset[i] += angle_offset[cnt*10+tmp];
+            pMotorL->dxl_write_word( cnt*10+tmp, MOVE_SERWOMOTOR, localOffset[i] );
+        }
 
+    }
 }
 
 /// Board configuration -- set default value
