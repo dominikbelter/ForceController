@@ -22,6 +22,17 @@
 #define MOVING_SPEED 32
 #define PRESENT_VOLTAGE 42
 
+#define LEG_0 0
+#define LEG_1 1
+#define LEG_2 2
+#define LEG_3 3
+#define LEG_4 4
+#define LEG_5 5
+
+#define JOINT_0 0
+#define JOINT_1 1
+#define JOINT_2 2
+
 namespace controller {
 
     /// create a single board controller (with usb2dynamixel)
