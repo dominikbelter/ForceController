@@ -235,7 +235,7 @@ unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char joi
     float_type ang_odt;
     float_type ang;
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-    cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
+    //cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
     ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
     ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
