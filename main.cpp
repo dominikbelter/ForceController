@@ -69,9 +69,15 @@ int main( int argc, const char** argv )
          cout<<"po stworzeniu"<<endl;
          //std::cout << "Board type: " << board->getName() << "\n";
 
+         vector<float_type> complianceSlopeVector = {120,120,120};
          vector<float_type> zera = {0.0,(24/180*PI),(-114/180*PI)};
+         vector<float_type> speeds = {25,25,25};
          for(int i=0;i<6;i++)
+         {
+             board->setSpeed(i,speeds);
+             board->setComplianceSlope(complianceSlopeVector);
              board->setPosition(i,zera);
+         }
 
          getchar();
 
