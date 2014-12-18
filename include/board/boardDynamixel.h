@@ -33,6 +33,14 @@
 #define JOINT_1 1
 #define JOINT_2 2
 
+#define P_MOVING_SPEED_L 32 /*!< wartosc predkosci serwomechanizmu */
+#define P_CW_COMPLIANCE_MARGIN 26 /*!< blad pomiedzy zadana a aktualna pozycja, w ruchu zgodnie ze wskazowkami zegara (CW) */
+#define P_CCW_COMPLIANCE_MARGIN 27 /*!< blad pomiedzy zadana a aktualna pozycja, w ruchu przeciwnym do wskazowek zegara (CCW) */
+#define P_CW_COMPLIANCE_SLOPE 28 /*!< wartosc momentu serwomechanizmu gdy zbliza sie juz do zadanego polozenia, CW */
+#define P_CCW_COMPLIANCE_SLOPE 29 /*!< wartosc momentu serwomechanizmu gdy zbliza sie juz do zadanego polozenia, CCW */
+#define P_TORQUE_LIMIT_L 34 //maximum output torque
+#define P_TEMERATURE_LIMIT_L 11 /* temperature limit*/
+
 namespace controller {
 
     /// create a single board controller (with usb2dynamixel)
