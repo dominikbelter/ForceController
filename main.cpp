@@ -81,7 +81,7 @@ int main( int argc, const char** argv )
          Mat34 mat;
          mat.setIdentity();
          mat(0, 3) = 0;
-         mat(1, 3) = 5;
+         mat(1, 3) = 0.05;
          mat(2, 3) = 0;
 
          robot->movePlatform(mat);
