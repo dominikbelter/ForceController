@@ -104,31 +104,9 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
             angle_tmp[i] = angle[i]*180/M_PI;
             angle_tmp[i] = angle_tmp[i]*10;
             angle_tmp[i]=-(angle_tmp[i]+angle_offset[cnt*3+tmp]-zero_angle[cnt*3+tmp])*0.341333 + 512;
-            object1->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
+            object2->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
             }
         }
-
-    /* how many elements have this vector?
-       - angle for every joint? 18
-
-    */
-
-  /*  std::vector <float> angleLocal;
-    for(int i = 0; i < 6 ; i++){    //typical duplication of vector doesnt work :(
-        angleLocal[i] = angle[i];
-    }
-
-    for(int i = 0; i < 2; i++){     //port
-        CDynamixel *pointMotor = &dynamixelMotors[i];
-        for(int j = 0; j < 6; j++ ){    //angle for every leg
-            angleLocal[i] = angleLocal[i]*180/M_PI;
-            angleLocal[i] = angleLocal[i]*10;
-            angleLocal[i]=-(angleLocal[i]+angle_offset[legNo*3+i]-zero_angle[legNo*3+i])*0.341333 + 512;
-
-            pointMotor->dxl_write_word(legNo*10+i, MOVE_SERWOMOTOR, angleLocal[i]);
-        }
-
-    }   */
 
     return 0;
 }
@@ -144,7 +122,7 @@ unsigned int BoardDynamixel::setSpeed(unsigned char legNo, unsigned char jointNo
 unsigned int BoardDynamixel::setSpeed(unsigned char legNo, const std::vector<float_type>& speed){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=1;i<=3;i++){
-        object->dxl_write_word(legNo*10+i,MOVING_SPEED,speed[i-1]);
+        object->dxl_write_word(legNo*10+i,MOVING_SPEED,speed[i-1]*9);
     }
 
     return 0;
@@ -162,14 +140,14 @@ unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
             if(!(i%3) && i!=0){
                 cnt++;
             }
-            object1->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]);
+            object1->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]*9);
         }
             else{
             tmp=i%3;
             if(!(i%3) && i!=0){
                 cnt++;
                 }
-            object2->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]);
+            object2->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]*9);
         }
         }
     return 0;
