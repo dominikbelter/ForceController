@@ -158,6 +158,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          std::vector<Mat34> pos,pos2;
          std::vector<float_type> l1,l2,l3,l4,l5,l6,FZ,FX,FY;
          float m=2,g=9.81,F=m*g,pom,LC1,LC2,LC3,LC4,LC5,LC6;
+         std::vector<float_type> torque1,torque2,torque3,torque4,torque5,torque6,TORQUE,compliance;
 
         /*pos=conputeLinksPosition(configuration);
 
@@ -241,12 +242,12 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          */
 
 
-         l1.push_back(-0.35);l1.push_back(0.25);l1.push_back(-0.2);
-         l2.push_back(0.25);l2.push_back(-0.1);l2.push_back(0.2);
-         l3.push_back(-0.3);l3.push_back(-0.2);l3.push_back(-0.2);
-         l4.push_back(0.32);l4.push_back(-0.25);l4.push_back(-0.2);
-         l5.push_back(-0.3);l5.push_back(0.1);l5.push_back(0.2);
-         l6.push_back(0.3);l6.push_back(0.3);l6.push_back(-0.2);
+         l1.push_back(-0.35);l1.push_back(0.05);l1.push_back(-0.1);
+         l2.push_back(0.35);l2.push_back(0.0);l2.push_back(0.1);
+         l3.push_back(-0.35);l3.push_back(-0.05);l3.push_back(-0.1);
+         l4.push_back(0.35);l4.push_back(-0.05);l4.push_back(-0.1);
+         l5.push_back(-0.35);l5.push_back(0.0);l5.push_back(0.1);
+         l6.push_back(0.35);l6.push_back(0.05);l6.push_back(-0.1);
          //equation of Torque y
          A(0,0)=((l1[0]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
          A(0,1)=((l2[0]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
@@ -350,7 +351,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          TF6.force.z()=Fz(5,0);
 
          //Torque
-        std::vector<float_type> torque1,torque2,torque3,torque4,torque5,torque6,TORQUE;
+
         torque1=Leg0->computLoad(TF1.force,configuration);
         torque2=Leg0->computLoad(TF2.force,configuration);
         torque3=Leg0->computLoad(TF3.force,configuration);
@@ -364,7 +365,26 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         TORQUE.insert(TORQUE.end(),torque5.begin(),torque5.end());
         TORQUE.insert(TORQUE.end(),torque6.begin(),torque6.end());
 
-        return TORQUE;
+        for(int i=0;i<18;i++)
+         {
+
+             compliance.push_back(TORQUE[i]*0.25);
+
+
+         }
+      for(int i=0;i<18;i++)
+         {
+
+             compliance[i]=sqrt(compliance[i]*compliance[i]);
+
+                     if(compliance[i]>1)
+                        compliance[i]=1;
+         }
+
+
+
+
+        return compliance;
 
 }
 
