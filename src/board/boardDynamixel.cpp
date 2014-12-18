@@ -14,6 +14,19 @@ BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIX
     //Every operation is executed on two objects in the same time (One object on one side of port)
     for(int i=0 ; i < 2 ; i++){
        int result =  dynamixelMotors[i].dxl_initialize(i+1, DEFAULT_BAUDNUM);
+       for (int j=0;j<6;j++){
+                  if(result == 1) {
+                      for (int k=0;k<3;k++) {
+                          dynamixelMotors[i].dxl_write_word(j*10+k, P_MOVING_SPEED_L, 512);
+                          dynamixelMotors[i].dxl_write_word(j*10+k, P_CW_COMPLIANCE_MARGIN, 1);
+                          dynamixelMotors[i].dxl_write_word(j*10+k, P_CCW_COMPLIANCE_MARGIN, 1);
+                          dynamixelMotors[i].dxl_write_word(j*10+k, P_CW_COMPLIANCE_SLOPE, 32);
+                          dynamixelMotors[i].dxl_write_word(j*10+k, P_CCW_COMPLIANCE_SLOPE, 32);
+                          dynamixelMotors[i].dxl_write_word(j*10+k, P_TORQUE_LIMIT_L, 1012);
+                          dynamixelMotors[i].dxl_write_word(j*10+k, P_TEMERATURE_LIMIT_L, 99);
+                      }
+                  }
+              }
     }
 
     zero_angle[0]=450; zero_angle[1]=240; zero_angle[2]=1140;
