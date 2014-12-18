@@ -7,7 +7,7 @@ SET(CMAKE_BUILD_TYPE "Release" CACHE PATH "Current build configuration")
 
 # TRACKER Project configuration
 PROJECT(ForceController)
-SET(CMAKE_CXX_FLAGS "-std=c++11")
+SET(CMAKE_CXX_FLAGS "-std=c++0x")
 SET(CMAKE_LD_FLAGS "-lz")
 
 # Folders
@@ -55,7 +55,7 @@ mark_as_advanced(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
 
 #additional dependencies
 #Boost
-FIND_PACKAGE(Boost COMPONENTS system filesystem thread asio)
+FIND_PACKAGE(Boost COMPONENTS system filesystem thread)
 # OpenCV
 # FIND_PACKAGE(OpenCV REQUIRED)
 # include_directories( ${OpenCV_INCLUDE_DIRS} )
