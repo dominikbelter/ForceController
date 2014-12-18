@@ -61,7 +61,7 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, const std::vector<
     vector <float_type> angleLocal;
     // angleLocal(angle.begin(), angle.begin()+3); //nie dziala
     for(int i = 0; i < 3 ; i++){    //typical duplication of vector doesnt work :(
-        angleLocal[i] = angle[i];
+        angleLocal.push_back( angle[i] );
     }
 
     CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
@@ -378,15 +378,15 @@ void BoardDynamixel::setOffset(unsigned char legNo, unsigned char jointNo, float
     localOffset = offset;
     localOffset = localOffset * (180/M_PI);
 
-    localOffset += angle_offset[legNo*10+jointNo];
-    offset = localOffset;
+    angle_offset[legNo*10+jointNo] += localOffset ;
+
 }
 
 /// Set servo Offset
 void BoardDynamixel::setOffset(unsigned char legNo, const std::vector<float_type> offset){
     vector <float_type> localOffset;
     for(int i=0; i<3; i++){
-       localOffset[i] = offset[i];
+       localOffset.push_back( offset[i] );
        localOffset[i] = localOffset[i] * (180/M_PI);
     }
 
@@ -399,7 +399,7 @@ void BoardDynamixel::setOffset(unsigned char legNo, const std::vector<float_type
 void BoardDynamixel::setOffset(const std::vector<float_type> offset){
     vector <float_type> localOffset;
     for(int i=0; i<18; i++){
-       localOffset[i] = offset[i];
+       localOffset.push_back( offset[i] );
        localOffset[i] = localOffset[i] * (180/M_PI);
     }
 
