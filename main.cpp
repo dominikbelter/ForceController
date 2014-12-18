@@ -62,9 +62,12 @@ void updatePlatformPosition(visualizationPointers* args)
 int main( int argc, const char** argv )
 {
     try {
+
+        cout<<"przed stworzeniem"<<endl;
          Board* board;
          board = createBoardDynamixel();
-         std::cout << "Board type: " << board->getName() << "\n";
+         cout<<"po stworzeniu"<<endl;
+         //std::cout << "Board type: " << board->getName() << "\n";
 
          vector<float_type> zera = {0.0,0.0,0.0};
          for(int i=0;i<6;i++)
