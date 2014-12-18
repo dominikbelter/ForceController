@@ -48,11 +48,11 @@ using namespace controller;
 class BoardDynamixel : public Board{
     public:
         /// Default values of angles for serwomotors.
-        // int zero_angle[18]
-        std::vector <float_type> zero_angle;  //rad
+        int zero_angle[18];
+        //std::vector <float_type> zero_angle;  //rad
         /// Default offset values of angles for serwomotors.
-        //int angle_offset[18]
-        std::vector<float_type> angle_offset; //rad
+        int angle_offset[18];
+        //std::vector<float_type> angle_offset; //rad
 
         static const float_type DEG2DYNAMIXEL;
         /// Pointer
