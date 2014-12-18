@@ -352,11 +352,12 @@ unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent)
 unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     if (legNo<3)
-       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE);
+       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, 0x0E)/1024*28.3;
     else
-        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE);
+        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, 0x0E)/1024*28.3;
 
-    cout << "MaxTorque: " <<object->dxl_read_word(legNo*10+jointNo, 0x0E) << endl;   //0x0E - Max Torque
+    //cout << "MaxTorque: " <<object->dxl_read_word(legNo*10+jointNo, 0x0E) << endl;   //0x0E - Max Torque
+
     return 0;
 }
 
@@ -372,12 +373,13 @@ unsigned int BoardDynamixel::readTorque(const std::vector<float_type>& servoTorq
 
 /// Set servo Offset
 void BoardDynamixel::setOffset(unsigned char legNo, unsigned char jointNo, float_type offset){
-    float_type localOffset = offset;
+    float_type localOffset;
+
+    localOffset = offset;
     localOffset = localOffset * (180/M_PI);
 
-    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
     localOffset += angle_offset[legNo*10+jointNo];
-    pMotor->dxl_write_word( legNo*10+jointNo, MOVE_SERWOMOTOR, localOffset );
+    offset = localOffset;
 }
 
 /// Set servo Offset
@@ -388,10 +390,8 @@ void BoardDynamixel::setOffset(unsigned char legNo, const std::vector<float_type
        localOffset[i] = localOffset[i] * (180/M_PI);
     }
 
-    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
     for(int i=0; i<3; i++){
-         localOffset[i] += angle_offset[legNo*10+i];
-         pMotor->dxl_write_word( legNo*10+i, MOVE_SERWOMOTOR, localOffset[i] );
+         angle_offset[legNo*10+i] += localOffset[i];
     }
 }
 
@@ -402,8 +402,7 @@ void BoardDynamixel::setOffset(const std::vector<float_type> offset){
        localOffset[i] = offset[i];
        localOffset[i] = localOffset[i] * (180/M_PI);
     }
-    CDynamixel *pMotorR = &dynamixelMotors[0];
-    CDynamixel *pMotorL = &dynamixelMotors[1];
+
     int tmp = 0;
     int cnt = 0;
     for(int i = 0; i < 18; i++){
@@ -412,15 +411,13 @@ void BoardDynamixel::setOffset(const std::vector<float_type> offset){
             if(!(i%3) && i != 0){
                 cnt++;
             }
-            localOffset[i] += angle_offset[cnt*10+tmp];
-            pMotorR->dxl_write_word( cnt*10+tmp, MOVE_SERWOMOTOR, localOffset[i] );
+            angle_offset[cnt*10+tmp] += localOffset[i];
         }else{      //Left side of Mesor
             tmp = i%3;
             if(!i%3){
                 cnt++;
             }
-            localOffset[i] += angle_offset[cnt*10+tmp];
-            pMotorL->dxl_write_word( cnt*10+tmp, MOVE_SERWOMOTOR, localOffset[i] );
+            angle_offset[cnt*10+tmp] += localOffset[i];
         }
 
     }

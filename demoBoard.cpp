@@ -11,7 +11,6 @@ using namespace controller;
 
 int main( int argc, const char** argv )
 {
-    int deg;
     float_type kat0 = 0;
     float_type kat1 = 0;
     float_type kat2 = 0;
@@ -32,30 +31,38 @@ int main( int argc, const char** argv )
     for(int i = 0; i < 18; i++ ){
         motorComplianceSlope.push_back(120);
     }
+    vector <float_type> polozeniePoczatkowe;
+    polozeniePoczatkowe.push_back( 0 );
+    polozeniePoczatkowe.push_back( 0 );
+    polozeniePoczatkowe.push_back( 0 );
 
     Board *demo = createBoardDynamixel();
+
     demo->readPosition( LEG_1, JOINT_0, kat0);
     demo->readPosition( LEG_1, JOINT_1, kat1);
     demo->readPosition( LEG_1, JOINT_2, kat2);
+
     demo->setSpeed( motorSpeed );
+
     demo->setComplianceSlope( motorComplianceSlope );
     demo->setOffset( motorOffset );
 
+    demo->setPosition(LEG_0, polozeniePoczatkowe );
+    //demo->setPosition(LEG_1, polozeniePoczatkowe );
+    //demo->setPosition(LEG_2, polozeniePoczatkowe );
+    //demo->setPosition(LEG_3, polozeniePoczatkowe );
+    //demo->setPosition(LEG_4, polozeniePoczatkowe );
+    //demo->setPosition(LEG_5, polozeniePoczatkowe );
+
+    demo->readTorque(LEG_0, JOINT_0, moment0 );
+
+    cout << "Katy: " << endl;
+    cout << (kat0*180)/M_PI << endl << (kat1*180)/M_PI << endl << (kat2*180)/M_PI << endl;
+    cout << "Momenty: " << endl;
+    cout << moment0 << endl << moment1 << endl << moment2 << endl;
 
     while (true){
 
-     /*   cout<<"Enter degree"<<endl;
-        cin>>deg;
-        if (deg>100){
-            break;
-        }
-        demo->setPosition(1, 0, (M_PI*deg)/180);   //move 1st leg, 0 joint, about 45deg
-        //demo->setPosition(4, 0, (M_PI*deg)/180);   //move 1st leg, 0 joint, about 45deg
-
-
-        cout << "Kat: "<< (kat*180)/M_PI << endl
-              << "Moment: " << moment << endl;
-       */
     }
 
     return 0;
