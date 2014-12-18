@@ -84,7 +84,7 @@ int main( int argc, const char** argv )
          char filename[100] = "../resources/robotModel.xml";
          cout<<"Przed stworzeniem robota:"<<filename<<endl;
          Robot* robot;
-         robot = createRobotMessor(filename);
+         robot = createRobotMessor("../resources/robotModel.xml");
          cout<<"Po stworzeniu."<<endl;
 
          Mat34 mat;
@@ -95,7 +95,7 @@ int main( int argc, const char** argv )
          mat(2, 3) = 0.0;
          cout<<"Wypełnienie macierzy"<<endl;
 
-         robot->movePlatform(mat);
+         board->setPosition(robot->movePlatform(mat));
          //std::cout << "Robot name: " << robot->getName() << "\n";
 
          /*Kinematic* kinematicModel;
