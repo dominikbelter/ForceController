@@ -66,7 +66,11 @@ int main( int argc, const char** argv )
          board = createBoardDynamixel();
          std::cout << "Board type: " << board->getName() << "\n";
 
-         Kinematic* kinematicModel;
+         vector<float_type> zera = {0.0,0.0,0.0};
+         for(int i=0;i<6;i++)
+             board->setPosition(i,zera);
+
+         /*Kinematic* kinematicModel;
          kinematicModel = createKinematicLie("../resources/legModel.xml");
          std::cout << "Kinematic type: " << kinematicModel->getName() << "\n";
 
@@ -97,7 +101,7 @@ int main( int argc, const char** argv )
 			 std::cerr << ex.what() << std::endl;
 			 return 1;
 		 }
-#endif
+#endif*/
 
     }
     catch (const std::exception& ex) {
