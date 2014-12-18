@@ -63,23 +63,34 @@ int main( int argc, const char** argv )
 {
     try {
 
-        cout<<"przed stworzeniem"<<endl;
+         cout<<"przed stworzeniem"<<endl;
          Board* board;
          board = createBoardDynamixel();
          cout<<"po stworzeniu"<<endl;
          //std::cout << "Board type: " << board->getName() << "\n";
 
-         vector<float_type> zera = {0.0,0.0,0.0};
+         vector<float_type> zera = {0.0,24/180*PI,-114/180*PI};
          for(int i=0;i<6;i++)
              board->setPosition(i,zera);
+
+         getchar();
+
+         Robot* robot;
+         robot = createRobotMessor("Messor2");
+
+         Mat34 mat;
+         mat.setIdentity();
+         mat(0, 3) = 0;
+         mat(1, 3) = 5;
+         mat(2, 3) = 0;
+
+         robot->movePlatform(mat);
+         //std::cout << "Robot name: " << robot->getName() << "\n";
 
          /*Kinematic* kinematicModel;
          kinematicModel = createKinematicLie("../resources/legModel.xml");
          std::cout << "Kinematic type: " << kinematicModel->getName() << "\n";
 
-         Robot* robot;
-         robot = createRobotMessor("Messor2");
-         std::cout << "Robot name: " << robot->getName() << "\n";
 
          Mat34 destinationMatrix; // where do the values come from?
          std::vector<float_type> destinationConfiguration = robot->movePlatform(destinationMatrix);
