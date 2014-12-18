@@ -61,12 +61,17 @@ RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 	OldMotion.setIdentity();
 	OldMotion(0, 3) = 0;
 	OldMotion(1, 3) = 0;
-	OldMotion(2, 3) = 0;
+    OldMotion(2, 3) = 0;
 
+    NeutralMotion.setIdentity();
+    NeutralMotion(0, 3) = 0;
+    NeutralMotion(1, 3) = 0;
+    NeutralMotion(2, 3) = 0.12;
 
 
 
 }
+
 
 
 
@@ -103,8 +108,27 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
  std::vector<float_type> RobotMessor::movePlatformNeutral(const Mat34 motion)
 {
-     std::vector<float_type> tmp;
-      return tmp;
+     {
+         std::vector<float_type> conf, conf2;
+         Mat34 actleg, newmotion;
+
+         newmotion = NeutralMotion*motion;
+         //-----------------------------------------
+
+         for (int i = 0; i<6; i++)
+         {
+
+             actleg = newmotion*L_all[i];
+             conf2 = Leg0->inverseKinematic(actleg);
+             conf.push_back(conf2[0]);
+             conf.push_back(conf2[1]);
+             conf.push_back(conf2[2]);
+         }
+
+         //-------------------------------------------
+         OldMotion = newmotion;
+         return conf;
+     }
 }
 
  /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)
