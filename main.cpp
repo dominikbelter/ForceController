@@ -70,25 +70,30 @@ int main( int argc, const char** argv )
          //std::cout << "Board type: " << board->getName() << "\n";
 
          vector<float_type> complianceSlopeVector = {120,120,120};
-         vector<float_type> zera = {0.0,(24/180*PI),(-114/180*PI)};
+         vector<float_type> zera = {0.0,((24.0/180.0)*PI),((-114.0/180.0)*PI)};
          vector<float_type> speeds = {25,25,25};
          for(int i=0;i<6;i++)
          {
              board->setSpeed(i,speeds);
-             board->setComplianceSlope(complianceSlopeVector);
+             board->setComplianceSlope(i,complianceSlopeVector);
              board->setPosition(i,zera);
          }
 
          getchar();
 
+         char filename[100] = "../resources/robotModel.xml";
+         cout<<"Przed stworzeniem robota:"<<filename<<endl;
          Robot* robot;
-         robot = createRobotMessor("../resources/robotModel.xml");
+         robot = createRobotMessor(filename);
+         cout<<"Po stworzeniu."<<endl;
 
          Mat34 mat;
+         cout<<"Stworzenie macierzy jednostkowej"<<endl;
          mat.setIdentity();
-         mat(0, 3) = 0;
+         mat(0, 3) = 0.0;
          mat(1, 3) = 0.05;
-         mat(2, 3) = 0;
+         mat(2, 3) = 0.0;
+         cout<<"Wypełnienie macierzy"<<endl;
 
          robot->movePlatform(mat);
          //std::cout << "Robot name: " << robot->getName() << "\n";
