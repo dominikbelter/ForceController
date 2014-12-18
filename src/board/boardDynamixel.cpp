@@ -352,11 +352,12 @@ unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent)
 unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     if (legNo<3)
-       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE);
+       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, 0x0E)/1024*28.3;
     else
-        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE);
+        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, 0x0E)/1024*28.3;
 
-    cout << "MaxTorque: " <<object->dxl_read_word(legNo*10+jointNo, 0x0E) << endl;   //0x0E - Max Torque
+    //cout << "MaxTorque: " <<object->dxl_read_word(legNo*10+jointNo, 0x0E) << endl;   //0x0E - Max Torque
+
     return 0;
 }
 
