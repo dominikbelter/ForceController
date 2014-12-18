@@ -11,7 +11,6 @@ using namespace controller;
 
 int main( int argc, const char** argv )
 {
-    int deg;
     float_type kat0 = 0;
     float_type kat1 = 0;
     float_type kat2 = 0;
@@ -34,17 +33,14 @@ int main( int argc, const char** argv )
     }
     vector <float_type> polozeniePoczatkowe;
     polozeniePoczatkowe.push_back( 0 );
-    polozeniePoczatkowe.push_back( 24 );
-    polozeniePoczatkowe.push_back( -114 );
-
+    polozeniePoczatkowe.push_back( 0 );
+    polozeniePoczatkowe.push_back( 0 );
 
     Board *demo = createBoardDynamixel();
 
     demo->readPosition( LEG_1, JOINT_0, kat0);
     demo->readPosition( LEG_1, JOINT_1, kat1);
     demo->readPosition( LEG_1, JOINT_2, kat2);
-
-    cout << kat0 << endl;
 
     demo->setSpeed( motorSpeed );
 
@@ -58,7 +54,12 @@ int main( int argc, const char** argv )
     //demo->setPosition(LEG_4, polozeniePoczatkowe );
     //demo->setPosition(LEG_5, polozeniePoczatkowe );
 
-    cout << kat1 << endl << kat2 << endl;
+    demo->readTorque(LEG_0, JOINT_0, moment0 );
+
+    cout << "Katy: " << endl;
+    cout << (kat0*180)/M_PI << endl << (kat1*180)/M_PI << endl << (kat2*180)/M_PI << endl;
+    cout << "Momenty: " << endl;
+    cout << moment0 << endl << moment1 << endl << moment2 << endl;
 
     while (true){
 
