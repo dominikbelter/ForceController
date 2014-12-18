@@ -77,6 +77,36 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, const std::vector<
 
 /// Set reference position value for servomotors, returns error value
 unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
+    CDynamixel *object1=&dynamixelMotors[0];
+    CDynamixel *object2=&dynamixelMotors[1];
+    vector<float_type> angle_tmp;
+    for(int i=0; i<18; i++){
+        angle_tmp.push_back(1);
+    }
+    int cnt = 0;
+    int tmp = 0;
+    for(int i=0;i<18;i++){
+        if(i<9){
+            tmp=i%3;
+            if(!(i%3) && i!=0){
+                cnt++;
+            }
+            angle_tmp[i] = angle[i]*180/M_PI;
+            angle_tmp[i] = angle_tmp[i]*10;
+            angle_tmp[i]=-(angle_tmp[i]+angle_offset[cnt*3+tmp]-zero_angle[cnt*3+tmp])*0.341333 + 512;
+            object1->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
+        }
+            else{
+            tmp=i%3;
+            if(!(i%3) && i!=0){
+                cnt++;
+                }
+            angle_tmp[i] = angle[i]*180/M_PI;
+            angle_tmp[i] = angle_tmp[i]*10;
+            angle_tmp[i]=-(angle_tmp[i]+angle_offset[cnt*3+tmp]-zero_angle[cnt*3+tmp])*0.341333 + 512;
+            object1->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
+            }
+        }
 
     /* how many elements have this vector?
        - angle for every joint? 18
@@ -124,7 +154,7 @@ unsigned int BoardDynamixel::setSpeed(unsigned char legNo, const std::vector<flo
 unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
     CDynamixel *object1=&dynamixelMotors[0];
     CDynamixel *object2=&dynamixelMotors[1];
-    /*int cnt = 0;
+    int cnt = 0;
     int tmp = 0;
     for(int i=0;i<18;i++){
         if(i<9){
@@ -132,13 +162,16 @@ unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
             if(!(i%3) && i!=0){
                 cnt++;
             }
-            object1->dxl_write_word(cnt*10+tmp);
-            else{
-
-            }
-            object2->dxl_write_word();
+            object1->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]);
         }
-    }*/
+            else{
+            tmp=i%3;
+            if(!(i%3) && i!=0){
+                cnt++;
+                }
+            object2->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]);
+        }
+        }
     return 0;
 }
 
@@ -226,7 +259,7 @@ unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char joi
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
     ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
-    ang = (((ang_odt-512)/(-0.341333)))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
+    ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
     return 0;
 }
