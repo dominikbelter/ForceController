@@ -41,6 +41,10 @@
 #define P_TORQUE_LIMIT_L 34 //maximum output torque
 #define P_TEMERATURE_LIMIT_L 11 /* temperature limit*/
 
+#define SET_TORQUE_LIMIT 34 //adres do ustawienia ograniczenia momentu
+#define GET_MAX_TORQUE 14 //adres odczytu maxymalnego momentu
+
+
 namespace controller {
 
     /// create a single board controller (with usb2dynamixel)

@@ -168,6 +168,9 @@ unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
 
 /// Set compliance margin [0,254]- dead zone -- for this area the torque is zero, returns error value
 unsigned int BoardDynamixel::setComplianceMargin(unsigned char legNo, unsigned char jointNo, float_type margin){
+    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    object->dxl_write_word(legNo*10 + jointNo, P_CCW_COMPLIANCE_MARGIN, margin);//do spraawdzenia czy ma byc dxl_write_word()
+    object->dxl_write_word(legNo*10 + jointNo, P_CW_COMPLIANCE_MARGIN, margin);
     return 0;
 }
 
@@ -230,6 +233,8 @@ unsigned int BoardDynamixel::setComplianceSlope(const std::vector<float_type>& s
 
 /// Set torque limit torque_limit [0,1023] - the torque limit, returns error value
 unsigned int BoardDynamixel::setTorqueLimit(unsigned char legNo, unsigned char jointNo, float_type torqueLimit){
+    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+            object->dxl_write_word(legNo*10 + jointNo, SET_TORQUE_LIMIT, torqueLimit);
     return 0;
 }
 
@@ -343,9 +348,9 @@ unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent)
 unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     if (legNo<3)
-       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, 0x0E)/1024*28.3;
+       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
     else
-        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, 0x0E)/1024*28.3;
+        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
 
     //cout << "MaxTorque: " <<object->dxl_read_word(legNo*10+jointNo, 0x0E) << endl;   //0x0E - Max Torque
 
