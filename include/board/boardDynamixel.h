@@ -33,6 +33,18 @@
 #define JOINT_1 1
 #define JOINT_2 2
 
+#define P_MOVING_SPEED_L 32 /*!< wartosc predkosci serwomechanizmu */
+#define P_CW_COMPLIANCE_MARGIN 26 /*!< blad pomiedzy zadana a aktualna pozycja, w ruchu zgodnie ze wskazowkami zegara (CW) */
+#define P_CCW_COMPLIANCE_MARGIN 27 /*!< blad pomiedzy zadana a aktualna pozycja, w ruchu przeciwnym do wskazowek zegara (CCW) */
+#define P_CW_COMPLIANCE_SLOPE 28 /*!< wartosc momentu serwomechanizmu gdy zbliza sie juz do zadanego polozenia, CW */
+#define P_CCW_COMPLIANCE_SLOPE 29 /*!< wartosc momentu serwomechanizmu gdy zbliza sie juz do zadanego polozenia, CCW */
+#define P_TORQUE_LIMIT_L 34 //maximum output torque
+#define P_TEMERATURE_LIMIT_L 11 /* temperature limit*/
+
+#define SET_TORQUE_LIMIT 34 //adres do ustawienia ograniczenia momentu
+#define GET_MAX_TORQUE 14 //adres odczytu maxymalnego momentu
+
+
 namespace controller {
 
     /// create a single board controller (with usb2dynamixel)
@@ -48,11 +60,11 @@ using namespace controller;
 class BoardDynamixel : public Board{
     public:
         /// Default values of angles for serwomotors.
-        // int zero_angle[18]
-        std::vector <float_type> zero_angle;  //rad
+        int zero_angle[18];
+        //std::vector <float_type> zero_angle;  //rad
         /// Default offset values of angles for serwomotors.
-        //int angle_offset[18]
-        std::vector<float_type> angle_offset; //rad
+        int angle_offset[18];
+        //std::vector<float_type> angle_offset; //rad
 
         static const float_type DEG2DYNAMIXEL;
         /// Pointer

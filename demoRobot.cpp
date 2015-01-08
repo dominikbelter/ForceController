@@ -1,6 +1,7 @@
 #include "include/defs/defs.h"
 #include "include/robotModel/robot.h"
 #include "include/robotModel/robotMessor2.h"
+#include "include/legModel/insectLeg.h"
 #include <iostream>
 #include <stdio.h>
 #include "include/visualization/visualizerIrrlicht.h"
@@ -34,24 +35,22 @@ int main( int argc, const char** argv )
 		testmoveplatform2(1, 3) = 0;
 		testmoveplatform2(2, 3) = 0;
 
-		Robot* Rob;
-		Rob = createRobotMessor();
+        Robot* Rob;
+        Rob = createRobotMessor("../resources/robotModel.xml");
         Visualizer* visualizer;
         visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
 
 
 		std::vector<float_type> configuration, configuration2, Fz;
-
-        //configuration.push_back(18);
-       // configuration = Rob->movePlatform(testmoveplatform);
-       // cout << configuration[0] << endl << configuration[1] << endl << configuration[2] << endl;
+        getchar();
+        configuration.push_back(18);
+       configuration = Rob->movePlatform(testmoveplatform);
+       getchar();
+       //cout << configuration[0] << endl << configuration[1] << endl << configuration[2] << endl;
         //cout << configuration[3] << endl << configuration[4] << endl << configuration[5] << endl;
         //cout << configuration[12] << endl << configuration[13] << endl << configuration[14] << endl;
         //cout << configuration[15] << endl << configuration[16] << endl << configuration[17] << endl;
        // getchar();
-
-        configuration2.push_back(18);
-        configuration2 = Rob->movePlatform(testmoveplatform2);
 
 
 
@@ -71,15 +70,16 @@ int main( int argc, const char** argv )
 		robotPose(3, 3) = 1;
 
 
-
+/*
         // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
-        for (int i = 0; i<6; i++)
-		{
-            configuration.push_back(0);
+       for (int i = 0; i<6; i++)
+      {
+           configuration.push_back(0);
             configuration.push_back(0.4189);
             configuration.push_back(-1.1989);
-		}
-
+    }
+*/
+        getchar();
         visualizer->drawRobot(robotPose, configuration);
 		getchar();
 		//visualizer->drawRobot(robotPose, configuration2);

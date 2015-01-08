@@ -11,6 +11,7 @@
 
 #include "robot.h"
 #include <iostream>
+#include "../include/legModel/insectLeg.h"
 
 
 namespace controller {
@@ -30,7 +31,89 @@ public:
     /// Pointer
     typedef std::unique_ptr<Robot> Ptr;
     RobotMessor(void);
-    RobotMessor(std::string configFilename):Robot(configFilename, "RobotMessor", TYPE_MESSOR2){};
+    RobotMessor(std::string configFilename):Robot(configFilename, "RobotMessor", TYPE_MESSOR2)
+    {
+        tinyxml2::XMLDocument config;
+        std::string filename = "../../resources/" + configFilename;
+        config.LoadFile(filename.c_str());
+        if (config.ErrorID())
+        {
+            std::cout << "unable to load Robot config file.\n";
+        }
+        else
+        {
+            Leg0 = createInsectLeg("../resources/legModel.xml");
+
+            tinyxml2::XMLElement * parameters;
+            float_type paramf;
+            parameters = config.FirstChildElement("width1");
+            parameters = parameters->FirstChildElement( "parameters" );
+            parameters->QueryDoubleAttribute("width_max", &paramf); width_max = paramf;
+              parameters = config.FirstChildElement("width2");
+            parameters = parameters->FirstChildElement( "parameters" );
+            parameters->QueryDoubleAttribute("width_min", &paramf); width_min = paramf;
+              parameters = config.FirstChildElement("length1");
+            parameters = parameters->FirstChildElement( "parameters" );
+            parameters->QueryDoubleAttribute("length", &paramf); length = paramf;
+
+           // std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
+            std::cout<< width_max << std::endl;
+            //std::cout << "Lenght2: " << lengths[1] << std::endl;
+            //std::cout << "Lenght3: " << lengths[2] << std::endl;
+        }
+        L0.setIdentity();
+        L0(0, 3) = width_min;
+        L0(1, 3) = length;
+        L0(2, 3) = 0;
+
+        L1.setIdentity();
+        L1(0, 3) = width_max;
+        L1(1, 3) = 0;
+        L1(2, 3) = 0;
+
+        L2.setIdentity();
+        L2(0, 3) = width_min;
+        L2(1, 3) = -length;
+        L2(2, 3) = 0;
+
+        L3.setIdentity();
+        L3(0, 3) = -width_min;
+        L3(1, 3) = -length;
+        L3(2, 3) = 0;
+
+        L4.setIdentity();
+        L4(0, 3) = -width_max;
+        L4(1, 3) = 0;
+        L4(2, 3) = 0;
+
+        L5.setIdentity();
+        L5(0, 3) = -width_min;
+        L5(1, 3) = length;
+        L5(2, 3) = 0;
+
+        L_all.push_back(L0);
+        L_all.push_back(L1);
+        L_all.push_back(L2);
+        L_all.push_back(L3);
+        L_all.push_back(L4);
+        L_all.push_back(L5);
+
+        OldMotion.setIdentity();
+        OldMotion(0, 3) = 0;
+        OldMotion(1, 3) = 0;
+        OldMotion(2, 3) = 0;
+
+        NeutralMotion.setIdentity();
+        NeutralMotion(0, 3) = 0;
+        NeutralMotion(1, 3) = 0;
+        NeutralMotion(2, 3) = 0.12;
+
+
+    };
+
+
+
+
 
     /// Name of the robot model
     const std::string& getName() const { return name; }
@@ -80,6 +163,7 @@ private:
 	Mat34 L5;
 
 	Mat34 OldMotion; ///matrix include oldmotion robot, start with...
+    Mat34 NeutralMotion; ///matrix include robots neutral position
 
 	std::vector<Mat34> L_all; ///vector include translations for all legs from robot center
 	Leg* Leg0;
