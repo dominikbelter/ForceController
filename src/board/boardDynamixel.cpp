@@ -63,7 +63,6 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
     angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])*0.341333 + 512;
 
     CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
-    cout << "Kat przed wyslaniem: " << angle << endl;
     pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
 
     return 0;
