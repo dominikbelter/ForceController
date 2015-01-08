@@ -186,8 +186,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
  std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)
 {
 
-        // Leg* leg;
-        // leg = createInsectLeg("../resources/legModel.xml");
+
          TorqueForce TF1,TF2,TF3,TF4,TF5,TF6;
          //Coefficient matrix of force and torque equations
          typedef Eigen::Matrix<float_type,6,6> Mat66;
@@ -196,26 +195,26 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          Mat66 A;
          std::vector<Mat34> pos,pos2;
          std::vector<float_type> l1,l2,l3,l4,l5,l6,FZ,FX,FY;
-         float m=2,g=9.81,F=m*g,pom,LC1,LC2,LC3,LC4,LC5,LC6;
+         float m=2,g=9.81,F=m*g;
          std::vector<float_type> torque1,torque2,torque3,torque4,torque5,torque6,TORQUE,compliance;
 
-        /*pos=conputeLinksPosition(configuration);
+        pos=conputeLinksPosition(configuration);
 
-         for(int i=3; i<pos.size(); i+=4)
-         {
-           pos2.push_back(pos[i]);
+        for(int i=3; i<pos.size(); i+=4)
+        {
+          pos2.push_back(pos[i]);
 
-         }
+        }
 
-         for(int i=0;i<3;i++)
-         {
-         l1.push_back(pos2[0](i,3));
-         l2.push_back(pos2[1](i,3));
-         l3.push_back(pos2[2](i,3));
-         l4.push_back(pos2[3](i,3));
-         l5.push_back(pos2[4](i,3));
-         l6.push_back(pos2[5](i,3));
-         }
+        for(int i=0;i<3;i++)
+        {
+        l1.push_back(pos2[0](i,3));
+        l2.push_back(pos2[1](i,3));
+        l3.push_back(pos2[2](i,3));
+        l4.push_back(pos2[3](i,3));
+        l5.push_back(pos2[4](i,3));
+        l6.push_back(pos2[5](i,3));
+        }
          l1[2]=-1*l1[2];
          l2[2]=-1*l2[2];
          l3[2]=-1*l3[2];
@@ -223,70 +222,20 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          l5[2]=-1*l5[2];
          l6[2]=-1*l6[2];
 
-         LC1=sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
-         LC2=sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
-         LC3=sqrt(pow(l3[0],2)+pow(l3[1],2)+pow(l3[2],2));
-         LC4=sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
-         LC5=sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
-         LC6=sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
 
-         pom=LC1;
-         if(pom>LC2)
-             pom=LC2;
-         if(pom>LC3)
-             pom=LC3;
-         if(pom>LC4)
-             pom=LC4;
-         if(pom>LC5)
-             pom=LC5;
-         if(pom>LC6)
-             pom=LC6;
-
-         if(pom==LC1)
-         {
-             l1[0]=-1*l1[0];
-             l1[1]=-1*l1[1];
-             l1[2]=-1*l1[2];
-         }
-         if(pom==LC2)
-         {
-             l2[0]=-1*l2[0];
-             l2[1]=-1*l2[1];
-             l2[2]=-1*l2[2];
-         }
-         if(pom==LC3)
-         {
-             l3[0]=-1*l3[0];
-             l3[1]=-1*l3[1];
-             l3[2]=-1*l3[2];
-         }
-         if(pom==LC4)
-         {
-             l4[0]=-1*l4[0];
-             l4[1]=-1*l4[1];
-             l4[2]=-1*l4[2];
-         }
-         if(pom==LC5)
-         {
-             l5[0]=-1*l5[0];
-             l5[1]=-1*l5[1];
-             l5[2]=-1*l5[2];
-         }
-         if(pom==LC6)
-         {
-             l6[0]=-1*l6[0];
-             l6[1]=-1*l6[1];
-             l6[2]=-1*l6[2];
-         }
-         */
+         std::cout<<" "<<std::endl;
+         std::cout<<" l1x="<<l1[0]<<" l2x="<<l2[0]<<" l3x="<<l3[0]<<" l4x="<<l4[0]<<" l5x="<<l5[0]<<" l6x="<<l6[0]<<" "<<std::endl;
+         std::cout<<" l1y="<<l1[1]<<" l2y="<<l2[1]<<" l3y="<<l3[1]<<" l4y="<<l4[1]<<" l5y="<<l5[1]<<" l6y="<<l6[1]<<" "<<std::endl;
+         std::cout<<" l1z="<<l1[2]<<" l2z="<<l2[2]<<" l3z="<<l3[2]<<" l4z="<<l4[2]<<" l5z="<<l5[2]<<" l6z="<<l6[2]<<" "<<std::endl;
+         std::cout<<" "<<std::endl;
 
 
-         l1.push_back(-0.35);l1.push_back(0.05);l1.push_back(-0.1);
-         l2.push_back(0.35);l2.push_back(0.0);l2.push_back(0.1);
-         l3.push_back(-0.35);l3.push_back(-0.05);l3.push_back(-0.1);
-         l4.push_back(0.35);l4.push_back(-0.05);l4.push_back(-0.1);
-         l5.push_back(-0.35);l5.push_back(0.0);l5.push_back(0.1);
-         l6.push_back(0.35);l6.push_back(0.05);l6.push_back(-0.1);
+         /*l1.push_back(-0.3);l1.push_back(0.1);l1.push_back(-0.1);
+         l2.push_back(-0.35);l2.push_back(0.0);l2.push_back(-0.1);
+         l3.push_back(-0.3);l3.push_back(-0.1);l3.push_back(-0.1);
+         l4.push_back(0.3);l4.push_back(-0.1);l4.push_back(-0.1);
+         l5.push_back(0.35);l5.push_back(0.0);l5.push_back(-0.1);
+         l6.push_back(0.3);l6.push_back(0.1);l6.push_back(-0.1);*/
          //equation of Torque y
          A(0,0)=((l1[0]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
          A(0,1)=((l2[0]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
@@ -415,17 +364,6 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
 
          }
-      /*for(int i=0;i<18;i++)
-         {
-
-             compliance[i]=sqrt(compliance[i]*compliance[i]);
-
-                     if(compliance[i]>1)
-                        compliance[i]=1;
-         }*/
-
-
-
 
         return compliance;
 
