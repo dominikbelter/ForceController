@@ -23,12 +23,12 @@ int main( int argc, const char** argv )
     try {
 
 
-        Mat34 testmoveplatform, testmoveplatform2;
+        Mat34 testmoveplatform;
 
 		testmoveplatform.setIdentity();
 		testmoveplatform(0, 3) = 0;
         testmoveplatform(1, 3) = 0;
-        testmoveplatform(2, 3) = 0.14;
+        testmoveplatform(2, 3) = -0.14;
 
 
         Robot* Rob;
@@ -38,7 +38,7 @@ int main( int argc, const char** argv )
 
 
 		std::vector<float_type> configuration, configuration2, Fz;
-         configuration2.push_back(18);
+        // configuration2.push_back(18);
 
 
 
@@ -66,16 +66,18 @@ int main( int argc, const char** argv )
        for (int i = 0; i<6; i++)
       {
            configuration.push_back(0);
-            configuration.push_back(0.4189);
-            configuration.push_back(-1.1989);
+            configuration.push_back(24*3.14/180);
+            configuration.push_back(-114*3.14/180);
     }
 
-        visualizer->drawRobot(robotPose, configuration);
+        //visualizer->drawRobot(robotPose, configuration);
+
 
         configuration2 = Rob->movePlatform(testmoveplatform);
-        getchar();
+        //getchar();
 
         visualizer->drawRobot(robotPose, configuration2);
+
         return 0;
 
    }

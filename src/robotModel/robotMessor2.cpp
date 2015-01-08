@@ -61,7 +61,7 @@ RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 	OldMotion.setIdentity();
 	OldMotion(0, 3) = 0;
 	OldMotion(1, 3) = 0;
-    OldMotion(2, 3) = 0;
+    OldMotion(2, 3) = 0.12;
 
     NeutralMotion.setIdentity();
     NeutralMotion(0, 3) = 0;
@@ -96,11 +96,11 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 		actleg = newmotion*L_all[i];
         if (i<3)
         {
-        conf2 = Leg0->inverseKinematic(actleg,0);
+        conf2 = Leg0->inverseKinematic(actleg, 3, 0);
         }
         else
         {
-        conf2 = Leg0->inverseKinematic(actleg,1);
+        conf2 = Leg0->inverseKinematic(actleg, 3, 1);
         }
 		conf.push_back(conf2[0]);
 		conf.push_back(conf2[1]);
@@ -128,13 +128,14 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 
              actleg = newmotion*L_all[i];
              if (i<3)
-             {
-             conf2 = Leg0->inverseKinematic(actleg,0);
-             }
-             else
-             {
-             conf2 = Leg0->inverseKinematic(actleg,1);
-             }
+                 if (i<3)
+                 {
+                 conf2 = Leg0->inverseKinematic(actleg, 3, 0);
+                 }
+                 else
+                 {
+                 conf2 = Leg0->inverseKinematic(actleg, 3, 1);
+                 }
              conf.push_back(conf2[0]);
              conf.push_back(conf2[1]);
              conf.push_back(conf2[2]);
