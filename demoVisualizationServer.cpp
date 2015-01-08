@@ -11,8 +11,9 @@
 #include <stdio.h>
 #include <thread>
 #include <time.h>
+#ifdef __USE_VISUALIZER__
 #include <boost/array.hpp>
-//#include <boost/asio.hpp>
+#include <boost/asio.hpp>
 
 
 /*
@@ -20,19 +21,33 @@
  Tomasz Chrosniak
  */
 
-//using boost::asio::ip::udp;
+using boost::asio::ip::udp;
+Board* board;
 
-std::string make_daytime_string()
+vector<float_type> give_position()
 {
-  using namespace std;
-    time_t now = time(0);
-    return ctime(&now);
-}
+    std::vector<float_type> configuration;
+    std::vector<float_type> configSingleLeg;
 
+    for(int i=0;i<6;++i)
+    {
+        configSingleLeg.clear();
+        board->readPositions(i,configSingleLeg);
+        for(int j=0;j<configSingleLeg.size();++j)
+        {
+            configuration.push_back(configSingleLeg[j]);
+        }
+    }
+    return configuration;
+}
+#endif
 
 int main()
 {
-	 /* try
+    #ifdef __USE_VISUALIZER__
+    board = createBoardDynamixel();
+
+    try
     {
         boost::asio::io_service io_service;
 
@@ -49,9 +64,8 @@ int main()
             if (error && error != boost::asio::error::message_size)
                 throw boost::system::system_error(error);
 
-            std::string message = make_daytime_string();
             boost::system::error_code ignored_error;
-            socket.send_to(boost::asio::buffer(message),
+            socket.send_to(boost::asio::buffer(give_position()),
                            remote_endpoint, 0, ignored_error);
 
         }
@@ -61,7 +75,7 @@ int main()
     catch (std::exception& e)
     {
         std::cerr << e.what() << std::endl;
-		}*/
-
+        }
+#endif
     return 0;
 }
