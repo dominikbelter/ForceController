@@ -28,7 +28,7 @@ int main( int argc, const char** argv )
 		testmoveplatform.setIdentity();
 		testmoveplatform(0, 3) = 0;
         testmoveplatform(1, 3) = 0;
-        testmoveplatform(2, 3) = -0.14;
+        testmoveplatform(2, 3) = 0;
 
 
         Robot* Rob;
@@ -48,27 +48,16 @@ int main( int argc, const char** argv )
 		// setIdentity w bledny sposob tworzy macierz jednostkowa
 
 		Mat34 robotPose;
-
-		for (int i = 0; i<4; i++) {
-			for (int j = 0; j<4; j++) {
-				robotPose(i, j) = 0;
-			}
-		}
-
-		robotPose(0, 0) = 1;
-		robotPose(1, 1) = 1;
-		robotPose(2, 2) = 1;
-		robotPose(3, 3) = 1;
-
+        robotPose.setIdentity();
 
 
         // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
        for (int i = 0; i<6; i++)
       {
-           configuration.push_back(0);
+            configuration.push_back(0);
             configuration.push_back(24*3.14/180);
             configuration.push_back(-114*3.14/180);
-    }
+      }
 
         //visualizer->drawRobot(robotPose, configuration);
 
@@ -76,7 +65,7 @@ int main( int argc, const char** argv )
         configuration2 = Rob->movePlatform(testmoveplatform);
         //getchar();
 
-        visualizer->drawRobot(robotPose, configuration2);
+       visualizer->drawRobot(robotPose, configuration2);
 
         return 0;
 

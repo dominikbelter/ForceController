@@ -83,33 +83,69 @@ RobotMessor::~RobotMessor(void)
 ///Compute configuration of the robot for the reference motion
 std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 {
-	std::vector<float_type> conf, conf2;
-	Mat34 actleg, newmotion;
+    std::vector<float_type> conf, conf2;
+    Mat34 x, y, s;
 
-	newmotion = OldMotion*motion;
+    //newmotion = OldMotion*motion;
+    std::vector<float_type> configurationstart;
 	//-----------------------------------------
+    using namespace std;
 
+    for (int i = 0; i<6; i++)
+        {
+            configurationstart.push_back(0);
+            configurationstart.push_back(24*3.14/180);
+            configurationstart.push_back(-114*3.14/180);
+        }
 	for (int i = 0; i<6; i++)
 	{
 
+        x = motion * L_all[i];
+        cout<<"x\n"<<x.matrix()<<endl;
 
-		actleg = newmotion*L_all[i];
-        if (i<3)
+        s = OldMotion * L_all[i];
+
+        if (i < 3)
         {
-        conf2 = Leg0->inverseKinematic(actleg, 3, 0);
+            s.matrix() *= Leg0 ->forwardKinematic(configurationstart, 3, 0).matrix();
+            cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationstart, 3, 0).matrix()<<endl;
         }
         else
         {
-        conf2 = Leg0->inverseKinematic(actleg, 3, 1);
+            s.matrix() *= Leg0 ->forwardKinematic(configurationstart, 3, 1).matrix();
+            cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationstart, 3, 1).matrix()<<endl;
+        }
+
+        cout<<"s\n"<<s.matrix()<<endl;
+
+        y.matrix() = x.matrix().inverse() * s.matrix();
+        cout<<"y\n"<<y.matrix()<<endl;
+
+
+
+        // actleg.matrix() = actleg.matrix().inverse();
+
+        if (i<3)
+        {
+
+        conf2 = Leg0->inverseKinematic(y, 3, 0);
+        }
+        else
+        {
+        conf2 = Leg0->inverseKinematic(y, 3, 1);
         }
 		conf.push_back(conf2[0]);
 		conf.push_back(conf2[1]);
 		conf.push_back(conf2[2]);
-	}
 
+        for(int e=0;e<3;e++)
+        {
+            cout<<conf2[i]<<endl;
+        }
+        getchar();
+	}
 	//-------------------------------------------
 
-	OldMotion = newmotion;
 	return conf;
 }
 		
@@ -127,7 +163,6 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
          {
 
              actleg = newmotion*L_all[i];
-             if (i<3)
                  if (i<3)
                  {
                  conf2 = Leg0->inverseKinematic(actleg, 3, 0);
@@ -139,6 +174,7 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
              conf.push_back(conf2[0]);
              conf.push_back(conf2[1]);
              conf.push_back(conf2[2]);
+
          }
 
          //-------------------------------------------
