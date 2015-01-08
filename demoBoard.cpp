@@ -18,6 +18,7 @@ int main( int argc, const char** argv )
 float_type kat0 = 0;
     float_type kat1 = 0;
     float_type kat2 = 0;
+float_type readkat = 0;
 
     float_type moment0 = 0;
     float_type moment1 = 0;
@@ -82,6 +83,8 @@ float_type kat0 = 0;
         cout << "Podatnosc = ";
         cin >> podatnosc;
         demo->setTorqueLimit(noga, wezel, podatnosc);
+	demo->readPosition(noga,wezel,readkat);
+	cout<<"Odczytany kat: "<<readkat*180/M_PI<<endl; 
     }
 
     return 0;
