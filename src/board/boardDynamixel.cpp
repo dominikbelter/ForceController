@@ -54,7 +54,13 @@ BoardDynamixel::~BoardDynamixel(void) {
 
 /// Set reference position value for servomotor, returns error value
 unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char jointNo, float_type angle){
+if(legNo<3 && jointNo==2){
+angle=-angle;
+}
 
+if(legNo>2 && jointNo==1){
+angle=-angle;
+}
 
     angle = angle*180/M_PI;
     angle = angle*10;
@@ -269,6 +275,12 @@ unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char joi
     ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
     ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
+if(legNo < 3 && jointNo == 2){
+        angle = -angle;
+    }
+    if(legNo > 2 && jointNo == 1){
+        angle = -angle;
+    }
     return 0;
 }
 
