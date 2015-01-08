@@ -99,6 +99,11 @@ int main(int argc, const char** argv)
     robotPose(2,2) = 1;
     robotPose(3,3) = 1;
 
+    for (int i=0;i<6;i++){
+        configuration[i*3+0] = 0;
+        configuration[i*3+1] = 24*3.14/180;
+        configuration[i*3+2] = -114*3.14/180;
+    }
 
     visualizer->drawRobot(robotPose, configuration);
 
