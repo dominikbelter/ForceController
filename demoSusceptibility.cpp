@@ -23,11 +23,11 @@ int main( int argc, const char** argv )
         Mat34 testmoveplatform;
 
         testmoveplatform.setIdentity();
-        testmoveplatform(0, 3) = 0.2;
-        testmoveplatform(1, 3) = 0.2;
+        testmoveplatform(0, 3) = 0;
+        testmoveplatform(1, 3) = 0;
         testmoveplatform(2, 3) = 0.2;
 
-         //configuration.push_back(18);
+
          configuration = Rob->movePlatform(testmoveplatform);
 
            std::cout<<""<<std::endl;
@@ -39,8 +39,8 @@ int main( int argc, const char** argv )
             std::cout<<C[i]<<std::endl;
 
         }
-
-       /* std::vector<float_type> l1,l2,l3,l4,l5,l6;
+/*
+       std::vector<float_type> l1,l2,l3,l4,l5,l6;
        pos=Rob->conputeLinksPosition(configuration);
 
        for(int i=3; i<pos.size(); i+=4)
