@@ -86,6 +86,7 @@ int main(int argc, const char** argv)
 */
 
 // setIdentity w bledny sposob tworzy macierz jednostkowa
+//DB u mnie działa dobrze: robotPose.setIdentity();
 
     for(int i=0 ; i<4 ; i++) {
         for(int j=0 ; j<4 ; j++) {
