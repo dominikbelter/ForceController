@@ -68,14 +68,14 @@ class InsectLeg : public Leg
 		* @param [in] linkNo the number of nodes kinematic
 		* @return Mat34 homogeneous matrix legs
 		*/
-		Mat34 forwardKinematic(std::vector<float_type> configuration, int linkNo = -1);
+		Mat34 forwardKinematic(std::vector<float_type> configuration, int linkNo = -1, bool is_leg_left = false);
 
 		/** Compute inverse kinematic, default (-1) -- the last joint
 		* @param [in] linkPose homogeneous matrix legs
 		* @param [in] linkNo the number of nodes kinematic
 		* @return std::vector<float_type> configuration variables legs
 		*/
-		std::vector<float_type> inverseKinematic(Mat34 linkPose, int linkNo = -1);
+		std::vector<float_type> inverseKinematic(Mat34 linkPose, int linkNo = -1, bool is_leg_left = false);
 
 		/** Returns number of links in leg
 		* @return int number of links

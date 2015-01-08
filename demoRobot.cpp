@@ -23,17 +23,13 @@ int main( int argc, const char** argv )
     try {
 
 
-        Mat34 testmoveplatform, testmoveplatform2;
+        Mat34 testmoveplatform;
 
 		testmoveplatform.setIdentity();
 		testmoveplatform(0, 3) = 0;
-		testmoveplatform(1, 3) = 0;
-		testmoveplatform(2, 3) = 0;
+        testmoveplatform(1, 3) = 0;
+        testmoveplatform(2, 3) = -0.14;
 
-		testmoveplatform2.setIdentity();
-		testmoveplatform2(0, 3) = 0;
-		testmoveplatform2(1, 3) = 0;
-		testmoveplatform2(2, 3) = 0;
 
         Robot* Rob;
         Rob = createRobotMessor("../resources/robotModel.xml");
@@ -42,15 +38,10 @@ int main( int argc, const char** argv )
 
 
 		std::vector<float_type> configuration, configuration2, Fz;
-        getchar();
-        configuration.push_back(18);
-       configuration = Rob->movePlatform(testmoveplatform);
-       getchar();
-       //cout << configuration[0] << endl << configuration[1] << endl << configuration[2] << endl;
-        //cout << configuration[3] << endl << configuration[4] << endl << configuration[5] << endl;
-        //cout << configuration[12] << endl << configuration[13] << endl << configuration[14] << endl;
-        //cout << configuration[15] << endl << configuration[16] << endl << configuration[17] << endl;
-       // getchar();
+        // configuration2.push_back(18);
+
+
+
 
 
 
@@ -70,19 +61,23 @@ int main( int argc, const char** argv )
 		robotPose(3, 3) = 1;
 
 
-/*
+
         // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
        for (int i = 0; i<6; i++)
       {
            configuration.push_back(0);
-            configuration.push_back(0.4189);
-            configuration.push_back(-1.1989);
+            configuration.push_back(24*3.14/180);
+            configuration.push_back(-114*3.14/180);
     }
-*/
-        getchar();
-        visualizer->drawRobot(robotPose, configuration);
-		getchar();
-		//visualizer->drawRobot(robotPose, configuration2);
+
+        //visualizer->drawRobot(robotPose, configuration);
+
+
+        configuration2 = Rob->movePlatform(testmoveplatform);
+        //getchar();
+
+        visualizer->drawRobot(robotPose, configuration2);
+
         return 0;
 
    }
