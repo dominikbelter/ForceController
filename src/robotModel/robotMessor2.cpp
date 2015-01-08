@@ -369,17 +369,21 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          {
 
              compliance.push_back(TORQUE[i]*0.25);
+             compliance[i]=sqrt(compliance[i]*compliance[i]);
+
+                     if(compliance[i]>1)
+                        compliance[i]=1;
 
 
          }
-      for(int i=0;i<18;i++)
+      /*for(int i=0;i<18;i++)
          {
 
              compliance[i]=sqrt(compliance[i]*compliance[i]);
 
                      if(compliance[i]>1)
                         compliance[i]=1;
-         }
+         }*/
 
 
 
