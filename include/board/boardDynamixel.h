@@ -18,9 +18,9 @@
 #define MOVE_SERWOMOTOR 0x1E
 #define P_PRESENT_POSITION_L 36
 #define TORQUE 40
-#define SET_COMPLIANCE_SLOPE 0x40
+
 #define MOVING_SPEED 32
-#define PRESENT_VOLTAGE 42
+#define PRESENT_VOLTAGE 42      //used readCurrent
 
 #define LEG_0 0
 #define LEG_1 1
