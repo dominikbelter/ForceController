@@ -11,7 +11,11 @@ using namespace controller;
 
 int main( int argc, const char** argv )
 {
-    float_type kat0 = 0;
+    float_type kat;
+    float_type noga;
+    float_type wezel;
+	float_type podatnosc;    
+float_type kat0 = 0;
     float_type kat1 = 0;
     float_type kat2 = 0;
 
@@ -21,7 +25,7 @@ int main( int argc, const char** argv )
 
     vector <float_type> motorSpeed;
     for(int i = 0; i < 18; i++ ){
-        motorSpeed.push_back(5);
+        motorSpeed.push_back(50);
     }
     vector <float_type> motorOffset;
     for(int i = 0; i < 18; i++ ){
@@ -29,7 +33,7 @@ int main( int argc, const char** argv )
     }
     vector <float_type> motorComplianceSlope;
     for(int i = 0; i < 18; i++ ){
-        motorComplianceSlope.push_back(120);
+        motorComplianceSlope.push_back(60);
     }
     vector <float_type> polozeniePoczatkowe;
     polozeniePoczatkowe.push_back( 0 );
@@ -38,7 +42,7 @@ int main( int argc, const char** argv )
 
     Board *demo = createBoardDynamixel();
 
-    demo->readPosition( LEG_1, JOINT_0, kat0);
+/*    demo->readPosition( LEG_1, JOINT_0, kat0);
     demo->readPosition( LEG_1, JOINT_1, kat1);
     demo->readPosition( LEG_1, JOINT_2, kat2);
 
@@ -57,12 +61,27 @@ int main( int argc, const char** argv )
     demo->readTorque(LEG_0, JOINT_0, moment0 );
 
     cout << "Katy: " << endl;
-    cout << (kat0*180)/M_PI << endl << (kat1*180)/M_PI << endl << (kat2*180)/M_PI << endl;
+    cout << (kat0,*180)/M_PI << endl << (kat1*180)/M_PI << endl << (kat2*180)/M_PI << endl;
     cout << "Momenty: " << endl;
     cout << moment0 << endl << moment1 << endl << moment2 << endl;
+*/
+	demo->setOffset(5,0,(-10*M_PI)/180);
+    for(int i=0;i<6;i++)
+    {
+
+        demo->setPosition(i, 0, (0*M_PI)/180 );
+        demo->setPosition(i, 1, (24*M_PI)/180 );
+	demo->setPosition(i, 2, (-114*M_PI)/180 );
+    }
 
     while (true){
-
+        cout << "Noga = ";
+        cin >> noga;
+        cout << "Wezel = ";
+        cin >> wezel;
+        cout << "Podatnosc = ";
+        cin >> podatnosc;
+        demo->setTorqueLimit(noga, wezel, podatnosc);
     }
 
     return 0;
