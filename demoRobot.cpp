@@ -38,8 +38,8 @@ int main( int argc, const char** argv )
 
 
 		std::vector<float_type> configuration, configuration2, Fz;
-       // configuration.push_back(18);
-       //configuration = Rob->movePlatform(testmoveplatform);
+         configuration2.push_back(18);
+
 
 
 
@@ -72,8 +72,10 @@ int main( int argc, const char** argv )
 
         visualizer->drawRobot(robotPose, configuration);
 
+        configuration2 = Rob->movePlatform(testmoveplatform);
+        getchar();
 
-		//visualizer->drawRobot(robotPose, configuration2);
+        visualizer->drawRobot(robotPose, configuration2);
         return 0;
 
    }
