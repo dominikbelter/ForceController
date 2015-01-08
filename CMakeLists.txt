@@ -367,7 +367,7 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT)
 
         SET(DEMO_VISUALIZATION_CLIENT_SOURCES ./demoVisualizationClient.cpp)
         ADD_EXECUTABLE(demoVisualizationClient ${DEMO_VISUALIZATION_CLIENT_SOURCES})
-        TARGET_LINK_LIBRARIES(demoVisualizationClient Leg Board Robot Visualization Irrlicht ${Boost_ASIO_LIBRARY} ${Boost_SYSTEM_LIBRARY} )
+				TARGET_LINK_LIBRARIES(demoVisualizationClient Leg Board Robot Visualization Irrlicht ${Boost_SYSTEM_LIBRARY} )
         INSTALL(TARGETS demoVisualizationClient RUNTIME DESTINATION bin)
         INSTALL(FILES ${DEMO_VISUALIZATION_CLIENT_FILES} DESTINATION bin)
 

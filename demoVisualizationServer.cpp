@@ -12,7 +12,7 @@
 #include <thread>
 #include <time.h>
 #include <boost/array.hpp>
-#include <boost/asio.hpp>
+//#include <boost/asio.hpp>
 
 
 /*
@@ -20,7 +20,7 @@
  Tomasz Chrosniak
  */
 
-using boost::asio::ip::udp;
+//using boost::asio::ip::udp;
 
 std::string make_daytime_string()
 {
@@ -32,7 +32,7 @@ std::string make_daytime_string()
 
 int main()
 {
-    try
+	 /* try
     {
         boost::asio::io_service io_service;
 
@@ -61,7 +61,7 @@ int main()
     catch (std::exception& e)
     {
         std::cerr << e.what() << std::endl;
-    }
+		}*/
 
     return 0;
 }
