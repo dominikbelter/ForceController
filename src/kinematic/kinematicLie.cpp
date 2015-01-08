@@ -94,7 +94,11 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 	float_type x = linkPose(0, 3);
 	float_type y = linkPose(1, 3);
 	float_type z = linkPose(2, 3);
-	configVector.push_back(atan2(x, y));//theta0
+	configVector.push_back(-atan2(x, y));//theta0
+	float_type xp = sin(-configVector[0])*y + cos(-configVector[0])*x;
+	float_type yp = sin(-configVector[0])*x + cos(-configVector[0])*y;
+	x = xp;
+	y = yp;
 	switch (linkNo)
 	{
 	case 1:
@@ -119,7 +123,7 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 			float_type p = (l2 - pow(L[1], 2) - pow(L[2], 2)) / (2 * L[1] * L[2]);
 			if (p > 1) p = 1;
 			else if (p < -1) p = -1;
-			configVector.push_back(-acos(p));//theta2
+			configVector.push_back(acos(p));//theta2
 			break;
 		}
 	}	
