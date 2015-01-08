@@ -27,7 +27,7 @@ int main( int argc, const char** argv )
 
 		testmoveplatform.setIdentity();
 		testmoveplatform(0, 3) = 0;
-		testmoveplatform(1, 3) = 0;
+        testmoveplatform(1, 3) = 0.14;
 		testmoveplatform(2, 3) = 0;
 
 		testmoveplatform2.setIdentity();
@@ -42,15 +42,13 @@ int main( int argc, const char** argv )
 
 
 		std::vector<float_type> configuration, configuration2, Fz;
-        getchar();
         configuration.push_back(18);
        configuration = Rob->movePlatform(testmoveplatform);
-       getchar();
        //cout << configuration[0] << endl << configuration[1] << endl << configuration[2] << endl;
         //cout << configuration[3] << endl << configuration[4] << endl << configuration[5] << endl;
         //cout << configuration[12] << endl << configuration[13] << endl << configuration[14] << endl;
         //cout << configuration[15] << endl << configuration[16] << endl << configuration[17] << endl;
-       // getchar();
+
 
 
 
@@ -79,9 +77,7 @@ int main( int argc, const char** argv )
             configuration.push_back(-1.1989);
     }
 */
-        getchar();
         visualizer->drawRobot(robotPose, configuration);
-		getchar();
 		//visualizer->drawRobot(robotPose, configuration2);
         return 0;
 

@@ -92,8 +92,16 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 	for (int i = 0; i<6; i++)
 	{
 
+
 		actleg = newmotion*L_all[i];
-		conf2 = Leg0->inverseKinematic(actleg);
+        if (i<3)
+        {
+        conf2 = Leg0->inverseKinematic(actleg,0);
+        }
+        else
+        {
+        conf2 = Leg0->inverseKinematic(actleg,1);
+        }
 		conf.push_back(conf2[0]);
 		conf.push_back(conf2[1]);
 		conf.push_back(conf2[2]);
@@ -119,7 +127,14 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
          {
 
              actleg = newmotion*L_all[i];
-             conf2 = Leg0->inverseKinematic(actleg);
+             if (i<3)
+             {
+             conf2 = Leg0->inverseKinematic(actleg,0);
+             }
+             else
+             {
+             conf2 = Leg0->inverseKinematic(actleg,1);
+             }
              conf.push_back(conf2[0]);
              conf.push_back(conf2[1]);
              conf.push_back(conf2[2]);
