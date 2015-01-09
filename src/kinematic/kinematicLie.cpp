@@ -94,9 +94,9 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 	float_type x = linkPose(0, 3);
 	float_type y = linkPose(1, 3);
 	float_type z = linkPose(2, 3);
-	configVector.push_back(-atan2(y, x));//theta0
-	float_type xp = sin(-configVector[0])*y + cos(-configVector[0])*x;
-	float_type yp = sin(-configVector[0])*x + cos(-configVector[0])*y;
+	configVector.push_back(atan2(y, x));//theta0
+	float_type xp = sin(configVector[0])*y + cos(configVector[0])*x;
+	float_type yp = sin(configVector[0])*x + cos(configVector[0])*y;
 	x = xp;
 	y = yp;
 	switch (linkNo)
