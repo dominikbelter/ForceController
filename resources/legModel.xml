@@ -33,8 +33,8 @@
 			<value>0</value>
 			<value>0</value>
 			<value>-0.05</value>
-			<value>1</value>
 			<value>0</value>
+			<value>-1</value>
 			<value>0</value>
 	  </Joint1>
 	  <Joint2>
@@ -42,14 +42,14 @@
 			<value>0</value>
 			<value>0</value>
 			<value>-0.17</value>
-			<value>1</value>
 			<value>0</value>
+			<value>-1</value>
 			<value>0</value>
 	  </Joint2>
 	  <g0>
 		<name>g0</name>   
-			<value>0</value>
 			<value>0.345</value>
+			<value>0</value>
 			<value>0</value>
 	  </g0>
 </parameters>
