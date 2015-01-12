@@ -285,7 +285,7 @@ if(legNo < 3 && jointNo == 2){
 }
 
 /// Returns current position of the servomotors, returns error value
-unsigned int BoardDynamixel::readPositions(unsigned char legNo,const std::vector<float_type>& angle){
+unsigned int BoardDynamixel::readPositions(unsigned char legNo, std::vector<float_type>& angle){
     float_type ang_odt;
     float_type ang;
     float_type angleTmp;
@@ -304,13 +304,13 @@ unsigned int BoardDynamixel::readPositions(unsigned char legNo,const std::vector
         angVec.push_back(angleTmp);
     }
 
-    //angle = angVec;
+    angle = angVec;
 
     return 0;
 }
 
 /// Returns current position of the servomotor, returns error value
-unsigned int BoardDynamixel::readPosition(const std::vector<float_type>& angle){
+unsigned int BoardDynamixel::readPosition(std::vector<float_type>& angle){
     return 0;
 }
 

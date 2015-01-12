@@ -211,14 +211,14 @@ class BoardDynamixel : public Board{
          * \param &angle Angle values.
          * \return Return error value.
          */
-        unsigned int readPositions(unsigned char legNo, const std::vector<float_type>& angle);
+        unsigned int readPositions(unsigned char legNo, std::vector<float_type>& angle);
 
         /**
          * \brief Returns current position of the servomotors.
          * \param &angle Angle values.
          * \return Return error value.
          */
-        unsigned int readPosition(const std::vector<float_type>& angle);
+        unsigned int readPosition(std::vector<float_type>& angle);
 
         /**
          * \brief Returns contact force from 3-axis force sensor in particular leg.
