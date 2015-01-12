@@ -315,7 +315,7 @@ unsigned int BoardDynamixel::readPosition(std::vector<float_type>& angle){
     float_type ang;
     float_type angleTmp;
     std::vector<float_type> angVec;
-    int tmp=0;// servo no
+    int tmp=0;// servo no in leg
     int cnt=0;// leg no
     CDynamixel *object1 = &dynamixelMotors[0];
     CDynamixel *object2 = &dynamixelMotors[1];
