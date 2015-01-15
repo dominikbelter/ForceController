@@ -56,7 +56,19 @@ int main( int argc, const char** argv )
     cout << "Momenty: " << endl;
     cout << moment0 << endl << moment1 << endl << moment2 << endl;
     */
-    demo->setOffset(5,0,(-10*M_PI)/180);
+
+    /***** pelka *****/
+
+    demo->setOffset(5,0,(-20*M_PI)/180);
+    demo->setComplianceSlope( 1, 1, 0x40 );
+
+    /*****************/
+
+    /*** Pawcio *****/
+    demo->setComplianceMargin( 1, 1, 0x40 );
+    /**************/
+
+
     for(int i=0;i<6;i++)
     {
         demo->setPosition(i, 0, (0*M_PI)/180 );
