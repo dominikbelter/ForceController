@@ -59,6 +59,16 @@ angle=-angle;
 }
 
 
+<<<<<<< HEAD
+=======
+    if(legNo < 3 && jointNo == 2){
+        angle = -angle;
+    }
+    if(legNo > 2 && jointNo == 1){
+        angle = -angle;
+    }
+
+>>>>>>> 401f46ff8aca6dd9191d4fce30f1c4ad4721d690
 if(legNo>2 && jointNo==1){
 angle=-angle;
 }
@@ -177,8 +187,8 @@ unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
 /// Set compliance margin [0,254]- dead zone -- for this area the torque is zero, returns error value
 unsigned int BoardDynamixel::setComplianceMargin(unsigned char legNo, unsigned char jointNo, float_type margin){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-    object->dxl_write_word(legNo*10 + jointNo, P_CCW_COMPLIANCE_MARGIN, margin);//do spraawdzenia czy ma byc dxl_write_word()
-    object->dxl_write_word(legNo*10 + jointNo, P_CW_COMPLIANCE_MARGIN, margin);
+    object->dxl_write_byte(legNo*10 + jointNo, P_CCW_COMPLIANCE_MARGIN, margin);
+    object->dxl_write_byte(legNo*10 + jointNo, P_CW_COMPLIANCE_MARGIN, margin);
     return 0;
 }
 
@@ -187,8 +197,8 @@ unsigned int BoardDynamixel::setComplianceMargin(unsigned char legNo, const std:
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++)
     {
-    object->dxl_write_word(legNo*10 + i, P_CCW_COMPLIANCE_MARGIN, margin[i]);//do spraawdzenia czy ma byc dxl_write_word()
-    object->dxl_write_word(legNo*10 + i, P_CW_COMPLIANCE_MARGIN, margin[i]);
+    object->dxl_write_byte(legNo*10 + i, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+    object->dxl_write_byte(legNo*10 + i, P_CW_COMPLIANCE_MARGIN, margin[i]);
     }
     return 0;
 }
@@ -249,18 +259,18 @@ unsigned int BoardDynamixel::setComplianceSlope(const std::vector<float_type>& s
     return 0;
 }
 
-/// Set torque limit torque_limit [0,1023] - the torque limit, returns error value
+/// Set torque limit torque_limit [0,1] - the torque limit, returns error value
 unsigned int BoardDynamixel::setTorqueLimit(unsigned char legNo, unsigned char jointNo, float_type torqueLimit){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-            object->dxl_write_word(legNo*10 + jointNo, SET_TORQUE_LIMIT, torqueLimit);
+            object->dxl_write_word(legNo*10 + jointNo, SET_TORQUE_LIMIT, torqueLimit*1023);
     return 0;
 }
 
-/// Set torque limit torque_limit [0,1023] - the torque limit, returns error value
+/// Set torque limit torque_limit [0,1] - the torque limit, returns error value
 unsigned int BoardDynamixel::setTorqueLimit(unsigned char legNo, const std::vector<float_type>& torqueLimit){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++)
-            object->dxl_write_word(legNo*10 + i, SET_TORQUE_LIMIT, torqueLimit[i]);
+            object->dxl_write_word(legNo*10 + i, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
     return 0;
 }
 
