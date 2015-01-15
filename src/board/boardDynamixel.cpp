@@ -59,16 +59,6 @@ angle=-angle;
 }
 
 
-<<<<<<< HEAD
-=======
-    if(legNo < 3 && jointNo == 2){
-        angle = -angle;
-    }
-    if(legNo > 2 && jointNo == 1){
-        angle = -angle;
-    }
-
->>>>>>> 401f46ff8aca6dd9191d4fce30f1c4ad4721d690
 if(legNo>2 && jointNo==1){
 angle=-angle;
 }
