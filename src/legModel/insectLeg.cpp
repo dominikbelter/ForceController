@@ -81,9 +81,25 @@ std::vector<float_type> InsectLeg::computLoad(Vec3& force, std::vector<float_typ
 * @param [in] linkNo the number of nodes kinematic
 * @return Mat34 homogeneous matrix legs
 */
-Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, int linkNo)
+Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, int linkNo, bool is_leg_left)
 {
-	return legKine->forwardKinematic(configuration, linkNo);
+	if(is_leg_left)
+	{
+		Mat34 temp = legKine->forwardKinematic(configuration, linkNo);
+        //temp(0, 3) = -temp(0, 3);
+          float_type tmpf = temp(0,3);
+        temp(0,3)=-temp(1,3);
+        temp(1,3) = tmpf;
+		return temp;
+	}
+	else
+	{
+        Mat34 temp = legKine->forwardKinematic(configuration, linkNo);
+        float_type tmpf = temp(0,3);
+        temp(0,3)=temp(1,3);
+        temp(1,3) = tmpf;
+        return temp;
+	}
 }
 
 /** Compute inverse kinematic, default (-1) -- the last joint
@@ -91,9 +107,17 @@ Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, int lin
 * @param [in] linkNo the number of nodes kinematic
 * @return std::vector<float_type> configuration variables legs
 */
-std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, int linkNo)
+std::vector<float_type> InsectLeg::inverseKinematic(Mat34 linkPose, int linkNo, bool is_leg_left)
 {
-	return legKine->inverseKinematic(linkPose, linkNo);
+	if(is_leg_left)
+	{
+		linkPose(0, 3) = -linkPose(0, 3);
+		return legKine->inverseKinematic(linkPose, linkNo);
+	}
+	else
+	{
+		return legKine->inverseKinematic(linkPose, linkNo);
+	}
 }
 
 /// Jacobian of Messor leg

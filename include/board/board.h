@@ -163,13 +163,13 @@ namespace controller {
          * \param &angle Angle values.
          * \return Return error value.
          */
-            virtual unsigned int readPositions(unsigned char legNo, const std::vector<float_type>& angle) = 0;
+            virtual unsigned int readPositions(unsigned char legNo, std::vector<float_type>& angle) = 0;
               /**
          * \brief Returns current position of the servomotors.
          * \param &angle Angle values.
          * \return Return error value.
          */
-            virtual unsigned int readPosition(const std::vector<float_type>& angle) = 0;
+            virtual unsigned int readPosition(std::vector<float_type>& angle) = 0;
 
             /**
          * \brief Returns contact force from 3-axis force sensor in particular leg.

@@ -54,13 +54,23 @@ BoardDynamixel::~BoardDynamixel(void) {
 
 /// Set reference position value for servomotor, returns error value
 unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char jointNo, float_type angle){
+if(legNo<3 && jointNo==2){
+angle=-angle;
+}
 
+<<<<<<< HEAD
     if(legNo < 3 && jointNo == 2){
         angle = -angle;
     }
     if(legNo > 2 && jointNo == 1){
         angle = -angle;
     }
+=======
+if(legNo>2 && jointNo==1){
+angle=-angle;
+}
+
+>>>>>>> 7a307717e72710a801769c7f78674263d0f3b432
     angle = angle*180/M_PI;
     angle = angle*10;
     //DB prosze zdefiniowac osobno stale, np.: static const float_type DEG2DYNAMIXEL;
@@ -139,8 +149,8 @@ unsigned int BoardDynamixel::setSpeed(unsigned char legNo, unsigned char jointNo
 /// Set reference speed value for servomotors, returns error value
 unsigned int BoardDynamixel::setSpeed(unsigned char legNo, const std::vector<float_type>& speed){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-    for(int i=1;i<=3;i++){
-        object->dxl_write_word(legNo*10+i,MOVING_SPEED,speed[i-1]*9);
+    for(int i=0;i<3;i++){
+        object->dxl_write_word(legNo*10+i,MOVING_SPEED,speed[i]*9);
     }
 
     return 0;
@@ -275,16 +285,86 @@ unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char joi
     ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
     ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
+if(legNo < 3 && jointNo == 2){
+        angle = -angle;
+    }
+    if(legNo > 2 && jointNo == 1){
+        angle = -angle;
+    }
     return 0;
 }
 
 /// Returns current position of the servomotors, returns error value
-unsigned int BoardDynamixel::readPositions(unsigned char legNo, const std::vector<float_type>& angle){
+unsigned int BoardDynamixel::readPositions(unsigned char legNo, std::vector<float_type>& angle){
+    float_type ang_odt;
+    float_type ang;
+    float_type angleTmp;
+    std::vector<float_type> angVec;
+    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    for(int i = 0; i<3; i++){
+        ang_odt = object->dxl_read_word(legNo*10 + i, P_PRESENT_POSITION_L);
+        ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*10+i]+zero_angle[legNo*3+i];
+        angleTmp=(ang/10)*(M_PI/180);
+    if(legNo < 3 && i == 2){
+            angleTmp = -angleTmp;
+        }
+        if(legNo > 2 && i == 1){
+            angleTmp = -angleTmp;
+        }
+        angVec.push_back(angleTmp);
+    }
+
+    angle = angVec;
+
     return 0;
 }
 
 /// Returns current position of the servomotor, returns error value
-unsigned int BoardDynamixel::readPosition(const std::vector<float_type>& angle){
+unsigned int BoardDynamixel::readPosition(std::vector<float_type>& angle){
+    float_type ang_odt;
+    float_type ang;
+    float_type angleTmp;
+    std::vector<float_type> angVec;
+    int tmp=0;// servo no in leg
+    int cnt=0;// leg no
+    CDynamixel *object1 = &dynamixelMotors[0];
+    CDynamixel *object2 = &dynamixelMotors[1];
+    for(int i=0;i<18;i++){
+        if(i<9){
+            tmp=i%3;
+            if(!(i%3) && i!=0){
+                cnt++;
+            }
+            ang_odt = object1->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
+            ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*10+tmp]+zero_angle[cnt*3+tmp];
+            angleTmp=(ang/10)*(M_PI/180);
+        if(cnt < 3 && tmp == 2){
+                angleTmp = -angleTmp;
+            }
+            if(cnt > 2 && tmp == 1){
+                angleTmp = -angleTmp;
+            }
+            angVec.push_back(angleTmp);
+        }
+            else{
+            tmp=i%3;
+            if(!(i%3) && i!=0){
+                cnt++;
+                }
+            ang_odt = object2->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
+            ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*10+tmp]+zero_angle[cnt*3+tmp];
+            angleTmp=(ang/10)*(M_PI/180);
+        if(cnt < 3 && tmp == 2){
+                angleTmp = -angleTmp;
+            }
+            if(cnt > 2 && tmp == 1){
+                angleTmp = -angleTmp;
+            }
+            angVec.push_back(angleTmp);
+        }
+        }
+    angle = angVec;
+
     return 0;
 }
 

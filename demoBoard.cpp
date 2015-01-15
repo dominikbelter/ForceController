@@ -14,9 +14,16 @@ int main( int argc, const char** argv )
     float_type kat;
     float_type noga;
     float_type wezel;
+<<<<<<< HEAD
     float_type kat0 = 0;
+=======
+	float_type podatnosc;    
+float_type kat0 = 0;
+>>>>>>> 7a307717e72710a801769c7f78674263d0f3b432
     float_type kat1 = 0;
     float_type kat2 = 0;
+float_type readkat = 0;
+    vector<float_type> readkatLeg;
 
     float_type moment0 = 0;
     float_type moment1 = 0;
@@ -64,6 +71,7 @@ int main( int argc, const char** argv )
     cout << "Momenty: " << endl;
     cout << moment0 << endl << moment1 << endl << moment2 << endl;
 */
+<<<<<<< HEAD
     for(int i=0;i<6;i++)
     {
         demo->setPosition(i, 0, (0*M_PI)/180 );
@@ -71,14 +79,35 @@ int main( int argc, const char** argv )
         demo->setPosition(i, 2, (-114*M_PI)/180 );
     }
 
+=======
+	demo->setOffset(5,0,(-10*M_PI)/180);
+    for(int i=0;i<6;i++)
+    {
+
+        demo->setPosition(i, 0, (0*M_PI)/180 );
+        demo->setPosition(i, 1, (24*M_PI)/180 );
+	demo->setPosition(i, 2, (-114*M_PI)/180 );
+    }
+
+>>>>>>> 7a307717e72710a801769c7f78674263d0f3b432
     while (true){
         cout << "Noga = ";
         cin >> noga;
         cout << "Wezel = ";
         cin >> wezel;
+<<<<<<< HEAD
         cout << "Kat = ";
         cin >> kat;
         demo->setPosition(noga, wezel, (kat*M_PI)/180 );
+=======
+        cout << "Podatnosc = ";
+        cin >> podatnosc;
+        demo->setTorqueLimit(noga, wezel, podatnosc);
+	demo->readPosition(noga,wezel,readkat);
+    demo->readPositions(noga,readkatLeg);
+    cout<<"Odczytany kat: "<<readkat*180/M_PI<<endl;
+    cout<<"Odczytane katy w nodze: "<<readkatLeg[0]*180/M_PI<<" "<<readkatLeg[1]*180/M_PI<<" "<<readkatLeg[2]*180/M_PI<<endl;
+>>>>>>> 7a307717e72710a801769c7f78674263d0f3b432
     }
 
     return 0;

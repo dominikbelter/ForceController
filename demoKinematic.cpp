@@ -14,9 +14,9 @@ int main( int argc, const char** argv )
 		std::cout << "Kinematic type:" << demoKine->getName() << "\n";
 		std::cout << "Init Vector of displacements and joint angles:\n" << std::endl;
 		std::vector<float_type> configuration;
-		configuration.push_back(0);
-		configuration.push_back(M_PI*24/180);
-        configuration.push_back(-M_PI*114/180);
+		configuration.push_back(M_PI * 0 / 180);
+		configuration.push_back(M_PI * 24 / 180);
+		configuration.push_back(M_PI * -114 / 180);
 		std::cout << configuration[0] << " " << configuration[1] << " " << configuration[2] << std::endl;
 		std::cout << "\nFORWARD KINEMATICS\n" << std::endl;
 		std::cout << "Matrix of the position, orientation:\n" << std::endl;

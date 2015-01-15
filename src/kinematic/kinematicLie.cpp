@@ -90,11 +90,15 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 	std::vector<float_type> L; // lenhgts of links
 	L.push_back(abs(ksi[1][2]));
 	L.push_back(abs(ksi[2][2])-abs(ksi[1][2]));
-	L.push_back(abs(g0[1]) - abs(ksi[2][2]));
+	L.push_back(abs(g0[0]) - abs(ksi[2][2]));
 	float_type x = linkPose(0, 3);
 	float_type y = linkPose(1, 3);
 	float_type z = linkPose(2, 3);
-	configVector.push_back(atan2(x, y));//theta0
+	configVector.push_back(atan2(y, x));//theta0
+	float_type xp = sin(configVector[0])*y + cos(configVector[0])*x;
+	float_type yp = sin(configVector[0])*x + cos(configVector[0])*y;
+	x = xp;
+	y = yp;
 	switch (linkNo)
 	{
 	case 1:
@@ -103,14 +107,14 @@ std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, un
 		}
 	case 2:
 		{
-			  configVector.push_back(atan2(z, y - L[0]));//theta1
+			  configVector.push_back(atan2(z, x - L[0]));//theta1
 			break;
 		}
 	default:
 		{
-			float_type l2 = (pow(y - L[0], 2) + pow(z, 2));
+			float_type l2 = (pow(x - L[0], 2) + pow(z, 2));
 			float_type l = sqrt(l2);
-			float_type B = atan2(z,y - L[0]);
+			float_type B = atan2(z,x - L[0]);
 			float_type g = (pow(L[1], 2) + l2 - pow(L[2], 2)) / (2 * L[1] * l);
 			if (g > 1) g = 1;
 			else if (g < -1) g = -1;

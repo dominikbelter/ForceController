@@ -109,6 +109,8 @@ public:
         NeutralMotion(2, 3) = 0.12;
 
 
+
+
     };
 
 
@@ -162,7 +164,7 @@ private:
 	Mat34 L4;
 	Mat34 L5;
 
-	Mat34 OldMotion; ///matrix include oldmotion robot, start with...
+    Mat34 OldMotion; ///mtrix include oldmotion robot, strt with...
     Mat34 NeutralMotion; ///matrix include robots neutral position
 
 	std::vector<Mat34> L_all; ///vector include translations for all legs from robot center
