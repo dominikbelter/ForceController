@@ -32,7 +32,7 @@ int main( int argc, const char** argv )
 
 		int linksNo = legModel->getLinksNo();
 
-
+		/*
 		cout << "Destination Position" << endl;
 		for (int i = 0; i < 3; ++i)
 		{
@@ -81,10 +81,10 @@ int main( int argc, const char** argv )
 			cout << endl;
 		}
 
-
-		config[0] = 0;//10*M_PI/180;
-		config[1] = 0;//24*M_PI/180;
-		config[2] = 90*M_PI/180;//-114*M_PI/180;
+		*/
+		config.push_back(10 * M_PI / 180);//10*M_PI/180;
+		config.push_back(24 * M_PI / 180);//24*M_PI/180;
+		config.push_back(-114 * M_PI / 180);//-114*M_PI/180;
 		linkPose = legModel->forwardKinematic(config, linksNo, false);
 		cout << endl << "Test Inverse Kinematic" << endl;
 		cout << "testowa konfiguracja: " << config[0] << ", " << config[1] << ", " << config[2] << endl;
