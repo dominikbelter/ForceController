@@ -58,15 +58,25 @@ if(legNo<3 && jointNo==2){
 angle=-angle;
 }
 
+<<<<<<< HEAD
+    if(legNo < 3 && jointNo == 2){
+        angle = -angle;
+    }
+    if(legNo > 2 && jointNo == 1){
+        angle = -angle;
+    }
+=======
 if(legNo>2 && jointNo==1){
 angle=-angle;
 }
 
+>>>>>>> 7a307717e72710a801769c7f78674263d0f3b432
     angle = angle*180/M_PI;
     angle = angle*10;
     //DB prosze zdefiniowac osobno stale, np.: static const float_type DEG2DYNAMIXEL;
     // inicjalizacji dokonujemy w konstruktorze za pomoca listy
     angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])*0.341333 + 512;
+
 
     CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
     pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);

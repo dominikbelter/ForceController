@@ -259,7 +259,8 @@ void VisualizerIrrlicht::drawLeg(int legIndex,  irr::core::vector3d<irr::f32> po
 
     video->drawMeshBuffer(femurMeshBuffer);
 
-    ourTransform(0, - configuration.at(3*(legIndex - 1) + 2) - 1.1989, 0, 11.2, 0, 5);
+    ourTransform(0, -PI / 2 -50*3.14/180- configuration.at(3*(legIndex - 1) + 2) - 1.1989, 0, 11.2, 0, 5);
+    //ourTransform(0, - configuration.at(3*(legIndex - 1) + 2) - 1.1989, 0, 11.2, 0, 5);
 
     video->drawMeshBuffer(vitulusMeshBuffer);
 
