@@ -86,20 +86,13 @@ Mat34 InsectLeg::forwardKinematic(std::vector<float_type> configuration, int lin
 	if(is_leg_left)
 	{
 		Mat34 temp = legKine->forwardKinematic(configuration, linkNo);
-				temp(0, 3) = -temp(0, 3);
-				temp(1, 3) = -temp(1, 3);
-					//float_type tmpf = temp(0,3);
-				//temp(0,3)=-temp(1,3);
-				//temp(1,3) = tmpf;
+		temp(0, 3) = -temp(0, 3);
+		temp(1, 3) = -temp(1, 3);
 		return temp;
 	}
 	else
 	{
-        Mat34 temp = legKine->forwardKinematic(configuration, linkNo);
-				//float_type tmpf = temp(0,3);
-				//temp(0,3)=temp(1,3);
-				//temp(1,3) = tmpf;
-        return temp;
+		return legKine->forwardKinematic(configuration, linkNo);
 	}
 }
 
@@ -113,10 +106,8 @@ std::vector<float_type> InsectLeg::inverseKinematic(Mat34& linkPose, int linkNo,
 	if(is_leg_left)
 	{
 		std::vector<float_type> temp;
-		//linkPose(2, 3) = -linkPose(2, 3);//M_PI / 2.0;
 		temp = legKine->inverseKinematic(linkPose, linkNo);
 		temp[0] += M_PI;
-
 		return temp;
 	}
 	else
