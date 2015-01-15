@@ -50,6 +50,8 @@ using namespace controller;
 		*/
 		void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration);
 
+        void setPosition(std::vector<float_type> configuration){};
+
 		/// Virtual descrutor
 		~VisualizerGL() {}
 

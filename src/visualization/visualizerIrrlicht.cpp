@@ -84,11 +84,15 @@ void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
 
 }
 
+void VisualizerIrrlicht::setPosition(std::vector<float_type> configuration)
+{
+    this->m_configuration = configuration;
+}
+
 
 void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) {
-
+    this->m_configuration = configuration;
     while (device->run()) {
-
 
 
            if(receiver.IsKeyDown(irr::KEY_KEY_Q)) {
@@ -124,22 +128,22 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
 
            if(debug) {
            if(receiver.IsKeyDown(irr::KEY_KEY_T)) {
-             configuration[0] = configuration[0] + PI/50;
+             this->m_configuration[0] = this->m_configuration[0] + PI/50;
            } else
                if(receiver.IsKeyDown(irr::KEY_KEY_R)) {
-               configuration[0] = configuration[0] - PI/50;
+               this->m_configuration[0] = this->m_configuration[0] - PI/50;
              } else
                if(receiver.IsKeyDown(irr::KEY_KEY_G)) {
-               configuration[1] = configuration[1] + PI/50;
+               this->m_configuration[1] = this->m_configuration[1] + PI/50;
              } else
                if(receiver.IsKeyDown(irr::KEY_KEY_F)) {
-               configuration[1] = configuration[1] - PI/50;
+               this->m_configuration[1] = this->m_configuration[1] - PI/50;
              } else
                if(receiver.IsKeyDown(irr::KEY_KEY_B)) {
-                 configuration[2] = configuration[2] + PI/50;
+                 this->m_configuration[2] = this->m_configuration[2] + PI/50;
             } else
                if(receiver.IsKeyDown(irr::KEY_KEY_V)) {
-               configuration[2] = configuration[2] - PI/50;
+               this->m_configuration[2] = this->m_configuration[2] - PI/50;
             }
            }
 
@@ -157,13 +161,13 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
            drawBody(vector3d<f32>(0, 0, 0), vector3d<f32>(PI / 2, 0, 0));
 
 
-            drawLeg(1, vector3d<f32>(0, 0, 0), vector3d<f32>(0, 0, 0), configuration);
+            drawLeg(1, vector3d<f32>(0, 0, 0), vector3d<f32>(0, 0, 0), this->m_configuration);
 
-            drawLeg(2, vector3d<f32>(-12, 0, 5), vector3d<f32>(0, 0, 0), configuration);
-            drawLeg(3, vector3d<f32>(-24, 0, 0), vector3d<f32>(0, 0, 0), configuration);
-            drawLeg(4, vector3d<f32>(0, 0, -8), vector3d<f32>(0, PI, 0), configuration);
-            drawLeg(5, vector3d<f32>(-12, 0, -13), vector3d<f32>(0, PI, 0), configuration);
-            drawLeg(6, vector3d<f32>(-24, 0, -8), vector3d<f32>(0, PI, 0), configuration);
+            drawLeg(2, vector3d<f32>(-12, 0, 5), vector3d<f32>(0, 0, 0), this->m_configuration);
+            drawLeg(3, vector3d<f32>(-24, 0, 0), vector3d<f32>(0, 0, 0), this->m_configuration);
+            drawLeg(4, vector3d<f32>(0, 0, -8), vector3d<f32>(0, PI, 0), this->m_configuration);
+            drawLeg(5, vector3d<f32>(-12, 0, -13), vector3d<f32>(0, PI, 0), this->m_configuration);
+            drawLeg(6, vector3d<f32>(-24, 0, -8), vector3d<f32>(0, PI, 0), this->m_configuration);
 
             manager->drawAll();
 

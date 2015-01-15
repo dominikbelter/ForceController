@@ -48,6 +48,8 @@ namespace controller {
 			*/
             virtual void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) = 0;
 
+            virtual void setPosition(std::vector<float_type> configuration) = 0;
+
             /// Virtual descrutor
             virtual ~Visualizer() {}
 

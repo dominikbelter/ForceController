@@ -30,7 +30,6 @@ using namespace controller;
     class VisualizerIrrlicht : public Visualizer {
     public:
 
-
         /// Pointer
         typedef std::unique_ptr<VisualizerIrrlicht> Ptr;
 
@@ -49,6 +48,8 @@ using namespace controller;
         * @param configuration
         */
         void drawRobot(const Mat34& robotPose, std::vector<float_type> configuration);
+
+        void setPosition(std::vector<float_type> configuration);
 
         void setDebugMode(bool enable);
 
@@ -69,6 +70,8 @@ using namespace controller;
         irr::video::SMaterial videoMaterial;
         irr::scene::ICameraSceneNode* camera;
         irr::scene::ISceneManager * manager;
+
+        std::vector<float_type> m_configuration;
 
         const irr::f32 axisBoxSize;
 
