@@ -31,8 +31,8 @@ BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIX
 
     zero_angle[0]=450; zero_angle[1]=240; zero_angle[2]=1140;
     zero_angle[3]=0; zero_angle[4]=240; zero_angle[5]=1140;
-    zero_angle[6]=-450; zero_angle[7]=240; zero_angle[8]=1140;
-    zero_angle[9]=450; zero_angle[10]=-240; zero_angle[11]=-1140;
+    zero_angle[6]=-480; zero_angle[7]=240; zero_angle[8]=1140;
+    zero_angle[9]=420; zero_angle[10]=-240; zero_angle[11]=-1140;
     zero_angle[12]=0; zero_angle[13]=-240; zero_angle[14]=-1140;
     zero_angle[15]=-450; zero_angle[16]=-240; zero_angle[17]=-1140;
 
@@ -41,7 +41,7 @@ BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIX
     angle_offset[6]=-30; angle_offset[7]=125; angle_offset[8]=0;
     angle_offset[9]=60; angle_offset[10]=40; angle_offset[11]=0;
     angle_offset[12]=-190; angle_offset[13]=45; angle_offset[14]=80;
-    angle_offset[15]=80; angle_offset[16]=75; angle_offset[17]=100;
+    angle_offset[15]=10; angle_offset[16]=75; angle_offset[17]=100;
 }
 
 BoardDynamixel::~BoardDynamixel(void) {
