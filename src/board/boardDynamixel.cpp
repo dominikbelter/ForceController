@@ -54,14 +54,14 @@ BoardDynamixel::~BoardDynamixel(void) {
 
 /// Set reference position value for servomotor, returns error value
 unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char jointNo, float_type angle){
-if(legNo<3 && jointNo==2){
-angle=-angle;
-}
+    if(legNo<3 && jointNo==2){
+         angle=-angle;
+    }
 
 
-if(legNo>2 && jointNo==1){
-angle=-angle;
-}
+    if(legNo>2 && jointNo==1){
+         angle=-angle;
+    }
 
 
     angle = angle*180/M_PI;
@@ -206,8 +206,8 @@ unsigned int BoardDynamixel::setComplianceSlope(unsigned char legNo, unsigned ch
         slope = 254;
     }
     CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
-    pMotor->dxl_write_word(legNo*10+jointNo, P_CW_COMPLIANCE_SLOPE, slope);
-    pMotor->dxl_write_word(legNo*10+jointNo, P_CCW_COMPLIANCE_SLOPE, slope);
+    pMotor->dxl_write_byte(legNo*10+jointNo, P_CW_COMPLIANCE_SLOPE, slope);
+    pMotor->dxl_write_byte(legNo*10+jointNo, P_CCW_COMPLIANCE_SLOPE, slope);
     return 0;
 }
 
@@ -216,8 +216,8 @@ unsigned int BoardDynamixel::setComplianceSlope(unsigned char legNo, const std::
 
     CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
     for(int i = 0; i < 3; i++){     // i -> jointNo
-        pMotor->dxl_write_word(legNo*10+i, P_CW_COMPLIANCE_SLOPE, slope[i]);
-        pMotor->dxl_write_word(legNo*10+i, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+        pMotor->dxl_write_byte(legNo*10+i, P_CW_COMPLIANCE_SLOPE, slope[i]);
+        pMotor->dxl_write_byte(legNo*10+i, P_CCW_COMPLIANCE_SLOPE, slope[i]);
     }
     return 0;
 }
@@ -234,15 +234,15 @@ unsigned int BoardDynamixel::setComplianceSlope(const std::vector<float_type>& s
             if(!(i%3) && i != 0){
                 cnt++;
             }
-            pMotorR->dxl_write_word(cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
-            pMotorR->dxl_write_word(cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+            pMotorR->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
+            pMotorR->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
         }else{      //Left side of Mesor
             tmp = i%3;
             if(!i%3){
                 cnt++;
             }
-            pMotorL->dxl_write_word(cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
-            pMotorL->dxl_write_word(cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+            pMotorL->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
+            pMotorL->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
         }
 
     }
