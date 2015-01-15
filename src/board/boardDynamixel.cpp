@@ -184,7 +184,7 @@ unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
 /// Set compliance margin [0,254]- dead zone -- for this area the torque is zero, returns error value
 unsigned int BoardDynamixel::setComplianceMargin(unsigned char legNo, unsigned char jointNo, float_type margin){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-    object->dxl_write_byte(legNo*10 + jointNo, P_CCW_COMPLIANCE_MARGIN, margin);/
+    object->dxl_write_byte(legNo*10 + jointNo, P_CCW_COMPLIANCE_MARGIN, margin);
     object->dxl_write_byte(legNo*10 + jointNo, P_CW_COMPLIANCE_MARGIN, margin);
     return 0;
 }
