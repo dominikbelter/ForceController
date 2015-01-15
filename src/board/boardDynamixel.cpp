@@ -276,7 +276,7 @@ unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char joi
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     //cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
     ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
-    ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*10+jointNo]+zero_angle[legNo*3+jointNo];
+    ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*3+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
 if(legNo < 3 && jointNo == 2){
         angle = -angle;
@@ -296,7 +296,7 @@ unsigned int BoardDynamixel::readPositions(unsigned char legNo, std::vector<floa
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i = 0; i<3; i++){
         ang_odt = object->dxl_read_word(legNo*10 + i, P_PRESENT_POSITION_L);
-        ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*10+i]+zero_angle[legNo*3+i];
+        ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*3+i]+zero_angle[legNo*3+i];
         angleTmp=(ang/10)*(M_PI/180);
     if(legNo < 3 && i == 2){
             angleTmp = -angleTmp;
@@ -329,7 +329,7 @@ unsigned int BoardDynamixel::readPosition(std::vector<float_type>& angle){
                 cnt++;
             }
             ang_odt = object1->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
-            ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*10+tmp]+zero_angle[cnt*3+tmp];
+            ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*3+tmp]+zero_angle[cnt*3+tmp];
             angleTmp=(ang/10)*(M_PI/180);
         if(cnt < 3 && tmp == 2){
                 angleTmp = -angleTmp;
@@ -345,7 +345,7 @@ unsigned int BoardDynamixel::readPosition(std::vector<float_type>& angle){
                 cnt++;
                 }
             ang_odt = object2->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
-            ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*10+tmp]+zero_angle[cnt*3+tmp];
+            ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*3+tmp]+zero_angle[cnt*3+tmp];
             angleTmp=(ang/10)*(M_PI/180);
         if(cnt < 3 && tmp == 2){
                 angleTmp = -angleTmp;
