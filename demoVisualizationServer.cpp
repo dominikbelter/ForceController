@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <thread>
 #include <time.h>
-#ifdef __USE_VISUALIZER__
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
 
@@ -24,15 +23,21 @@
 using boost::asio::ip::udp;
 Board* board;
 
+int k = 0;
+
 vector<float_type> give_position()
 {
     std::vector<float_type> configuration;
     std::vector<float_type> configSingleLeg;
 
+    k++;
+    k = k%20;
     for(int i=0;i<6;++i)
     {
+
         configSingleLeg.clear();
         board->readPositions(i,configSingleLeg);
+        //configSingleLeg = {(0+k)*PI/180,(24+k)*PI/180,(-114+k)*PI/180};
         for(int j=0;j<configSingleLeg.size();++j)
         {
             configuration.push_back(configSingleLeg[j]);
@@ -40,11 +45,9 @@ vector<float_type> give_position()
     }
     return configuration;
 }
-#endif
 
 int main()
 {
-    #ifdef __USE_VISUALIZER__
     board = createBoardDynamixel();
 
     try
@@ -76,6 +79,5 @@ int main()
     {
         std::cerr << e.what() << std::endl;
         }
-#endif
     return 0;
 }
