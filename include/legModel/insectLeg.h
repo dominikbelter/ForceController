@@ -75,7 +75,7 @@ class InsectLeg : public Leg
 		* @param [in] linkNo the number of nodes kinematic
 		* @return std::vector<float_type> configuration variables legs
 		*/
-		std::vector<float_type> inverseKinematic(Mat34 linkPose, int linkNo = -1, bool is_leg_left = false);
+        std::vector<float_type> inverseKinematic(Mat34& linkPose, int linkNo = -1, bool is_leg_left = false);
 
 		/** Returns number of links in leg
 		* @return int number of links
