@@ -28,7 +28,7 @@ int main( int argc, const char** argv )
 		testmoveplatform.setIdentity();
 		testmoveplatform(0, 3) = 0;
         testmoveplatform(1, 3) = 0;
-        testmoveplatform(2, 3) = 0;
+        testmoveplatform(2, 3) = 0.12;
 
 
         Robot* Rob;
@@ -65,7 +65,7 @@ int main( int argc, const char** argv )
         configuration2 = Rob->movePlatform(testmoveplatform);
         //getchar();
 
-       visualizer->drawRobot(robotPose, configuration2);
+       visualizer->drawRobot(robotPose, configuration);
 
         return 0;
 
