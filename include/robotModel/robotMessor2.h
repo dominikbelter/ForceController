@@ -110,6 +110,13 @@ public:
 
 
 
+        for (int i = 0; i<6; i++)
+            {
+                configurationstart.push_back(0);
+                configurationstart.push_back(24*3.14/180);
+                configurationstart.push_back(-114*3.14/180);
+            }
+    configurationact=configurationstart;
 
     };
 
@@ -170,6 +177,8 @@ private:
 	std::vector<Mat34> L_all; ///vector include translations for all legs from robot center
 	Leg* Leg0;
 
+    std::vector<float_type> configurationstart;
+    std::vector<float_type> configurationact;
 
 };
 
