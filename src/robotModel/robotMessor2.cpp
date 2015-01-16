@@ -144,7 +144,7 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
         {
             cout<<conf2[i]<<endl;
         }
-        getchar();
+        //getchar();
 	}
 	//-------------------------------------------
     configurationact = conf;
