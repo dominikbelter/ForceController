@@ -88,9 +88,9 @@ Mat34 KinematicLie::forwardKinematic(const std::vector<float_type>& configuratio
 std::vector<float_type> KinematicLie::inverseKinematic(const Mat34& linkPose, unsigned int linkNo){
 	std::vector<float_type> configVector;
 	std::vector<float_type> L; // lenhgts of links
-	L.push_back(abs(ksi[1][2]));
-	L.push_back(abs(ksi[2][2])-abs(ksi[1][2]));
-	L.push_back(abs(g0[0]) - abs(ksi[2][2]));
+	L.push_back(fabs(ksi[1][2]));
+	L.push_back(fabs(ksi[2][2])-fabs(ksi[1][2]));
+	L.push_back(fabs(g0[0]) - fabs(ksi[2][2]));
 	float_type x = linkPose(0, 3);
 	float_type y = linkPose(1, 3);
 	float_type z = linkPose(2, 3);
