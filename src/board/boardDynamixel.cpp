@@ -82,10 +82,14 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, const std::vector<
     vector <float_type> angleLocal;
     // angleLocal(angle.begin(), angle.begin()+3); //nie dziala
     for(int i = 0; i < 3 ; i++){    //typical duplication of vector doesnt work :(
-        angleLocal.push_back( angle[i] );
+        if (legNo >2)
+            angleLocal.push_back( -angle[i] );
+        else
+            angleLocal.push_back( angle[i] );
     }
 
     CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+
     for(int i=0; i<3; i++ ){    // i -> jointNo
         angleLocal[i] = angleLocal[i]*180/M_PI;
         angleLocal[i] = angleLocal[i]*10;
