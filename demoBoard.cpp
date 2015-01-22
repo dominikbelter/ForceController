@@ -59,22 +59,50 @@ int main( int argc, const char** argv )
 
     /***** pelka *****/
 
-    demo->setOffset(5,0,(-20*M_PI)/180);
-    demo->setComplianceSlope( 1, 1, 0x40 );
+    //demo->setOffset(5,0,(-20*M_PI)/180);
+    //demo->setComplianceSlope( 1, 1, 0x40 );
 
     /*****************/
 
     /*** Pawcio *****/
-    demo->setComplianceMargin( 1, 1, 0x40 );
+    //demo->setComplianceMargin( 1, 1, 0x40 );
     /**************/
 
+    std::vector<float_type> wektorTestowy3;
+    wektorTestowy3.push_back((0*M_PI)/180);
+    wektorTestowy3.push_back((24*M_PI)/180);
+    wektorTestowy3.push_back((-114*M_PI)/180);
+
+    std::vector<float_type> wektorTestowy18;
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
 
     for(int i=0;i<6;i++)
     {
-        demo->setPosition(i, 0, (0*M_PI)/180 );
+        /*demo->setPosition(i, 0, (0*M_PI)/180 );
         demo->setPosition(i, 1, (24*M_PI)/180 );
-        demo->setPosition(i, 2, (-114*M_PI)/180 );
+        demo->setPosition(i, 2, (-114*M_PI)/180 );*/
+
+        //demo->setPosition(i,wektorTestowy3);
     }
+    demo->setPosition(wektorTestowy18);
+
     while (true){
         cout << "Noga = ";
         cin >> noga;
