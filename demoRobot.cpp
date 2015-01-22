@@ -58,14 +58,14 @@ int main( int argc, const char** argv )
 
         Mat34 move3;
         move3.setIdentity();
-        move3(0, 3) = 0.05;
-        move3(1, 3) = 0;
+        move3(0, 3) = 0;
+        move3(1, 3) = -0.05;
         move3(2, 3) = 0;
 
         Mat34 move4;
         move4.setIdentity();
-        move4(0, 3) = 0;
-        move4(1, 3) = -0.05;
+        move4(0, 3) = 0.05;
+        move4(1, 3) = 0;
         move4(2, 3) = 0;
 
         Mat34 move5;
@@ -102,13 +102,13 @@ int main( int argc, const char** argv )
             motorSpeed.push_back(10);
         }
 
-        demo->setSpeed( motorSpeed );
+       // demo->setSpeed( motorSpeed );
 
         for(int i = 0; i < 6; i++)
         {
-                demo->setSpeed(i, 0, 20);
-                demo->setSpeed(i, 1, 20);
-                demo->setSpeed(i, 2, 20);
+                demo->setSpeed(i, 0, 15);
+                demo->setSpeed(i, 1, 15);
+                demo->setSpeed(i, 2, 15);
         }
 
         // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
