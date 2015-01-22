@@ -30,13 +30,18 @@ Mat34 robotPose;
 void setPosition()
 {
     boost::asio::io_service io_service;
+    struct timeval tv;
     for(;;configuration.clear())
     {
         udp::resolver resolver(io_service);
-        udp::resolver::query query(udp::v4(), serverAddress.c_str(), "daytime");
+        udp::resolver::query query(udp::v4(), serverAddress.c_str(), "6512");
 
         udp::endpoint receiver_endpoint = *resolver.resolve(query);
         udp::socket socket(io_service);
+        tv.tv_sec = 10;
+        tv.tv_usec = 0;
+        setsockopt(socket.native(),SOL_SOCKET,SO_RCVTIMEO,&tv,sizeof(tv));
+        setsockopt(socket.native(),SOL_SOCKET,SO_SNDTIMEO,&tv,sizeof(tv));
         socket.open(udp::v4());
 
         boost::array<char, 1> send_buf  = {{ 0 }};
@@ -55,7 +60,7 @@ void setPosition()
         visualizer->setPosition(configuration);
         cout<<"Done."<<endl;
         timespec requestedTime;
-        requestedTime.tv_nsec = 200000;
+        requestedTime.tv_nsec = 200000000;
         requestedTime.tv_sec = 0;
         nanosleep(&requestedTime,NULL);
         cout<<"Sleeping..."<<endl;

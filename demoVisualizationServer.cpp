@@ -54,7 +54,7 @@ int main()
     {
         boost::asio::io_service io_service;
 
-        udp::socket socket(io_service, udp::endpoint(udp::v4(), 13));
+        udp::socket socket(io_service, udp::endpoint(udp::v4(), 6512));
 
         for(;;)
         {
