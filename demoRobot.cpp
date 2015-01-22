@@ -62,7 +62,7 @@ int main( int argc, const char** argv )
         //visualizer->drawRobot(robotPose, configuration);
 
 
-        configuration2 = Rob->movePlatform(testmoveplatform);
+        configuration2 = Rob->movePlatformNeutral(testmoveplatform);
         //getchar();
 
        visualizer->drawRobot(robotPose, configuration2);
