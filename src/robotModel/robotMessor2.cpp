@@ -375,7 +375,9 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          Fz(3,0)=x(3,0)*l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
          Fz(4,0)=x(4,0)*l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
          Fz(5,0)=x(5,0)*l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
-         for(int i=0;i<6;i++){
+
+         for(int i=0;i<6;i++)
+         {
          FZ.push_back(Fz(i,0));
          FX.push_back(Fx(i,0));
          FY.push_back(Fy(i,0));
@@ -432,7 +434,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
          }
 
-        return FZ;
+        return compliance;
 
 }
 

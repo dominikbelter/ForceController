@@ -32,7 +32,7 @@ int main( int argc, const char** argv )
 
 		int linksNo = legModel->getLinksNo();
 
-		/*
+
 		cout << "Destination Position" << endl;
 		for (int i = 0; i < 3; ++i)
 		{
@@ -61,7 +61,7 @@ int main( int argc, const char** argv )
 		Vec3 sila(0,3,1);
 		vector<float_type> qload;
 
-		qload = legModel->computLoad(sila, config);
+		qload = legModel->computLoad(sila, config, true);
 		cout << endl << "Computed loads: " << qload[0] << ", " << qload[1] << ", " << qload[2] << endl;
 
 		cout << endl << "If Leg is left: " << endl;
@@ -81,7 +81,7 @@ int main( int argc, const char** argv )
 			cout << endl;
 		}
 
-		*/
+		config.clear();
 		config.push_back(10 * M_PI / 180);//10*M_PI/180;
 		config.push_back(24 * M_PI / 180);//24*M_PI/180;
 		config.push_back(-114 * M_PI / 180);//-114*M_PI/180;
