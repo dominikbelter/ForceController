@@ -43,6 +43,8 @@ int main( int argc, const char** argv )
        std::vector<float_type> l1,l2,l3,l4,l5,l6;
        pos=Rob->conputeLinksPosition(configuration);
 
+        std::cout<<pos[1](0,3)<<"   "<< pos[4](0,3)<<"\n"<<pos.size()<<endl;
+
        for(int i=3; i<pos.size(); i+=4)
        {
          pos2.push_back(pos[i]);
@@ -51,12 +53,12 @@ int main( int argc, const char** argv )
 
        for(int i=0;i<3;i++)
        {
-       l1.push_back(pos2[0](i,3));
-       l2.push_back(pos2[1](i,3));
-       l3.push_back(pos2[2](i,3));
-       l4.push_back(pos2[3](i,3));
-       l5.push_back(pos2[4](i,3));
-       l6.push_back(pos2[5](i,3));
+       l1.push_back(pos[3](i,3));
+       l2.push_back(pos[7](i,3));
+       l3.push_back(pos[11](i,3));
+       l4.push_back(pos[15](i,3));
+       l5.push_back(pos[19](i,3));
+       l6.push_back(pos[23](i,3));
        }
 
 
