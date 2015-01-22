@@ -32,7 +32,7 @@ vector<float_type> give_position()
 
     k++;
     k = k%20;
-    for(int i=0;i<6;++i)
+    for(int i=5;i>=0;--i)
     {
 
         configSingleLeg.clear();
@@ -49,6 +49,11 @@ vector<float_type> give_position()
 int main()
 {
     board = createBoardDynamixel();
+    std::vector<float_type> complianceVector = {120,120,120};
+    for(int k=0;k<6;++k)
+    {
+      board->setComplianceMargin(k,complianceVector);
+    }
 
     try
     {
