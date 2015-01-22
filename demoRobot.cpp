@@ -38,8 +38,8 @@ int main( int argc, const char** argv )
 
         Robot* Rob;
         Rob = createRobotMessor("../resources/robotModel.xml");
-        Visualizer* visualizer;
-        visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
+        //Visualizer* visualizer;
+        //visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
 
         Board *demo = createBoardDynamixel();
 
