@@ -76,6 +76,30 @@ std::vector<float_type> InsectLeg::computLoad(Vec3& force, std::vector<float_typ
 	return result;
 }
 
+/** Compute torque in each joint for given the force applied in the foot
+* @param [in] force Indicator to the force vector which works in x,y,z axis
+* @param [in] config vector of joints parameters of leg
+* @param [in] is_leg_left is the leg on the left side of robot
+* @return std::vector<float_type> load vector in individual nodes
+*/
+std::vector<float_type> InsectLeg::computLoad(Vec3& force, std::vector<float_type> config, bool is_leg_left)
+{
+	std::vector<float_type> result;
+	Vec3 torque;
+	torque.vector() = -computeJacobian_transposed(config) * force.vector();
+
+	for (int i = 0; i < 3; i++)
+	{
+		result.push_back(torque.vector().data()[i]);
+	}
+	if(is_leg_left)
+	{
+		result[0] = -result[0];
+	}
+
+	return result;
+}
+
 /** Compute forward kinematic, default (-1) -- the last joint
 * @param [in] configuration configuration variables legs
 * @param [in] linkNo the number of nodes kinematic
