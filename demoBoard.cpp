@@ -76,21 +76,21 @@ int main( int argc, const char** argv )
     std::vector<float_type> wektorTestowy18;
     wektorTestowy18.push_back((0*M_PI)/180);
     wektorTestowy18.push_back((24*M_PI)/180);
-    wektorTestowy18.push_back((-114*M_PI)/180);
-    wektorTestowy18.push_back((0*M_PI)/180);
-    wektorTestowy18.push_back((24*M_PI)/180);
-    wektorTestowy18.push_back((-114*M_PI)/180);
-    wektorTestowy18.push_back((0*M_PI)/180);
-    wektorTestowy18.push_back((24*M_PI)/180);
-    wektorTestowy18.push_back((-114*M_PI)/180);
-    wektorTestowy18.push_back((0*M_PI)/180);
-    wektorTestowy18.push_back((-24*M_PI)/180);
     wektorTestowy18.push_back((114*M_PI)/180);
     wektorTestowy18.push_back((0*M_PI)/180);
-    wektorTestowy18.push_back((-24*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
     wektorTestowy18.push_back((114*M_PI)/180);
     wektorTestowy18.push_back((0*M_PI)/180);
-    wektorTestowy18.push_back((-24*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
     wektorTestowy18.push_back((114*M_PI)/180);
 
     for(int i=0;i<6;i++)
@@ -99,9 +99,9 @@ int main( int argc, const char** argv )
         demo->setPosition(i, 1, (24*M_PI)/180 );
         demo->setPosition(i, 2, (-114*M_PI)/180 );*/
 
-        demo->setPosition(i,wektorTestowy3);
+        //demo->setPosition(i,wektorTestowy3);
     }
-    //demo->setPosition(wektorTestowy18);
+    demo->setPosition(wektorTestowy18);
 
     while (true){
         cout << "Noga = ";
