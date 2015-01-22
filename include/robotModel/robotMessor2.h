@@ -116,7 +116,9 @@ public:
                 configurationstart.push_back(24*3.14/180);
                 configurationstart.push_back(-114*3.14/180);
             }
-    configurationact=configurationstart;
+
+
+        configurationact=configurationstart;
 
     };
 

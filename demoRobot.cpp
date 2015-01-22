@@ -37,11 +37,18 @@ int main( int argc, const char** argv )
 
 
  //******************************
+
+        Mat34 moveneutral;
+        moveneutral.setIdentity();
+        moveneutral(0, 3) = 0;
+        moveneutral(1, 3) = 0;
+        moveneutral(2, 3) = 0.0;
+
         Mat34 move1;
         move1.setIdentity();
         move1(0, 3) = 0;
         move1(1, 3) = 0;
-        move1(2, 3) = 0.12;
+        move1(2, 3) = -0.05;
 
         Mat34 move2;
         move2.setIdentity();
@@ -71,12 +78,12 @@ int main( int argc, const char** argv )
 
         Robot* Rob;
         Rob = createRobotMessor("../resources/robotModel.xml");
-        //Visualizer* visualizer;
-        //visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
+        Visualizer* visualizer;
+        visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
 
         Board *demo = createBoardDynamixel();
 
-        std::vector<float_type> configuration, configuration2, Fz, configurationmove1, configurationmove2, configurationmove3;
+        std::vector<float_type> configuration, configuration2, Fz, configurationmove1, configurationmove2, configurationmove3,configurationneutral;
         // configuration2.push_back(18);
 
 		// setIdentity w bledny sposob tworzy macierz jednostkowa
@@ -92,14 +99,14 @@ int main( int argc, const char** argv )
             configuration.push_back(-114*3.14/180);
       }
 
-        //visualizer->drawRobot(robotPose, configuration);
+
 
 
         configuration2 = Rob->movePlatform(testmoveplatform);
 
-        configurationmove1 = Rob->movePlatform(move1);
 
 
+    visualizer->drawRobot(robotPose, configurationmove1);
        // configurationmove4 = Rob->movePlatform(move4);
        // configurationmove5 = Rob->movePlatform(move5);
        // configurationmove6 = Rob->movePlatform(move6);
@@ -116,6 +123,30 @@ int main( int argc, const char** argv )
                 demo->setPosition(i, 2, configuration2[j+2] );
         }
         */
+
+
+
+
+
+
+
+    configurationneutral = Rob->movePlatform(moveneutral);
+
+   for(int i = 0; i < 6; i++)
+   {
+       int j = 3 * i;
+           demo->setPosition(i, 0, configurationneutral[j] );
+           demo->setPosition(i, 1, configurationneutral[j+1] );
+           demo->setPosition(i, 2, configurationneutral[j+2] );
+   }
+
+
+
+
+
+
+         configurationmove1 = Rob->movePlatform(move1);
+
         for(int i = 0; i < 6; i++)
         {
             int j = 3 * i;
@@ -147,6 +178,9 @@ int main( int argc, const char** argv )
                 demo->setPosition(i, 1, configurationmove3[j+1] );
                 demo->setPosition(i, 2, configurationmove3[j+2] );
         }
+
+
+
 
 
         /*
