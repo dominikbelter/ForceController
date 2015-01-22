@@ -66,6 +66,14 @@ int main()
             boost::array<char, 1> recv_buf;
             udp::endpoint remote_endpoint;
             boost::system::error_code error;
+            vector<float_type> conf = give_position();
+            for (int i=0;i<6;i++)
+                conf[i*3]=-conf[i*3];
+            std::vector<float_type> confTmp;
+            confTmp.push_back(conf[9]); confTmp.push_back(conf[10]); confTmp.push_back(conf[11]);
+            conf[9]=conf[15]; conf[10]=conf[16]; conf[11]=conf[17];
+            conf[15]=confTmp[0]; conf[16]=confTmp[1]; conf[17]=confTmp[2];
+
             socket.receive_from(boost::asio::buffer(recv_buf),
                                 remote_endpoint, 0, error);
 
@@ -73,7 +81,7 @@ int main()
                 throw boost::system::system_error(error);
 
             boost::system::error_code ignored_error;
-            socket.send_to(boost::asio::buffer(give_position()),
+            socket.send_to(boost::asio::buffer(conf),
                            remote_endpoint, 0, ignored_error);
 
         }
