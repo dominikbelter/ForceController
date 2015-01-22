@@ -70,9 +70,9 @@ int main()
             for (int i=0;i<6;i++)
                 conf[i*3]=-conf[i*3];
             std::vector<float_type> confTmp;
-            confTmp.push_back(conf[0]); confTmp.push_back(conf[1]); confTmp.push_back(conf[2]);
-            conf[0]=conf[6]; conf[1]=conf[7]; conf[0]=conf[8];
-            conf[6]=confTmp[0]; conf[7]=confTmp[1]; conf[8]=confTmp[2];
+            confTmp.push_back(conf[9]); confTmp.push_back(conf[10]); confTmp.push_back(conf[11]);
+            conf[9]=conf[15]; conf[10]=conf[16]; conf[11]=conf[17];
+            conf[15]=confTmp[0]; conf[16]=confTmp[1]; conf[17]=confTmp[2];
 
             socket.receive_from(boost::asio::buffer(recv_buf),
                                 remote_endpoint, 0, error);
