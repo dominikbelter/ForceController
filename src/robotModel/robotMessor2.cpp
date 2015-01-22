@@ -61,7 +61,7 @@ RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 	OldMotion.setIdentity();
 	OldMotion(0, 3) = 0;
 	OldMotion(1, 3) = 0;
-    OldMotion(2, 3) = 0.12;
+    OldMotion(2, 3) = 0.0;
 
     NeutralMotion.setIdentity();
     NeutralMotion(0, 3) = 0;
@@ -168,7 +168,7 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
              x = motion * L_all[i];
             // cout<<"x\n"<<x.matrix()<<endl;
 
-             s = OldMotion * L_all[i];
+             s = NeutralMotion * L_all[i];
 
              if (i < 3)
              {
@@ -227,10 +227,21 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 			conf.push_back(configuration[j + h]);
 		}
 
+         if (h<10)
+         {
 		for (int i = 0; i<3; i++)
 		{
-            linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, i));
+            linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, i,0));
 		}
+         }
+         else
+         {
+             for (int i = 0; i<3; i++)
+             {
+                 linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, i,1));
+             }
+
+         }
 
 		linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, -1));
 

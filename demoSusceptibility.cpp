@@ -25,12 +25,12 @@ int main( int argc, const char** argv )
         testmoveplatform.setIdentity();
         testmoveplatform(0, 3) = 0;
         testmoveplatform(1, 3) = 0;
-        testmoveplatform(2, 3) = 0.2;
+        testmoveplatform(2, 3) = 0;
 
 
          configuration = Rob->movePlatform(testmoveplatform);
 
-           std::cout<<""<<std::endl;
+      /*     std::cout<<""<<std::endl;
            std::cout<<"Compliance:"<<std::endl;
            std::cout<<""<<std::endl;
            C=Rob->computeCompliance(configuration);
@@ -38,9 +38,9 @@ int main( int argc, const char** argv )
         {
             std::cout<<C[i]<<std::endl;
 
-        }
+        }*/
 
-      /* std::vector<float_type> l1,l2,l3,l4,l5,l6;
+       std::vector<float_type> l1,l2,l3,l4,l5,l6;
        pos=Rob->conputeLinksPosition(configuration);
 
        for(int i=3; i<pos.size(); i+=4)
@@ -58,14 +58,12 @@ int main( int argc, const char** argv )
        l5.push_back(pos2[4](i,3));
        l6.push_back(pos2[5](i,3));
        }
-       l4[2]=-1*l4[2];
-       l5[2]=-1*l5[2];
-       l6[2]=-1*l6[2];
+
 
         cout<<" l1x="<<l1[0]<<" l2x="<<l2[0]<<" l3x="<<l3[0]<<" l4x="<<l4[0]<<" l5x="<<l5[0]<<" l6x="<<l6[0]<<" "<<endl;
         cout<<" l1y="<<l1[1]<<" l2y="<<l2[1]<<" l3y="<<l3[1]<<" l4y="<<l4[1]<<" l5y="<<l5[1]<<" l6y="<<l6[1]<<" "<<endl;
         cout<<" l1z="<<l1[2]<<" l2z="<<l2[2]<<" l3z="<<l3[2]<<" l4z="<<l4[2]<<" l5z="<<l5[2]<<" l6z="<<l6[2]<<" "<<endl;
-        cout<<" "<<endl;*/
+        cout<<" "<<endl;
 
        return 0;
 
