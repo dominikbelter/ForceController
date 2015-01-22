@@ -103,25 +103,25 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 	{
 
         x = motion * L_all[i];
-        cout<<"x\n"<<x.matrix()<<endl;
+        //cout<<"x\n"<<x.matrix()<<endl;
 
         s = OldMotion * L_all[i];
 
         if (i < 3)
         {
             s.matrix() *= Leg0 ->forwardKinematic(configurationact, 3, 0).matrix();
-            cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationact, 3, 0).matrix()<<endl;
+            //cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationact, 3, 0).matrix()<<endl;
         }
         else
         {
             s.matrix() *= Leg0 ->forwardKinematic(configurationact, 3, 1).matrix();
-            cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationact, 3, 1).matrix()<<endl;
+            //cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationact, 3, 1).matrix()<<endl;
         }
 
-        cout<<"s\n"<<s.matrix()<<endl;
+       // cout<<"s\n"<<s.matrix()<<endl;
 
         y.matrix() = x.matrix().inverse() * s.matrix();
-        cout<<"y\n"<<y.matrix()<<endl;
+       // cout<<"y\n"<<y.matrix()<<endl;
 
 
 
@@ -139,12 +139,13 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 		conf.push_back(conf2[0]);
 		conf.push_back(conf2[1]);
 		conf.push_back(conf2[2]);
-
+        /*
         for(int e=0;e<3;e++)
         {
             cout<<conf2[i]<<endl;
         }
         //getchar();
+        */
 	}
 	//-------------------------------------------
     configurationact = conf;
@@ -181,7 +182,7 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
                 // cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationstart, 3, 1).matrix()<<endl;
              }
 
-             cout<<"s\n"<<s.matrix()<<endl;
+             //cout<<"s\n"<<s.matrix()<<endl;
 
              y.matrix() = x.matrix().inverse() * s.matrix();
             // cout<<"y\n"<<y.matrix()<<endl;
@@ -292,9 +293,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         l5.push_back(pos2[4](i,3));
         l6.push_back(pos2[5](i,3));
         }
-        l4[2]=-1*l4[2];
-        l5[2]=-1*l5[2];
-        l6[2]=-1*l6[2];
+
 
 
          /*l1.push_back(-0.3);l1.push_back(0.1);l1.push_back(-0.1);
@@ -303,6 +302,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          l4.push_back(0.3);l4.push_back(-0.1);l4.push_back(-0.1);
          l5.push_back(0.35);l5.push_back(0.0);l5.push_back(-0.1);
          l6.push_back(0.3);l6.push_back(0.1);l6.push_back(-0.1);*/
+
          //equation of Torque y
          A(0,0)=((l1[0]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
          A(0,1)=((l2[0]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
@@ -345,6 +345,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          A(5,3)=l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
          A(5,4)=l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
          A(5,5)=l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+
          //vector of results
          B(0,0)=0;
          B(1,0)=0;
@@ -352,8 +353,10 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          B(3,0)=F;
          B(4,0)=0;
          B(5,0)=0;
+
          //solution (x -> f1,f2,...,f6)
          x = A.colPivHouseholderQr().solve(B);
+
          //projection of forces
          Fx(0,0)=x(0,0)*l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
          Fx(1,0)=x(1,0)*l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
@@ -408,7 +411,6 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          TF6.force.z()=Fz(5,0);
 
          //Torque
-
         torque1=Leg0->computLoad(TF1.force,configuration);
         torque2=Leg0->computLoad(TF2.force,configuration);
         torque3=Leg0->computLoad(TF3.force,configuration);
@@ -434,7 +436,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
          }
 
-        return compliance;
+        return TORQUE;
 
 }
 
