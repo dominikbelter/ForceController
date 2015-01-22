@@ -141,7 +141,7 @@ int main( int argc, const char** argv )
    }
 
 
-
+    usleep(2000000);
 
 
 
