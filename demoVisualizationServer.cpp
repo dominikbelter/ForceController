@@ -70,7 +70,7 @@ int main()
             for (int i=0;i<6;i++)
                 conf[i*3]=-conf[i*3];
             std::vector<float_type> confTmp;
-            confTmp[0]=conf[0]; confTmp[1]=conf[1]; confTmp[2]=conf[2];
+            confTmp.push_back(conf[0]); confTmp.push_back(conf[1]); confTmp.push_back(conf[2]);
             conf[0]=conf[6]; conf[1]=conf[7]; conf[0]=conf[8];
             conf[6]=confTmp[0]; conf[7]=confTmp[1]; conf[8]=confTmp[2];
 
