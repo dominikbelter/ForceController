@@ -78,8 +78,8 @@ int main( int argc, const char** argv )
 
         Robot* Rob;
         Rob = createRobotMessor("../resources/robotModel.xml");
-        Visualizer* visualizer;
-        visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
+        //Visualizer* visualizer;
+       // visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
 
         Board *demo = createBoardDynamixel();
 
@@ -106,7 +106,9 @@ int main( int argc, const char** argv )
 
 
 
-    visualizer->drawRobot(robotPose, configurationmove1);
+   // visualizer->drawRobot(robotPose, configurationmove1);
+
+
        // configurationmove4 = Rob->movePlatform(move4);
        // configurationmove5 = Rob->movePlatform(move5);
        // configurationmove6 = Rob->movePlatform(move6);
