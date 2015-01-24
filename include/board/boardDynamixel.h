@@ -291,7 +291,7 @@ class BoardDynamixel : public Board{
          * \param &servoTorque Torque(load) values.
          * \return Return error value.
          */
-        unsigned int readTorque(unsigned char legNo, const std::vector<float_type>& servoTorque);
+        unsigned int readTorque(unsigned char legNo,const std::vector<float_type>& servoTorque);
 
         /**
          * \brief Returns torque(load) value from servos.

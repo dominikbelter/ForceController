@@ -205,6 +205,28 @@ unsigned int BoardDynamixel::setComplianceMargin(unsigned char legNo, const std:
 
 /// Set compliance margins [0,254]- dead zone -- for this area the torque is zero, returns error value
 unsigned int BoardDynamixel::setComplianceMargin(const std::vector<float_type> margin){
+    CDynamixel *object1 = &dynamixelMotors[0];
+    CDynamixel *object2 = &dynamixelMotors[1];
+    int tmp = 0;
+    int cnt = 0;
+    for(int i = 0; i < 18; i++){
+        if(i < 9){  //Right side of Mesor
+            tmp = i%3;
+            if(!(i%3) && i != 0){
+                cnt++;
+            }
+            object1->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+            object2->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_MARGIN, margin[i]);
+        }else{      //Left side of Mesor
+            tmp = i%3;
+            if(!i%3){
+                cnt++;
+            }
+            object1->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+            object2->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_MARGIN, margin[i]);
+        }
+
+    }
     return 0;
 }
 
@@ -274,8 +296,29 @@ unsigned int BoardDynamixel::setTorqueLimit(unsigned char legNo, const std::vect
     return 0;
 }
 
-/// Set torque limit torque_limit [0,1023] - the torque limit, returns error value
+/// Set torque limit torque_limit [0,1] - the torque limit, returns error value
 unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqueLimit){
+    CDynamixel *object1 = &dynamixelMotors[0];
+    CDynamixel *object2 = &dynamixelMotors[1];
+    int tmp = 0;
+    int cnt = 0;
+    for(int i = 0; i < 18; i++){
+        if(i < 9){  //Right side of Mesor
+            tmp = i%3;
+            if(!(i%3) && i != 0){
+                cnt++;
+            }
+            object1->dxl_write_word(cnt*10+tmp, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
+        }else{      //Left side of Mesor
+            tmp = i%3;
+            if(!i%3){
+                cnt++;
+            }
+            object2->dxl_write_word(cnt*10+tmp, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
+        }
+
+    }
+
     return 0;
 }
 
@@ -448,10 +491,11 @@ unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent)
 /// Returns torque/load from servo
 unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-    if (legNo<3)
+    servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
+    /*if (legNo<3)
        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
     else
-        servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
+       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;*/
 
     //cout << "MaxTorque: " <<object->dxl_read_word(legNo*10+jointNo, 0x0E) << endl;   //0x0E - Max Torque
 
@@ -459,15 +503,13 @@ unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char joint
 }
 
 /// Returns torque/load from servo
-unsigned int BoardDynamixel::readTorque(unsigned char legNo, const std::vector<float_type>& servoTorque){
-   /* CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+unsigned int BoardDynamixel::readTorque(unsigned char legNo,const std::vector<float_type>& servoTorque){
+   CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++)
     {
-    if (legNo<3)
-       servoTorque.push_back(object->dxl_read_word(legNo*10 + i, TORQUE)*object->dxl_read_word(legNo*10+i, GET_MAX_TORQUE)/1024*28.3);
-    else
-       servoTorque.push_back(object->dxl_read_word(legNo*10 + i, TORQUE)*object->dxl_read_word(legNo*10+i, GET_MAX_TORQUE)/1024*28.3);
-    }*/
+        //servoTorque.push_back(1);
+       //servoTorque.push_back(object->dxl_read_word(legNo*10 + i, TORQUE)*object->dxl_read_word(legNo*10+i, GET_MAX_TORQUE)/1024*28.3);
+    }
     return 0;
 }
 
