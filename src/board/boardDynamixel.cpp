@@ -492,29 +492,40 @@ unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent)
 unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
-    /*if (legNo<3)
-       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
-    else
-       servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;*/
-
-    //cout << "MaxTorque: " <<object->dxl_read_word(legNo*10+jointNo, 0x0E) << endl;   //0x0E - Max Torque
-
-    return 0;
+     return 0;
 }
 
 /// Returns torque/load from servo
-unsigned int BoardDynamixel::readTorque(unsigned char legNo,const std::vector<float_type>& servoTorque){
+unsigned int BoardDynamixel::readTorque(unsigned char legNo,std::vector<float_type>& servoTorque){
    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++)
     {
-        //servoTorque.push_back(1);
-       //servoTorque.push_back(object->dxl_read_word(legNo*10 + i, TORQUE)*object->dxl_read_word(legNo*10+i, GET_MAX_TORQUE)/1024*28.3);
+       servoTorque.push_back(object->dxl_read_word(legNo*10 + i, TORQUE)*object->dxl_read_word(legNo*10+i, GET_MAX_TORQUE)/1024*28.3);
     }
     return 0;
 }
 
 /// Returns torque/load from servo
-unsigned int BoardDynamixel::readTorque(const std::vector<float_type>& servoTorque){
+unsigned int BoardDynamixel::readTorque(std::vector<float_type>& servoTorque){
+    CDynamixel *object1 = &dynamixelMotors[0];
+    CDynamixel *object2 = &dynamixelMotors[1];
+    int tmp = 0;
+    int cnt = 0;
+    for(int i = 0; i < 18; i++){
+        if(i < 9){  //Right side of Mesor
+            tmp = i%3;
+            if(!(i%3) && i != 0){
+                cnt++;
+            }
+           servoTorque.push_back(object1->dxl_read_word(cnt*10+tmp, TORQUE)*object1->dxl_read_word(cnt*10+tmp, GET_MAX_TORQUE)/1024*28.3);
+        }else{      //Left side of Mesor
+            tmp = i%3;
+            if(!i%3){
+                cnt++;
+            }
+            servoTorque.push_back(object2->dxl_read_word(cnt*10+tmp, TORQUE)*object2->dxl_read_word(cnt*10+tmp, GET_MAX_TORQUE)/1024*28.3);
+        }
+    }
     return 0;
 }
 

@@ -233,13 +233,13 @@ namespace controller {
          * \param &servoTorque Torque(load) values.
          * \return Return error value.
          */
-            virtual unsigned int readTorque(unsigned char legNo, const std::vector<float_type>& servoTorque) = 0;
+            virtual unsigned int readTorque(unsigned char legNo,std::vector<float_type>& servoTorque) = 0;
              /**
          * \brief Returns torque(load) value from servos.
          * \param &servoTorque Torque(load) values.
          * \return Return error value.
          */
-            virtual unsigned int readTorque(const std::vector<float_type>& servoTorque) = 0;
+            virtual unsigned int readTorque(std::vector<float_type>& servoTorque) = 0;
 
              /**
          * \brief Returns servo's offset.
