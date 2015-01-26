@@ -40,13 +40,13 @@ int main( int argc, const char** argv )
 
         Mat34 moveneutral;
         moveneutral.setIdentity();
-        moveneutral(0, 3) = 0;
-        moveneutral(1, 3) = 0;
+        moveneutral(0, 3) = 0;///DB to jest niepotrzebne
+        moveneutral(1, 3) = 0; ///DB to jest niepotrzebne
         moveneutral(2, 3) = 0.0;
 
         Mat34 move1;
         move1.setIdentity();
-        move1(0, 3) = 0;
+        move1(0, 3) = 0; ///DB to jest niepotrzebne, itd...
         move1(1, 3) = 0;
         move1(2, 3) = -0.05;
 
@@ -80,6 +80,7 @@ int main( int argc, const char** argv )
         move6(1, 3) = 0;
         move6(2, 3) = 0.12;
 
+        ///DB zamiast move1, move2, itd. tablica move: std::vector<Mat34> move. Przy wykonywanie wystarczy wtedy petla
 //*******************************
 
         Robot* Rob;

@@ -91,8 +91,8 @@ int main( int argc, const char** argv )
          cout<<"Stworzenie macierzy jednostkowej"<<endl;
          mat.setIdentity();
          mat(0, 3) = 0.0;
-         mat(1, 3) = 0.05;
-         mat(2, 3) = 0.0;
+         mat(1, 3) = 0.0;
+         mat(2, 3) = 0.05;
          cout<<"Wypełnienie macierzy"<<endl;
 
          board->setPosition(robot->movePlatform(mat));
@@ -101,10 +101,10 @@ int main( int argc, const char** argv )
          /*Kinematic* kinematicModel;
          kinematicModel = createKinematicLie("../resources/legModel.xml");
          std::cout << "Kinematic type: " << kinematicModel->getName() << "\n";
-
+*/
 
          Mat34 destinationMatrix; // where do the values come from?
-         std::vector<float_type> destinationConfiguration = robot->movePlatform(destinationMatrix);
+         std::vector<float_type> destinationConfiguration = robot->movePlatform(mat);
          board->setPosition(destinationConfiguration);
 
          std::vector<float_type> destinationCompliance = robot->computeCompliance(destinationConfiguration);
@@ -126,7 +126,7 @@ int main( int argc, const char** argv )
 			 std::cerr << ex.what() << std::endl;
 			 return 1;
 		 }
-#endif*/
+#endif
 
     }
     catch (const std::exception& ex) {

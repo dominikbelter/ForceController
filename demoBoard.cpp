@@ -13,11 +13,13 @@ int main( int argc, const char** argv )
     float_type noga;
     float_type wezel;
     float_type podatnosc;
+    ///DB moze lepiej: float_type katy[] = {0, 0, 0};
     float_type kat0 = 0;
     float_type kat1 = 0;
     float_type kat2 = 0;
     float_type readkat = 0;
     vector<float_type> readkatLeg;
+    ///DB moze lepiej: float_type momenty[] = {0, 0, 0};
     float_type moment0 = 0;
     float_type moment1 = 0;
     float_type moment2 = 0;
@@ -74,6 +76,7 @@ int main( int argc, const char** argv )
     wektorTestowy3.push_back((-114*M_PI)/180);
 
     std::vector<float_type> wektorTestowy18;
+    ///DB wypelnianie wektora w petli
     wektorTestowy18.push_back((0*M_PI)/180);
     wektorTestowy18.push_back((24*M_PI)/180);
     wektorTestowy18.push_back((114*M_PI)/180);
