@@ -163,7 +163,12 @@ int main( int argc, const char** argv )
 
 
          configurationmove1 = Rob->movePlatform(move1);
-
+         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+             if (configurationmove1[i]>3.14)
+                 configurationmove1[i]-=6.28;
+             else if (configurationmove1[i]<-3.14)
+                 configurationmove1[i]=+6.28;
+         }
         for(int i = 0; i < 6; i++)
         {
             int j = 3 * i;
@@ -173,7 +178,12 @@ int main( int argc, const char** argv )
         }
 
         configurationmove2 = Rob->movePlatform(move2);
-
+        for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+            if (configurationmove2[i]>3.14)
+                configurationmove2[i]-=6.28;
+            else if (configurationmove2[i]<-3.14)
+                configurationmove2[i]=+6.28;
+        }
         usleep(2000000);
 
         for(int i = 0; i < 6; i++)
@@ -187,7 +197,12 @@ int main( int argc, const char** argv )
         usleep(2000000);
 
         configurationmove3 = Rob->movePlatform(move3);
-
+        for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+            if (configurationmove3[i]>3.14)
+                configurationmove3[i]-=6.28;
+            else if (configurationmove3[i]<-3.14)
+                configurationmove3[i]=+6.28;
+        }
         for(int i = 0; i < 6; i++)
         {
             int j = 3 * i;
@@ -199,6 +214,12 @@ int main( int argc, const char** argv )
         usleep(2000000);
 
         configurationmove4 = Rob->movePlatform(move4);
+        for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+            if (configurationmove4[i]>3.14)
+                configurationmove4[i]-=6.28;
+            else if (configurationmove4[i]<-3.14)
+                configurationmove4[i]=+6.28;
+        }
 
         for(int i = 0; i < 6; i++)
         {
@@ -211,7 +232,12 @@ int main( int argc, const char** argv )
         usleep(2000000);
 
         configurationmove5 = Rob->movePlatform(move5);
-
+        for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+            if (configurationmove5[i]>3.14)
+                configurationmove5[i]-=6.28;
+            else if (configurationmove5[i]<-3.14)
+                configurationmove5[i]=+6.28;
+        }
         for(int i = 0; i < 6; i++)
         {
             int j = 3 * i;

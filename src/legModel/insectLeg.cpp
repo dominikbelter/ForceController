@@ -131,7 +131,7 @@ std::vector<float_type> InsectLeg::inverseKinematic(Mat34& linkPose, int linkNo,
 	{
 		std::vector<float_type> temp;
 		temp = legKine->inverseKinematic(linkPose, linkNo);
-		temp[0] += M_PI;
+        temp[0] += M_PI;
 		return temp;
 	}
 	else

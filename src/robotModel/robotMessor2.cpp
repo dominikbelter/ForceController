@@ -109,12 +109,16 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 
         if (i < 3)
         {
-            s.matrix() *= Leg0 ->forwardKinematic(configurationact, 3, 0).matrix();
+            std::vector<float_type> conf1(configurationact.begin()+i*3, configurationact.begin()+i*3+3);
+            s.matrix() *= Leg0 ->forwardKinematic(conf1, 3, 0).matrix();
+            //s.matrix() *= Leg0 ->forwardKinematic(configurationact, 3, 0).matrix();
             //cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationact, 3, 0).matrix()<<endl;
         }
         else
         {
-            s.matrix() *= Leg0 ->forwardKinematic(configurationact, 3, 1).matrix();
+            std::vector<float_type> conf1(configurationact.begin()+i*3, configurationact.begin()+i*3+3);
+            s.matrix() *= Leg0 ->forwardKinematic(conf1, 3, 1).matrix();
+            //s.matrix() *= Leg0 ->forwardKinematic(configurationact, 3, 1).matrix();
             //cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationact, 3, 1).matrix()<<endl;
         }
 
@@ -147,8 +151,7 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
         //getchar();
         */
 	}
-	//-------------------------------------------
-    configurationact = conf;
+    //-------------------------------------------
 	return conf;
 }
 		
