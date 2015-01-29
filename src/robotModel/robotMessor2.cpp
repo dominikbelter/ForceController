@@ -223,11 +223,9 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
          TorqueForce TF1,TF2,TF3,TF4,TF5,TF6;
          //Coefficient matrix of force and torque equations
-         typedef Eigen::Matrix<float_type,6,6> Mat66;
          typedef Eigen::Matrix<float_type,6,3> Mat63;
          typedef Eigen::Matrix<float_type,6,1> Mat16;
          Mat16 B,B2,x2,x,Fx,Fy,Fz;
-         //Mat66 A,A2;
          Mat63 A,A2;
          std::vector<Mat34> pos,pos2;
          std::vector<float_type> l1,l2,l3,l4,l5,l6,FZ,FX,FY;
@@ -252,8 +250,6 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         l6.push_back(pos2[5](i,3));
         }
 
-
-
         //equation of Torque y
         A(0,0)=((l1[0]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
         A2(0,1)=((l2[0]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
@@ -262,6 +258,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         A2(0,0)=((l4[0]*(l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))+(l4[2]*(l4[0]/sqrt(pow(l4[0],2)-pow(l4[1],2)+pow(l4[2],2)))));
         A(0,1)=((l5[0]*(l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))+(l5[2]*(l5[0]/sqrt(pow(l5[0],2)-pow(l5[1],2)+pow(l5[2],2)))));
         A2(0,2)=((l6[0]*(l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))+(l6[2]*(l6[0]/sqrt(pow(l6[0],2)-pow(l6[1],2)+pow(l6[2],2)))));
+
         //equation of Torque x
         A(1,0)=((l1[1]*(l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[2]*(l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
         A2(1,1)=((l2[1]*(l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[2]*(l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
@@ -270,6 +267,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         A2(1,0)=((l4[1]*(l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))+(l4[2]*(l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2)))));
         A(1,1)=((l5[1]*(l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))+(l5[2]*(l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2)))));
         A2(1,2)=((l6[1]*(l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))+(l6[2]*(l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2)))));
+
         //equation of Torque z
         A(2,0)=((l1[0]*(l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2))))+(l1[1]*(l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2)))));
         A2(2,1)=((l2[0]*(l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2))))+(l2[1]*(l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2)))));
@@ -278,6 +276,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         A2(2,0)=((l4[0]*(l4[1]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2))))+(l4[1]*(l4[0]/sqrt(pow(l4[0],2)-pow(l4[1],2)+pow(l4[2],2)))));
         A(2,1)=((l5[0]*(l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2))))+(l5[1]*(l5[0]/sqrt(pow(l5[0],2)-pow(l5[1],2)+pow(l5[2],2)))));
         A2(2,2)=((l6[0]*(l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2))))+(l6[1]*(l6[0]/sqrt(pow(l6[0],2)-pow(l6[1],2)+pow(l6[2],2)))));
+
         //equation of Force z
         A(3,0)=l1[2]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
         A2(3,1)=l2[2]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
@@ -286,6 +285,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         A2(3,0)=l4[2]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
         A(3,1)=l5[2]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
         A2(3,2)=l6[2]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+
         //equation of Force x
         A(4,0)=l1[0]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
         A2(4,1)=l2[0]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
@@ -294,6 +294,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         A2(4,0)=l4[0]/sqrt(pow(l4[0],2)+pow(l4[1],2)+pow(l4[2],2));
         A(4,1)=l5[0]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
         A2(4,2)=l6[0]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
+
         //equation of Force y
         A(5,0)=l1[1]/sqrt(pow(l1[0],2)+pow(l1[1],2)+pow(l1[2],2));
         A2(5,1)=l2[1]/sqrt(pow(l2[0],2)+pow(l2[1],2)+pow(l2[2],2));
@@ -303,7 +304,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         A(5,1)=l5[1]/sqrt(pow(l5[0],2)+pow(l5[1],2)+pow(l5[2],2));
         A2(5,2)=l6[1]/sqrt(pow(l6[0],2)+pow(l6[1],2)+pow(l6[2],2));
 
-        //vector of results
+        //vectors of results
         B(0,0)=0;
         B(1,0)=0;
         B(2,0)=0;
@@ -317,6 +318,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
         B2(3,0)=F/2;
         B2(4,0)=0;
         B2(5,0)=0;
+
         //solution (x -> f1,f2,...,f6)
         x = A.colPivHouseholderQr().solve(B);
         x2 = A2.colPivHouseholderQr().solve(B2);
@@ -355,53 +357,53 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          FY.push_back(Fy(i,0));
          }
 
-         TF1.force.x()=0;//Fx(0,0);
-         TF1.force.y()=0;//Fy(0,0);
+         TF1.force.x()=0;
+         TF1.force.y()=0;
          TF1.force.z()=Fz(0,0);
 
-         TF2.force.x()=0;//Fx(1,0);
-         TF2.force.y()=0;//Fy(1,0);
+         TF2.force.x()=0;
+         TF2.force.y()=0;
          TF2.force.z()=Fz(1,0);
 
-         TF3.force.x()=0;//Fx(2,0);
-         TF3.force.y()=0;//Fy(2,0);
+         TF3.force.x()=0;
+         TF3.force.y()=0;
          TF3.force.z()=Fz(2,0);
 
-         TF4.force.x()=0;//Fx(3,0);
-         TF4.force.y()=0;//Fy(3,0);
+         TF4.force.x()=0;
+         TF4.force.y()=0;
          TF4.force.z()=Fz(3,0);
 
-         TF5.force.x()=0;//Fx(4,0);
-         TF5.force.y()=0;//Fy(4,0);
+         TF5.force.x()=0;
+         TF5.force.y()=0;
          TF5.force.z()=Fz(4,0);
 
-         TF6.force.x()=0;//Fx(5,0);
-         TF6.force.y()=0;//Fy(5,0);
+         TF6.force.x()=0;
+         TF6.force.y()=0;
          TF6.force.z()=Fz(5,0);
 
 
 
 
-std::vector<float_type> c1,c2,c3,c4,c5,c6;
+        std::vector<float_type> c1,c2,c3,c4,c5,c6;
 
-for(int i=0; i<3;i++)
-c1.push_back(configuration[i]);
+        for(int i=0; i<3;i++)
+            c1.push_back(configuration[i]);
 
 
-for(int i=3; i<6;i++)
-c2.push_back(configuration[i]);
+        for(int i=3; i<6;i++)
+            c2.push_back(configuration[i]);
 
-for(int i=6; i<9;i++)
-    c3.push_back(configuration[i]);
+        for(int i=6; i<9;i++)
+            c3.push_back(configuration[i]);
 
-for(int i=9; i<12;i++)
-c4.push_back(configuration[i]);
+        for(int i=9; i<12;i++)
+            c4.push_back(configuration[i]);
 
-for(int i=12; i<15;i++)
-c5.push_back(configuration[i]);
+        for(int i=12; i<15;i++)
+            c5.push_back(configuration[i]);
 
-for(int i=15; i<18;i++)
-c6.push_back(configuration[i]);
+        for(int i=15; i<18;i++)
+            c6.push_back(configuration[i]);
 
          //Torque
         torque1=Leg0->computLoad(TF1.force,c1,1);
@@ -410,6 +412,7 @@ c6.push_back(configuration[i]);
         torque4=Leg0->computLoad(TF4.force,c4,0);
         torque5=Leg0->computLoad(TF5.force,c5,0);
         torque6=Leg0->computLoad(TF6.force,c6,0);
+
         TORQUE.insert(TORQUE.end(),torque1.begin(),torque1.end());
         TORQUE.insert(TORQUE.end(),torque2.begin(),torque2.end());
         TORQUE.insert(TORQUE.end(),torque3.begin(),torque3.end());
@@ -419,16 +422,13 @@ c6.push_back(configuration[i]);
 
         for(int i=0;i<18;i++)
          {
-
-             compliance.push_back(TORQUE[i]*0.59);
+             compliance.push_back(TORQUE[i]*0.59*3);
              compliance[i]=sqrt(compliance[i]*compliance[i]);
 
-                     if(compliance[i]>1)
-                        compliance[i]=1;
-
+             if(compliance[i]>1)
+                       compliance[i]=1;
 
          }
-
 
 
         return compliance;

@@ -23,7 +23,7 @@ int main( int argc, const char** argv )
         std::vector<Mat34> pos,pos2;
         Mat34 move1;
         move1.setIdentity();
-        move1(0, 3) = 0; ///DB to jest niepotrzebne, itd...
+        move1(0, 3) = 0;
         move1(1, 3) = 0;
         move1(2, 3) = -0.05;
         Mat34 testmoveplatform;
@@ -43,7 +43,6 @@ int main( int argc, const char** argv )
                      demo->setSpeed(i, 2, 15);
              }
 
-             // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
             for (int i = 0; i<6; i++)
            {
                  configuration.push_back(0);
@@ -62,7 +61,7 @@ int main( int argc, const char** argv )
 
          configuration = Rob->movePlatform(testmoveplatform);
 
-         for (int i=0;i<configuration.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+         for (int i=0;i<configuration.size();i++){
              if (configuration[i]>3.14)
                  configuration[i]-=6.28;
              else if (configuration[i]<-3.14)
@@ -84,15 +83,13 @@ int main( int argc, const char** argv )
 
        for(int i=0;i<18;i++)
         {
-           C[i]*=2;
-          std::cout<<C[i]<<std::endl;
-
+               std::cout<<C[i]<<std::endl;
         }
 
         demo->setTorqueLimit(C);
        //demo->setComplianceSlope( C );
 
-        ///DB proszę jeszcze utworzyć obiekt typu BoardDynamixel i wysłać obliczone podatności do serwomechanizmów
+
        return 0;
 
    }
