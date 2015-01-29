@@ -145,9 +145,6 @@ Mat33 InsectLeg::computeJacobian_transposed(std::vector<float_type> config)
 {
 	Mat33 temp;
 
-
-
-
     temp(0, 0) = 0;
     temp(1, 0) = 0;
     temp(2, 0) = 0;
@@ -159,18 +156,6 @@ Mat33 InsectLeg::computeJacobian_transposed(std::vector<float_type> config)
     temp(2, 2) = -lengths[2] * sin(config[1]) * cos(config[2]) - lengths[1] * sin(config[1]);
 
 
-
-/*
-    temp(0, 0) = -lengths[2] * sin(config[0]) * cos(config[1]) - lengths[1] * sin(config[0]);
-    temp(1, 0) = -lengths[2] * cos(config[0]) * sin(config[1]);
-	temp(2, 0) = 0;
-    temp(0, 1) = lengths[2] * cos(config[0]) * cos(config[1]) + lengths[1] * cos(config[0]);
-    temp(1, 1) = -lengths[2] * sin(config[0]) * sin(config[1]);
-	temp(2, 1) = 0;
-	temp(0, 2) = 0;
-	temp(1, 2) = 0;
-	temp(2, 2) = 0;
-*/
 	return temp;
 }
 

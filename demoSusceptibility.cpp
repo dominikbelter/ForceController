@@ -23,9 +23,9 @@ int main( int argc, const char** argv )
         Mat34 testmoveplatform;
 
         testmoveplatform.setIdentity();
-        testmoveplatform(0, 3) = 0;
+        testmoveplatform(0, 3) = 0.3;
         testmoveplatform(1, 3) = 0;
-        testmoveplatform(2, 3) = 0;
+        testmoveplatform(2, 3) = 0.1;
 
 
          configuration = Rob->movePlatform(testmoveplatform);
@@ -41,34 +41,9 @@ int main( int argc, const char** argv )
 
         }
 
-  /*     std::vector<float_type> l1,l2,l3,l4,l5,l6;
-       pos=Rob->conputeLinksPosition(configuration);
-
-       // std::cout<<pos[1](0,3)<<"   "<< pos[4](0,3)<<"\n"<<pos.size()<<endl;
-
-       for(int i=3; i<pos.size(); i+=4)
-       {
-         pos2.push_back(pos[i]);
-
-       }
-
-       for(int i=0;i<3;i++)
-       {
-       l1.push_back(pos2[0](i,3));
-       l2.push_back(pos2[1](i,3));
-       l3.push_back(pos2[2](i,3));
-       l4.push_back(pos2[3](i,3));
-       l5.push_back(pos2[4](i,3));
-       l6.push_back(pos2[5](i,3));
-       }
+       Board *demo = createBoardDynamixel();
 
 
-        cout<<" l1x="<<l1[0]<<" l2x="<<l2[0]<<" l3x="<<l3[0]<<" l4x="<<l4[0]<<" l5x="<<l5[0]<<" l6x="<<l6[0]<<" "<<endl;
-        cout<<" l1y="<<l1[1]<<" l2y="<<l2[1]<<" l3y="<<l3[1]<<" l4y="<<l4[1]<<" l5y="<<l5[1]<<" l6y="<<l6[1]<<" "<<endl;
-        cout<<" l1z="<<l1[2]<<" l2z="<<l2[2]<<" l3z="<<l3[2]<<" l4z="<<l4[2]<<" l5z="<<l5[2]<<" l6z="<<l6[2]<<" "<<endl;
-        cout<<" "<<endl;
-
-*/
         ///DB proszę jeszcze utworzyć obiekt typu BoardDynamixel i wysłać obliczone podatności do serwomechanizmów
        return 0;
 
