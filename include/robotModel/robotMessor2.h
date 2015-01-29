@@ -150,10 +150,10 @@ public:
 	*/
     std::vector<Mat34> conputeLinksPosition(std::vector<float_type> configuration);
 
-    ///Compute force in each joint of the legs, input configuration of the robot
-    /**
-    * @param vector<float_type>
-    * @return TF.susceptibility - return susceptibility in each servomotor
+
+    /** Compute force in each joint of the legs, input configuration of the robot
+    * @param [in] configuration of all servomechanism
+    * @return std::vector<float_type> compliance of all servomechanism
     */
     std::vector<float_type> computeCompliance(const std::vector<float_type> configuration);
 

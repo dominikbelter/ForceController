@@ -265,7 +265,8 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 	return linksPos;
 }
 
-///Compute force in each joint of the legs, input configuration of the robot
+
+ ///Compute force in each joint of the legs, input configuration of the robot
  std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)
 {
 
