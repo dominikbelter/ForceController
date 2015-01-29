@@ -41,7 +41,7 @@ int main( int argc, const char** argv )
 
         }
 
-       std::vector<float_type> l1,l2,l3,l4,l5,l6;
+  /*     std::vector<float_type> l1,l2,l3,l4,l5,l6;
        pos=Rob->conputeLinksPosition(configuration);
 
        // std::cout<<pos[1](0,3)<<"   "<< pos[4](0,3)<<"\n"<<pos.size()<<endl;
@@ -68,7 +68,7 @@ int main( int argc, const char** argv )
         cout<<" l1z="<<l1[2]<<" l2z="<<l2[2]<<" l3z="<<l3[2]<<" l4z="<<l4[2]<<" l5z="<<l5[2]<<" l6z="<<l6[2]<<" "<<endl;
         cout<<" "<<endl;
 
-
+*/
         ///DB proszę jeszcze utworzyć obiekt typu BoardDynamixel i wysłać obliczone podatności do serwomechanizmów
        return 0;
 
