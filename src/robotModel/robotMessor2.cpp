@@ -5,17 +5,11 @@
 
 using namespace controller;
 
-
-
-
-
 RobotMessor::Ptr robotmessor;
 
 RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 {
-	//Translation for each Leg
-
-	Leg0 = createInsectLeg("../resources/legModel.xml");
+    Leg0 = createInsectLeg("../resources/legModel.xml");
 
 	width_max = 0.1025; ///distance from center to middle leg
 	width_min = 0.052; /// distance from x to front leg
@@ -68,7 +62,6 @@ RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
     NeutralMotion(1, 3) = 0;
     NeutralMotion(2, 3) = 0.12;
 
-
     for (int i = 0; i<6; i++)
         {
             configurationstart.push_back(0);
@@ -76,10 +69,7 @@ RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
             configurationstart.push_back(-114*3.14/180);
         }
         configurationact=configurationstart;
-
 }
-
-
 
 
 RobotMessor::~RobotMessor(void)
@@ -94,9 +84,7 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
     Mat34 x, y, s;
 
 
-    //newmotion = OldMotion*motion;
-
-	//-----------------------------------------
+    //-----------------------------------------
     using namespace std;
 
 	for (int i = 0; i<6; i++)
@@ -109,33 +97,19 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 
         if (i < 3)
         {
-            //DB tutaj byl blad
             std::vector<float_type> conf1(configurationact.begin()+i*3, configurationact.begin()+i*3+3);
             s.matrix() *= Leg0 ->forwardKinematic(conf1, 3, 0).matrix();
-            //s.matrix() *= Leg0 ->forwardKinematic(configurationact, 3, 0).matrix(); //DB tutaj byl blad
-            //cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationact, 3, 0).matrix()<<endl;
         }
         else
         {
-            //DB tutaj byl blad
             std::vector<float_type> conf1(configurationact.begin()+i*3, configurationact.begin()+i*3+3);
             s.matrix() *= Leg0 ->forwardKinematic(conf1, 3, 1).matrix();
-            //s.matrix() *= Leg0 ->forwardKinematic(configurationact, 3, 1).matrix(); //DB tutaj byl blad
-            //cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationact, 3, 1).matrix()<<endl;
         }
 
-       // cout<<"s\n"<<s.matrix()<<endl;
-
         y.matrix() = x.matrix().inverse() * s.matrix();
-       // cout<<"y\n"<<y.matrix()<<endl;
-
-
-
-        // actleg.matrix() = actleg.matrix().inverse();
 
         if (i<3)
         {
-
         conf2 = Leg0->inverseKinematic(y, 3, 0);
         }
         else
@@ -145,13 +119,6 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 		conf.push_back(conf2[0]);
 		conf.push_back(conf2[1]);
 		conf.push_back(conf2[2]);
-        /*
-        for(int e=0;e<3;e++)
-        {
-            cout<<conf2[i]<<endl;
-        }
-        //getchar();
-        */
 	}
     //-------------------------------------------
 	return conf;
@@ -164,33 +131,26 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
          std::vector<float_type> conf, conf2;
          Mat34 x, y, s;
 
-         //newmotion = OldMotion*motion;
          //-----------------------------------------
          using namespace std;
 
          for (int i = 0; i<6; i++)
          {
-
              x = motion * L_all[i];
-            // cout<<"x\n"<<x.matrix()<<endl;
 
              s = NeutralMotion * L_all[i];
 
              if (i < 3)
              {
                  s.matrix() *= Leg0 ->forwardKinematic(configurationstart, 3, 0).matrix();
-                 //cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationstart, 3, 0).matrix()<<endl;
-             }
+                           }
              else
              {
                  s.matrix() *= Leg0 ->forwardKinematic(configurationstart, 3, 1).matrix();
-                // cout<<"fk\n"<<Leg0 ->forwardKinematic(configurationstart, 3, 1).matrix()<<endl;
              }
 
-             //cout<<"s\n"<<s.matrix()<<endl;
 
              y.matrix() = x.matrix().inverse() * s.matrix();
-            // cout<<"y\n"<<y.matrix()<<endl;
 
              if (i<3)
              {
@@ -204,12 +164,6 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
              conf.push_back(conf2[0]);
              conf.push_back(conf2[1]);
              conf.push_back(conf2[2]);
-             /*
-             for(int e=0;e<3;e++)
-             {
-                 cout<<conf2[i]<<endl;
-             }
-             */
          }
          return conf;
      }
@@ -222,10 +176,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 	std::vector<Mat34> linksPos;
 	std::vector<float_type> conf;
 
-
-
-
-	//-----------------------------------------
+    //-----------------------------------------
     for (int h = 0; h<configuration.size(); h=h + 3)
 	{
 		for (int j = 0; j<3; j++)
@@ -235,11 +186,11 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
          if (h<9)
          {
-		for (int i = 0; i<3; i++)
-		{
-            linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, i,0));
-		}
-         }
+            for (int i = 0; i<3; i++)
+            {
+                linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, i,0));
+            }
+             }
          else
          {
              for (int i = 0; i<3; i++)
@@ -249,8 +200,8 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
          }
          if (h<9)
-
         linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, -1,0));
+
          else
              linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, -1,1));
 
@@ -258,14 +209,14 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 		{
 			conf.pop_back();
 		}
-
 	}
 	//-------------------------------------------
 
-	return linksPos;
+    return linksPos;
 }
 
-///Compute force in each joint of the legs, input configuration of the robot
+
+ ///Compute force in each joint of the legs, input configuration of the robot
  std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)
 {
 

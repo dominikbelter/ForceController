@@ -15,10 +15,8 @@
 
 
 namespace controller {
-
                     Robot* createRobotMessor(void);
                     Robot* createRobotMessor(std::string configFilename);
-
                      }
 
 using namespace controller;
@@ -49,17 +47,13 @@ public:
             parameters = config.FirstChildElement("width1");
             parameters = parameters->FirstChildElement( "parameters" );
             parameters->QueryDoubleAttribute("width_max", &paramf); width_max = paramf;
-              parameters = config.FirstChildElement("width2");
+            parameters = config.FirstChildElement("width2");
             parameters = parameters->FirstChildElement( "parameters" );
             parameters->QueryDoubleAttribute("width_min", &paramf); width_min = paramf;
-              parameters = config.FirstChildElement("length1");
+            parameters = config.FirstChildElement("length1");
             parameters = parameters->FirstChildElement( "parameters" );
             parameters->QueryDoubleAttribute("length", &paramf); length = paramf;
 
-           // std::cout << "links no: " << linksNo << " joints no: " << jointsNo << "\n";
-            std::cout<< width_max << std::endl;
-            //std::cout << "Lenght2: " << lengths[1] << std::endl;
-            //std::cout << "Lenght3: " << lengths[2] << std::endl;
         }
         L0.setIdentity();
         L0(0, 3) = width_min;
@@ -116,14 +110,8 @@ public:
                 configurationstart.push_back(24*3.14/180);
                 configurationstart.push_back(-114*3.14/180);
             }
-
-
         configurationact=configurationstart;
-
     };
-
-
-
 
 
     /// Name of the robot model
@@ -150,10 +138,10 @@ public:
 	*/
     std::vector<Mat34> conputeLinksPosition(std::vector<float_type> configuration);
 
-    ///Compute force in each joint of the legs, input configuration of the robot
-    /**
-    * @param vector<float_type>
-    * @return TF.susceptibility - return susceptibility in each servomotor
+
+    /** Compute force in each joint of the legs, input configuration of the robot
+    * @param [in] configuration of all servomechanism
+    * @return std::vector<float_type> compliance of all servomechanism
     */
     std::vector<float_type> computeCompliance(const std::vector<float_type> configuration);
 
@@ -164,7 +152,6 @@ private:
 	float_type width_max; ///distance from center to middle leg
 	float_type width_min; /// distance from x to front leg
 	float_type length; ///distance front legs from x
-
 
 	Mat34 L0;
 	Mat34 L1;
@@ -181,7 +168,6 @@ private:
 
     std::vector<float_type> configurationstart;
     std::vector<float_type> configurationact;
-
 };
 
 #endif
