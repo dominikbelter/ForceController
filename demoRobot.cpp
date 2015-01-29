@@ -26,17 +26,11 @@ using namespace gui;
 int main( int argc, const char** argv )
 {
     try {
-
-
         Mat34 testmoveplatform;
-
 		testmoveplatform.setIdentity();
 		testmoveplatform(0, 3) = 0;
         testmoveplatform(1, 3) = 0;
         testmoveplatform(2, 3) = 0.12;
-
-
- //******************************
 
         Mat34 moveneutral;
         moveneutral.setIdentity();
@@ -44,35 +38,42 @@ int main( int argc, const char** argv )
         moveneutral(1, 3) = 0; ///DB to jest niepotrzebne
         moveneutral(2, 3) = 0.0;
 
+        std::vector<Mat34> move;
+
         Mat34 move1;
         move1.setIdentity();
         move1(0, 3) = 0; ///DB to jest niepotrzebne, itd...
         move1(1, 3) = 0;
         move1(2, 3) = -0.05;
+        move.push_back(move1);
 
         Mat34 move2;
         move2.setIdentity();
         move2(0, 3) = 0;
         move2(1, 3) = 0.05;
         move2(2, 3) = 0;
+        move.push_back(move2);
 
         Mat34 move3;
         move3.setIdentity();
         move3(0, 3) = 0;
         move3(1, 3) = -0.05;
         move3(2, 3) = 0;
+        move.push_back(move3);
 
         Mat34 move4;
         move4.setIdentity();
         move4(0, 3) = 0.05;
         move4(1, 3) = 0;
         move4(2, 3) = 0;
+        move.push_back(move4);
 
         Mat34 move5;
         move5.setIdentity();
         move5(0, 3) = -0.05;
         move5(1, 3) = 0;
         move5(2, 3) = 0;
+        move.push_back(move5);
 
         Mat34 move6;
         move6.setIdentity();
@@ -80,21 +81,17 @@ int main( int argc, const char** argv )
         move6(1, 3) = 0;
         move6(2, 3) = 0.12;
 
-        ///DB zamiast move1, move2, itd. tablica move: std::vector<Mat34> move. Przy wykonywanie wystarczy wtedy petla
+
+        move.push_back(move6);
+
 //*******************************
 
         Robot* Rob;
         Rob = createRobotMessor("../resources/robotModel.xml");
-        //Visualizer* visualizer;
-       // visualizer = createVisualizerIrrlicht("configVisualization.xml", "TEST");
 
         Board *demo = createBoardDynamixel();
-
         std::vector<float_type> configuration, configuration2, configurationmove1, configurationmove2, configurationmove3, configurationmove4, configurationmove5, configurationneutral;
-        // configuration2.push_back(18);
-
-		// setIdentity w bledny sposob tworzy macierz jednostkowa
-
+        std::vector<std::vector<float_type>> configurationtest;
 		Mat34 robotPose;
         robotPose.setIdentity();
 
@@ -102,8 +99,6 @@ int main( int argc, const char** argv )
         for(int i = 0; i < 18; i++ ){
             motorSpeed.push_back(10);
         }
-
-       // demo->setSpeed( motorSpeed );
 
         for(int i = 0; i < 6; i++)
         {
@@ -122,133 +117,79 @@ int main( int argc, const char** argv )
 
 
 
-
-        configuration2 = Rob->movePlatform(testmoveplatform);
-
-
-
-   // visualizer->drawRobot(robotPose, configurationmove1);
-
-
-       // configurationmove4 = Rob->movePlatform(move4);
-       // configurationmove5 = Rob->movePlatform(move5);
-       // configurationmove6 = Rob->movePlatform(move6);
-        //getchar();
-
-       //visualizer->drawRobot(robotPose, configuration2);
-
-        /*
-        for(int i = 0; i < 6; i++)
-        {
-            int j = 3 * i;
-                demo->setPosition(i, 0, configuration2[j] );
-                demo->setPosition(i, 1, configuration2[j+1] );
-                demo->setPosition(i, 2, configuration2[j+2] );
-        }
-        */
-
-    configurationneutral = Rob->movePlatform(moveneutral);
-
-   for(int i = 0; i < 6; i++)
-   {
-       int j = 3 * i;
-           demo->setPosition(i, 0, configurationneutral[j] );
-           demo->setPosition(i, 1, configurationneutral[j+1] );
-           demo->setPosition(i, 2, configurationneutral[j+2] );
-   }
-
-
-    usleep(2000000);
-
-
-
-         configurationmove1 = Rob->movePlatform(move1);
-         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+   configurationmove1 = Rob->movePlatform(move1);
+         for (int i=0;i<configurationmove5.size();i++)
+        {//pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
              if (configurationmove1[i]>3.14)
                  configurationmove1[i]-=6.28;
              else if (configurationmove1[i]<-3.14)
                  configurationmove1[i]=+6.28;
+        }
+
+         configurationmove2 = Rob->movePlatform(move2);
+         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+             if (configurationmove2[i]>3.14)
+                 configurationmove2[i]-=6.28;
+             else if (configurationmove2[i]<-3.14)
+                 configurationmove2[i]=+6.28;
          }
+
+         configurationmove3 = Rob->movePlatform(move3);
+         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+             if (configurationmove3[i]>3.14)
+                 configurationmove3[i]-=6.28;
+             else if (configurationmove3[i]<-3.14)
+                 configurationmove3[i]=+6.28;
+         }
+
+         configurationmove4 = Rob->movePlatform(move4);
+         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+             if (configurationmove4[i]>3.14)
+                 configurationmove4[i]-=6.28;
+             else if (configurationmove4[i]<-3.14)
+                 configurationmove4[i]=+6.28;
+         }
+
+         configurationmove5 = Rob->movePlatform(move5);
+         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
+             if (configurationmove5[i]>3.14)
+                 configurationmove5[i]-=6.28;
+             else if (configurationmove5[i]<-3.14)
+                 configurationmove5[i]=+6.28;
+         }
+
+         configurationtest.push_back(configurationmove1);
+         configurationtest.push_back(configurationmove2);
+         configurationtest.push_back(configurationmove3);
+         configurationtest.push_back(configurationmove4);
+         configurationtest.push_back(configurationmove5);
+
+
+         configuration2 = Rob->movePlatform(testmoveplatform);
+         configurationneutral = Rob->movePlatform(moveneutral);
+
         for(int i = 0; i < 6; i++)
         {
             int j = 3 * i;
-                demo->setPosition(i, 0, configurationmove1[j] );
-                demo->setPosition(i, 1, configurationmove1[j+1] );
-                demo->setPosition(i, 2, configurationmove1[j+2] );
-        }
-
-        configurationmove2 = Rob->movePlatform(move2);
-        for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-            if (configurationmove2[i]>3.14)
-                configurationmove2[i]-=6.28;
-            else if (configurationmove2[i]<-3.14)
-                configurationmove2[i]=+6.28;
+                demo->setPosition(i, 0, configurationneutral[j] );
+                demo->setPosition(i, 1, configurationneutral[j+1] );
+                demo->setPosition(i, 2, configurationneutral[j+2] );
         }
         usleep(2000000);
 
+        for (int z;z<configurationtest.size();z++)
+        {
         for(int i = 0; i < 6; i++)
         {
             int j = 3 * i;
-                demo->setPosition(i, 0, configurationmove2[j] );
-                demo->setPosition(i, 1, configurationmove2[j+1] );
-                demo->setPosition(i, 2, configurationmove2[j+2] );
+                demo->setPosition(i, 0, configurationtest[z][j] );
+                demo->setPosition(i, 1, configurationtest[z][j+1] );
+                demo->setPosition(i, 2, configurationtest[z][j+2] );
         }
-
-        usleep(2000000);
-
-        configurationmove3 = Rob->movePlatform(move3);
-        for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-            if (configurationmove3[i]>3.14)
-                configurationmove3[i]-=6.28;
-            else if (configurationmove3[i]<-3.14)
-                configurationmove3[i]=+6.28;
+                usleep(2000000);
         }
-        for(int i = 0; i < 6; i++)
-        {
-            int j = 3 * i;
-                demo->setPosition(i, 0, configurationmove3[j] );
-                demo->setPosition(i, 1, configurationmove3[j+1] );
-                demo->setPosition(i, 2, configurationmove3[j+2] );
-        }
-
-        usleep(2000000);
-
-        configurationmove4 = Rob->movePlatform(move4);
-        for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-            if (configurationmove4[i]>3.14)
-                configurationmove4[i]-=6.28;
-            else if (configurationmove4[i]<-3.14)
-                configurationmove4[i]=+6.28;
-        }
-
-        for(int i = 0; i < 6; i++)
-        {
-            int j = 3 * i;
-                demo->setPosition(i, 0, configurationmove4[j] );
-                demo->setPosition(i, 1, configurationmove4[j+1] );
-                demo->setPosition(i, 2, configurationmove4[j+2] );
-        }
-
-        usleep(2000000);
-
-        configurationmove5 = Rob->movePlatform(move5);
-        for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-            if (configurationmove5[i]>3.14)
-                configurationmove5[i]-=6.28;
-            else if (configurationmove5[i]<-3.14)
-                configurationmove5[i]=+6.28;
-        }
-        for(int i = 0; i < 6; i++)
-        {
-            int j = 3 * i;
-                demo->setPosition(i, 0, configurationmove5[j] );
-                demo->setPosition(i, 1, configurationmove5[j+1] );
-                demo->setPosition(i, 2, configurationmove5[j+2] );
-        }
-
 
         return 0;
-
    }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
