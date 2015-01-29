@@ -508,18 +508,26 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          TF6.force.y()=Fy(5,0);
          TF6.force.z()=Fz(5,0);
 
+//         for(int i=0; i<3;i++)
+//         std::cout<<"F6["<<i<<"]= "<<TF2.force.vector().data()[i]<<std::endl;
 
-         std::vector<float_type> c1,c2,c3,c4,c5,c6;
+
+std::vector<float_type> c1,c2,c3,c4,c5,c6;
 
 for(int i=0; i<3;i++)
+{
 c1.push_back(configuration[i]);
+std::cout<<"conf1= "<<c1[i]<<std::endl;
+}
 
 for(int i=3; i<6;i++)
 c2.push_back(configuration[i]);
 
 for(int i=6; i<9;i++)
-c3.push_back(configuration[i]);
-
+{
+    c3.push_back(configuration[i]);
+    std::cout<<"conf3= "<<c3[i]<<std::endl;
+}
 for(int i=9; i<12;i++)
 c4.push_back(configuration[i]);
 
@@ -529,14 +537,15 @@ c5.push_back(configuration[i]);
 for(int i=15; i<18;i++)
 c6.push_back(configuration[i]);
 
-
+for(int i=0;i<6;i++)
+    std::cout<<"Fz["<<i<<"]= "<<FZ[i]<<std::endl;
          //Torque
-        torque1=Leg0->computLoad(TF1.force,c1,0);
-        torque2=Leg0->computLoad(TF2.force,c2,0);
-        torque3=Leg0->computLoad(TF3.force,c3,0);
-        torque4=Leg0->computLoad(TF4.force,c4,1);
-        torque5=Leg0->computLoad(TF5.force,c5,1);
-        torque6=Leg0->computLoad(TF6.force,c6,1);
+        torque1=Leg0->computLoad(TF1.force,c1,1);
+        torque2=Leg0->computLoad(TF2.force,c2,1);
+        torque3=Leg0->computLoad(TF3.force,c3,1);
+        torque4=Leg0->computLoad(TF4.force,c4,0);
+        torque5=Leg0->computLoad(TF5.force,c5,0);
+        torque6=Leg0->computLoad(TF6.force,c6,0);
         TORQUE.insert(TORQUE.end(),torque1.begin(),torque1.end());
         TORQUE.insert(TORQUE.end(),torque2.begin(),torque2.end());
         TORQUE.insert(TORQUE.end(),torque3.begin(),torque3.end());

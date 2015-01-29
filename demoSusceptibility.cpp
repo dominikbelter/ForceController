@@ -37,7 +37,7 @@ int main( int argc, const char** argv )
 
        for(int i=0;i<18;i++)
         {
-            std::cout<<C[i]<<std::endl;
+          std::cout<<C[i]<<std::endl;
 
         }
 
