@@ -42,7 +42,7 @@ int main( int argc, const char** argv )
 
         Mat34 move1;
         move1.setIdentity();
-        move1(0, 3) = 0; ///DB to jest niepotrzebne, itd...
+        move1(0, 3) = 0;
         move1(1, 3) = 0;
         move1(2, 3) = -0.05;
         move.push_back(move1);
@@ -80,17 +80,13 @@ int main( int argc, const char** argv )
         move6(0, 3) = 0;
         move6(1, 3) = 0;
         move6(2, 3) = 0.12;
-
-
         move.push_back(move6);
-
-//*******************************
 
         Robot* Rob;
         Rob = createRobotMessor("../resources/robotModel.xml");
 
         Board *demo = createBoardDynamixel();
-        std::vector<float_type> configuration, configuration2, configurationmove1, configurationmove2, configurationmove3, configurationmove4, configurationmove5, configurationneutral;
+        std::vector<float_type> configuration, configuration2, configurationneutral;
         std::vector<std::vector<float_type>> configurationtest;
 		Mat34 robotPose;
         robotPose.setIdentity();
@@ -116,54 +112,17 @@ int main( int argc, const char** argv )
       }
 
 
-
-   configurationmove1 = Rob->movePlatform(move1);
-         for (int i=0;i<configurationmove5.size();i++)
+   for (int j=0;j<move.size();j++)
+{
+   configurationtest.push_back(Rob->movePlatform(move[j]));
+         for (int i=0;i<18;i++)
         {//pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-             if (configurationmove1[i]>3.14)
-                 configurationmove1[i]-=6.28;
-             else if (configurationmove1[i]<-3.14)
-                 configurationmove1[i]=+6.28;
+             if (configurationtest[j][i]>3.14)
+                 configurationtest[j][i]-=6.28;
+             else if (configurationtest[j][i]<-3.14)
+                 configurationtest[j][i]=+6.28;
         }
-
-         configurationmove2 = Rob->movePlatform(move2);
-         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-             if (configurationmove2[i]>3.14)
-                 configurationmove2[i]-=6.28;
-             else if (configurationmove2[i]<-3.14)
-                 configurationmove2[i]=+6.28;
-         }
-
-         configurationmove3 = Rob->movePlatform(move3);
-         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-             if (configurationmove3[i]>3.14)
-                 configurationmove3[i]-=6.28;
-             else if (configurationmove3[i]<-3.14)
-                 configurationmove3[i]=+6.28;
-         }
-
-         configurationmove4 = Rob->movePlatform(move4);
-         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-             if (configurationmove4[i]>3.14)
-                 configurationmove4[i]-=6.28;
-             else if (configurationmove4[i]<-3.14)
-                 configurationmove4[i]=+6.28;
-         }
-
-         configurationmove5 = Rob->movePlatform(move5);
-         for (int i=0;i<configurationmove5.size();i++){///DB pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
-             if (configurationmove5[i]>3.14)
-                 configurationmove5[i]-=6.28;
-             else if (configurationmove5[i]<-3.14)
-                 configurationmove5[i]=+6.28;
-         }
-
-         configurationtest.push_back(configurationmove1);
-         configurationtest.push_back(configurationmove2);
-         configurationtest.push_back(configurationmove3);
-         configurationtest.push_back(configurationmove4);
-         configurationtest.push_back(configurationmove5);
-
+   }
 
          configuration2 = Rob->movePlatform(testmoveplatform);
          configurationneutral = Rob->movePlatform(moveneutral);
