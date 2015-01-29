@@ -44,6 +44,9 @@
 #define SET_TORQUE_LIMIT 34 //adres do ustawienia ograniczenia momentu
 #define GET_MAX_TORQUE 14 //adres odczytu maxymalnego momentu
 
+#define _DEG2RAD10              (1800/M_PI)
+#define _DEG2DYNAMIXEL          (0.341333)
+#define _stalePrzesuniecie      512
 
 namespace controller {
 

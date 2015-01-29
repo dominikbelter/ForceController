@@ -63,12 +63,10 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
          angle=-angle;
     }
 
-    /// DB czy nie wystarczy angle = angle*1800/M_PI; ?
-    angle = angle*180/M_PI;
-    angle = angle*10;
-    //DB prosze zdefiniowac osobno stale, np.: static const float_type DEG2DYNAMIXEL;
-    // inicjalizacji dokonujemy w konstruktorze za pomoca listy
-    angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])*0.341333 + 512;
+    angle = angle * _DEG2RAD10;
+
+
+    angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])* _DEG2DYNAMIXEL + _stalePrzesuniecie;
 
 
     CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
@@ -91,9 +89,8 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, const std::vector<
     CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
 
     for(int i=0; i<3; i++ ){    // i -> jointNo
-        //DB czy nie wystarczy angleLocal[i] = angleLocal[i]*1800/M_PI;
-        angleLocal[i] = angleLocal[i]*180/M_PI;
-        angleLocal[i] = angleLocal[i]*10;
+
+        angleLocal[i] = angleLocal[i]*_DEG2RAD10;
         angleLocal[i]=-(angleLocal[i]+angle_offset[legNo*3+i]-zero_angle[legNo*3+i])*0.341333 + 512;
 
         pointMotor->dxl_write_word(legNo*10+i, MOVE_SERWOMOTOR, angleLocal[i]);
@@ -198,8 +195,8 @@ unsigned int BoardDynamixel::setComplianceMargin(unsigned char legNo, const std:
     CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++)
     {
-    object->dxl_write_byte(legNo*10 + i, P_CCW_COMPLIANCE_MARGIN, margin[i]);//DB wciecie w kodzie
-    object->dxl_write_byte(legNo*10 + i, P_CW_COMPLIANCE_MARGIN, margin[i]);//DB wciecie w kodzie
+        object->dxl_write_byte(legNo*10 + i, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+        object->dxl_write_byte(legNo*10 + i, P_CW_COMPLIANCE_MARGIN, margin[i]);
     }
     return 0;
 }
@@ -332,11 +329,11 @@ unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char joi
     ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
     ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*3+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
-if(legNo < 3 && jointNo == 2){//DB wciecie w kodzie
-        angle = -angle;
+    if(legNo < 3 && jointNo == 2){
+            angle = -angle;
     }
     if(legNo > 2 && jointNo == 1){
-        angle = -angle;
+            angle = -angle;
     }
     return 0;
 }
@@ -385,31 +382,32 @@ unsigned int BoardDynamixel::readPosition(std::vector<float_type>& angle){
             ang_odt = object1->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
             ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*3+tmp]+zero_angle[cnt*3+tmp];
             angleTmp=(ang/10)*(M_PI/180);
-        if(cnt < 3 && tmp == 2){
-                angleTmp = -angleTmp;
+            if(cnt < 3 && tmp == 2){
+                    angleTmp = -angleTmp;
             }
             if(cnt > 2 && tmp == 1){
                 angleTmp = -angleTmp;
             }
             angVec.push_back(angleTmp);
-        }
-            else{
+        }//if
+        else{
             tmp=i%3;
             if(!(i%3) && i!=0){
                 cnt++;
-                }
+            }
             ang_odt = object2->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
             ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*3+tmp]+zero_angle[cnt*3+tmp];
             angleTmp=(ang/10)*(M_PI/180);
-        if(cnt < 3 && tmp == 2){
+            if(cnt < 3 && tmp == 2){
                 angleTmp = -angleTmp;
             }
+
             if(cnt > 2 && tmp == 1){
                 angleTmp = -angleTmp;
             }
             angVec.push_back(angleTmp);
-        }
-        }//DB wciecie w kodzie
+        }//else
+    }//for
     angle = angVec;
 
     return 0;
