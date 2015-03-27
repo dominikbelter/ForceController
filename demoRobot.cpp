@@ -76,17 +76,8 @@ int main( int argc, const char** argv )
 		Mat34 robotPose;
         robotPose.setIdentity();
 
-        vector <float_type> motorSpeed;
-        for(int i = 0; i < 18; i++ ){
-            motorSpeed.push_back(10);
-        }
-
-        for(int i = 0; i < 6; i++)
-        {
-                demo->setSpeed(i, 0, 15);
-                demo->setSpeed(i, 1, 15);
-                demo->setSpeed(i, 2, 15);
-        }
+        vector <float_type> motorSpeed(18,15.0);//set default speed
+        demo->setSpeed(motorSpeed);
 
         // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
        for (int i = 0; i<6; i++)
