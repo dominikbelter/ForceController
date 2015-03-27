@@ -92,7 +92,7 @@ public:
     * @param motion - specified motion
     * @return reference values for servomotors
     */
-    std::vector<float_type> computeLegConfiguration(int legNo, const Mat34 bodyMotion);
+    std::vector<float_type> computeLegConfiguration(int legNo, const Mat34 bodyMotion, std::vector<float_type> startConfiguration);
 
     ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
     /**

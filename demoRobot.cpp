@@ -90,7 +90,7 @@ int main( int argc, const char** argv )
 
    for (int j=0;j<move.size();j++)
 {
-   configurationtest.push_back(Rob->movePlatformNeutral(move[j]));
+   configurationtest.push_back(Rob->movePlatform(move[j]));
          for (int i=0;i<18;i++)
         {//pierwsze serwo powinno otrzymywac wartosci w oklicach zera (niezgodnosc kinematyki robota i sterownika)
              if (configurationtest[j][i]>3.14)

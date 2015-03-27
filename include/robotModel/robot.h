@@ -47,7 +47,7 @@ namespace controller {
             * @param motion - specified motion
             * @return reference values for servomotors
             */
-            virtual std::vector<float_type> computeLegConfiguration(int legNo, const Mat34 bodyMotion) = 0;
+            virtual std::vector<float_type> computeLegConfiguration(int legNo, const Mat34 bodyMotion, std::vector<float_type> startConfiguration) = 0;
 
             ///Compute configuration of the robot for the reference motion
             /**
