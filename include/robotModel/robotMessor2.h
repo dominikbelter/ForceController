@@ -65,8 +65,6 @@ public:
             }
         }
 
-        oldMotion.setIdentity();
-
         neutralMotion.setIdentity();
         neutralMotion(2, 3) = 0.12;
 
@@ -118,8 +116,7 @@ public:
 
 private:
 
-    Mat34 oldMotion; ///mtrix include oldmotion robot, strt with...
-    Mat34 neutralMotion; ///matrix include robots neutral position
+    Mat34 neutralMotion; /// neutral position of the robot
 
     Leg* legModel;
 

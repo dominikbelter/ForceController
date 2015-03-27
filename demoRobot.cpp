@@ -34,51 +34,36 @@ int main( int argc, const char** argv )
 
         Mat34 moveneutral;
         moveneutral.setIdentity();
-        moveneutral(0, 3) = 0;///DB to jest niepotrzebne
-        moveneutral(1, 3) = 0; ///DB to jest niepotrzebne
-        moveneutral(2, 3) = 0.0;
 
         std::vector<Mat34> move;
 
         Mat34 move1;
         move1.setIdentity();
-        move1(0, 3) = 0;
-        move1(1, 3) = 0;
         move1(2, 3) = -0.05;
         move.push_back(move1);
 
         Mat34 move2;
         move2.setIdentity();
-        move2(0, 3) = 0;
         move2(1, 3) = 0.05;
-        move2(2, 3) = 0;
         move.push_back(move2);
 
         Mat34 move3;
         move3.setIdentity();
-        move3(0, 3) = 0;
         move3(1, 3) = -0.05;
-        move3(2, 3) = 0;
         move.push_back(move3);
 
         Mat34 move4;
         move4.setIdentity();
         move4(0, 3) = 0.05;
-        move4(1, 3) = 0;
-        move4(2, 3) = 0;
         move.push_back(move4);
 
         Mat34 move5;
         move5.setIdentity();
         move5(0, 3) = -0.05;
-        move5(1, 3) = 0;
-        move5(2, 3) = 0;
         move.push_back(move5);
 
         Mat34 move6;
         move6.setIdentity();
-        move6(0, 3) = 0;
-        move6(1, 3) = 0;
         move6(2, 3) = 0.12;
         move.push_back(move6);
 

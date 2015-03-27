@@ -29,7 +29,7 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
     for (int i = 0; i<legsNo; i++){
         x = motion * legMountPoints[i];
 
-        s = oldMotion * legMountPoints[i];
+        s = legMountPoints[i];
 
         std::vector<float_type> conf1(configurationCurr.begin()+i*3, configurationCurr.begin()+i*3+3);
         if (i < 3){
@@ -70,7 +70,7 @@ std::vector<float_type> RobotMessor::movePlatform(const std::vector<Mat34>& moti
     for (int i = 0; i<legsNo; i++){
         x = motion[i] * legMountPoints[i];
 
-        s = oldMotion * legMountPoints[i];
+        s = legMountPoints[i];
 
         if (i < 3){
             std::vector<float_type> conf1(configurationCurr.begin()+i*3, configurationCurr.begin()+i*3+3);
