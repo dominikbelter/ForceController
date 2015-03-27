@@ -9,66 +9,6 @@ RobotMessor::Ptr robotmessor;
 
 RobotMessor::RobotMessor(void) : Robot("Type Messor", TYPE_MESSOR2)
 {
-    Leg0 = createInsectLeg("../resources/legModel.xml");
-
-	width_max = 0.1025; ///distance from center to middle leg
-	width_min = 0.052; /// distance from x to front leg
-	length = 0.12; ///distance front legs from x
-
-	L0.setIdentity();
-	L0(0, 3) = width_min;
-	L0(1, 3) = length;
-	L0(2, 3) = 0;
-
-	L1.setIdentity();
-	L1(0, 3) = width_max;
-	L1(1, 3) = 0;
-	L1(2, 3) = 0;
-
-	L2.setIdentity();
-	L2(0, 3) = width_min;
-	L2(1, 3) = -length;
-	L2(2, 3) = 0;
-
-	L3.setIdentity();
-	L3(0, 3) = -width_min;
-	L3(1, 3) = -length;
-	L3(2, 3) = 0;
-
-	L4.setIdentity();
-	L4(0, 3) = -width_max;
-	L4(1, 3) = 0;
-	L4(2, 3) = 0;
-
-	L5.setIdentity();
-	L5(0, 3) = -width_min;
-	L5(1, 3) = length;
-	L5(2, 3) = 0;
-
-	L_all.push_back(L0);
-	L_all.push_back(L1);
-	L_all.push_back(L2);
-	L_all.push_back(L3);
-	L_all.push_back(L4);
-	L_all.push_back(L5);
-
-	OldMotion.setIdentity();
-	OldMotion(0, 3) = 0;
-	OldMotion(1, 3) = 0;
-    OldMotion(2, 3) = 0.0;
-
-    NeutralMotion.setIdentity();
-    NeutralMotion(0, 3) = 0;
-    NeutralMotion(1, 3) = 0;
-    NeutralMotion(2, 3) = 0.12;
-
-    for (int i = 0; i<6; i++)
-        {
-            configurationstart.push_back(0);
-            configurationstart.push_back(24*3.14/180);
-            configurationstart.push_back(-114*3.14/180);
-        }
-        configurationact=configurationstart;
 }
 
 
@@ -83,38 +23,29 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
     std::vector<float_type> conf, conf2;
     Mat34 x, y, s;
 
-
     //-----------------------------------------
     using namespace std;
 
-	for (int i = 0; i<6; i++)
-	{
+    for (int i = 0; i<legsNo; i++){
+        x = motion * legMountPoints[i];
 
-        x = motion * L_all[i];
-        //cout<<"x\n"<<x.matrix()<<endl;
+        s = oldMotion * legMountPoints[i];
 
-        s = OldMotion * L_all[i];
-
-        if (i < 3)
-        {
-            std::vector<float_type> conf1(configurationact.begin()+i*3, configurationact.begin()+i*3+3);
-            s.matrix() *= Leg0 ->forwardKinematic(conf1, 3, 0).matrix();
+        std::vector<float_type> conf1(configurationCurr.begin()+i*3, configurationCurr.begin()+i*3+3);
+        if (i < 3){
+            s.matrix() *= legModel->forwardKinematic(conf1, 3, 0).matrix();
         }
-        else
-        {
-            std::vector<float_type> conf1(configurationact.begin()+i*3, configurationact.begin()+i*3+3);
-            s.matrix() *= Leg0 ->forwardKinematic(conf1, 3, 1).matrix();
+        else{
+            s.matrix() *= legModel->forwardKinematic(conf1, 3, 1).matrix();
         }
 
         y.matrix() = x.matrix().inverse() * s.matrix();
 
-        if (i<3)
-        {
-        conf2 = Leg0->inverseKinematic(y, 3, 0);
+        if (i<3){
+            conf2 = legModel->inverseKinematic(y, 3, 0);
         }
-        else
-        {
-        conf2 = Leg0->inverseKinematic(y, 3, 1);
+        else{
+            conf2 = legModel->inverseKinematic(y, 3, 1);
         }
 		conf.push_back(conf2[0]);
 		conf.push_back(conf2[1]);
@@ -123,9 +54,51 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
     //-------------------------------------------
 	return conf;
 }
-		
+
+///Compute configuration of the robot for the reference motion (each foot generates separate motion)
+std::vector<float_type> RobotMessor::movePlatform(const std::vector<Mat34>& motion)
+{
+    std::vector<float_type> conf, conf2;
+    Mat34 x, y, s;
+
+    //-----------------------------------------
+    using namespace std;
+    if (motion.size()!=legsNo){
+        std::cout << "movePlatform: Incorrect number of orders\n";
+    }
+
+    for (int i = 0; i<legsNo; i++){
+        x = motion[i] * legMountPoints[i];
+
+        s = oldMotion * legMountPoints[i];
+
+        if (i < 3){
+            std::vector<float_type> conf1(configurationCurr.begin()+i*3, configurationCurr.begin()+i*3+3);
+            s.matrix() *= legModel->forwardKinematic(conf1, 3, 0).matrix();
+        }
+        else{
+            std::vector<float_type> conf1(configurationCurr.begin()+i*3, configurationCurr.begin()+i*3+3);
+            s.matrix() *= legModel->forwardKinematic(conf1, 3, 1).matrix();
+        }
+
+        y.matrix() = x.matrix().inverse() * s.matrix();
+
+        if (i<3){
+            conf2 = legModel->inverseKinematic(y, 3, 0);
+        }
+        else{
+            conf2 = legModel->inverseKinematic(y, 3, 1);
+        }
+        conf.push_back(conf2[0]);
+        conf.push_back(conf2[1]);
+        conf.push_back(conf2[2]);
+    }
+    //-------------------------------------------
+    return conf;
+}
+
 ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
- std::vector<float_type> RobotMessor::movePlatformNeutral(const Mat34 motion)
+std::vector<float_type> RobotMessor::movePlatformNeutral(const Mat34 motion)
 {
      {
          std::vector<float_type> conf, conf2;
@@ -134,32 +107,26 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
          //-----------------------------------------
          using namespace std;
 
-         for (int i = 0; i<6; i++)
-         {
-             x = motion * L_all[i];
+         for (int i = 0; i<legsNo; i++){
+             x = motion * legMountPoints[i];
 
-             s = NeutralMotion * L_all[i];
+             s = neutralMotion * legMountPoints[i];
 
-             if (i < 3)
-             {
-                 s.matrix() *= Leg0 ->forwardKinematic(configurationstart, 3, 0).matrix();
-                           }
-             else
-             {
-                 s.matrix() *= Leg0 ->forwardKinematic(configurationstart, 3, 1).matrix();
+             if (i < 3){
+                 s.matrix() *= legModel ->forwardKinematic(configurationStart, 3, 0).matrix();
+             }
+             else{
+                 s.matrix() *= legModel ->forwardKinematic(configurationStart, 3, 1).matrix();
              }
 
 
              y.matrix() = x.matrix().inverse() * s.matrix();
 
-             if (i<3)
-             {
-
-             conf2 = Leg0->inverseKinematic(y, 3, 0);
+             if (i<3){
+                conf2 = legModel->inverseKinematic(y, 3, 0);
              }
-             else
-             {
-             conf2 = Leg0->inverseKinematic(y, 3, 1);
+             else{
+                conf2 = legModel->inverseKinematic(y, 3, 1);
              }
              conf.push_back(conf2[0]);
              conf.push_back(conf2[1]);
@@ -188,22 +155,22 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          {
             for (int i = 0; i<3; i++)
             {
-                linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, i,0));
+                linksPos.push_back(legMountPoints[h / 3] * legModel->forwardKinematic(conf, i,0));
             }
              }
          else
          {
              for (int i = 0; i<3; i++)
              {
-                 linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, i,1));
+                 linksPos.push_back(legMountPoints[h / 3] * legModel->forwardKinematic(conf, i,1));
              }
 
          }
          if (h<9)
-        linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, -1,0));
+        linksPos.push_back(legMountPoints[h / 3] * legModel->forwardKinematic(conf, -1,0));
 
          else
-             linksPos.push_back(L_all[h / 3] * Leg0->forwardKinematic(conf, -1,1));
+             linksPos.push_back(legMountPoints[h / 3] * legModel->forwardKinematic(conf, -1,1));
 
         for (int k = 0; k<3; k++)
 		{
@@ -216,11 +183,9 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 }
 
 
- ///Compute force in each joint of the legs, input configuration of the robot
- std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)
+///Compute force in each joint of the legs, input configuration of the robot
+std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_type> configuration)
 {
-
-
          TorqueForce TF1,TF2,TF3,TF4,TF5,TF6;
          //Coefficient matrix of force and torque equations
          typedef Eigen::Matrix<float_type,6,3> Mat63;
@@ -234,20 +199,18 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
 
         pos=conputeLinksPosition(configuration);
 
-        for(int i=3; i<pos.size(); i+=4)
-        {
+        for(int i=3; i<pos.size(); i+=4){
           pos2.push_back(pos[i]);
-
         }
 
         for(int i=0;i<3;i++)
         {
-        l1.push_back(pos2[0](i,3));
-        l2.push_back(pos2[1](i,3));
-        l3.push_back(pos2[2](i,3));
-        l4.push_back(pos2[3](i,3));
-        l5.push_back(pos2[4](i,3));
-        l6.push_back(pos2[5](i,3));
+            l1.push_back(pos2[0](i,3));
+            l2.push_back(pos2[1](i,3));
+            l3.push_back(pos2[2](i,3));
+            l4.push_back(pos2[3](i,3));
+            l5.push_back(pos2[4](i,3));
+            l6.push_back(pos2[5](i,3));
         }
 
         //equation of Torque y
@@ -381,10 +344,7 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
          TF6.force.y()=0;
          TF6.force.z()=Fz(5,0);
 
-
-
-
-        std::vector<float_type> c1,c2,c3,c4,c5,c6;
+         std::vector<float_type> c1,c2,c3,c4,c5,c6;
 
         for(int i=0; i<3;i++)
             c1.push_back(configuration[i]);
@@ -406,12 +366,12 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
             c6.push_back(configuration[i]);
 
          //Torque
-        torque1=Leg0->computLoad(TF1.force,c1,1);
-        torque2=Leg0->computLoad(TF2.force,c2,1);
-        torque3=Leg0->computLoad(TF3.force,c3,1);
-        torque4=Leg0->computLoad(TF4.force,c4,0);
-        torque5=Leg0->computLoad(TF5.force,c5,0);
-        torque6=Leg0->computLoad(TF6.force,c6,0);
+        torque1=legModel->computLoad(TF1.force,c1,1);
+        torque2=legModel->computLoad(TF2.force,c2,1);
+        torque3=legModel->computLoad(TF3.force,c3,1);
+        torque4=legModel->computLoad(TF4.force,c4,0);
+        torque5=legModel->computLoad(TF5.force,c5,0);
+        torque6=legModel->computLoad(TF6.force,c6,0);
 
         TORQUE.insert(TORQUE.end(),torque1.begin(),torque1.end());
         TORQUE.insert(TORQUE.end(),torque2.begin(),torque2.end());

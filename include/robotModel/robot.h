@@ -45,14 +45,17 @@ namespace controller {
             ///Compute configuration of the robot for the reference motion
             /**
             * @param motion - specified motion
-            * @return tmp (DB: wyjasnic co dokladnie jest zwracane np. wektor wartosci zadanych dla serwomechanizmow)
+            * @return reference values for servomotors
             */
             virtual std::vector<float_type> movePlatform(const Mat34& motion) = 0;
+
+            ///Compute configuration of the robot for the reference motion (each foot generates separate motion)
+            std::vector<float_type> movePlatform(const std::vector<Mat34>& motion);
 
             ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
             /**
             * @param motion - specified motion
-            * @return tmp
+            * @return reference values for servomotors
             */
             virtual std::vector<float_type> movePlatformNeutral(const Mat34 motion) = 0;
 
@@ -75,6 +78,12 @@ namespace controller {
 
             /// Robot name
             const std::string name;
+
+            /// legs number
+            int legsNo;
+
+            /// Mounting points of legs
+            std::vector<Mat34> legMountPoints;
     };
 };
 

@@ -1,15 +1,32 @@
-  <width1>
-    <name>Messor2</name>
-    <parameters width_max="0.1025" ></parameters>
- </width1>
+<?xml version="1.0" encoding="UTF-8"?>
 
-  <width2>
-    <name>Messor2</name>
-    <parameters width_min="0.052"></parameters>
-</width2>
-  <length1>
-    <name>Messor2</name>
-    <parameters length="0.12"></parameters>
-</length1>
-</Body>
+  <parameters legsNo="6"></parameters>
+  <leg1>
+    <name>Right-front</name>
+    <position a11="1.0" a12="0.0" a13="0.0" a14="0.052" a21="0.0" a22="1.0" a23="0.0" a24="0.12" a31="0.0" a32="0.0" a33="1.0" a34="0.0"></position>
+ </leg1>
 
+  <leg2>
+    <name>Right-middle</name>
+    <position a11="1" a12="0" a13="0" a14="0.1025" a21="0" a22="1" a23="0" a24="0.0" a31="0" a32="0" a33="1" a34="0"></position>
+ </leg2>
+
+  <leg3>
+    <name>Right-back</name>
+    <position a11="1" a12="0" a13="0" a14="0.052" a21="0" a22="1" a23="0" a24="-0.12" a31="0" a32="0" a33="1" a34="0"></position>
+ </leg3>
+ 
+ <leg4>
+    <name>Left-back</name>
+    <position a11="1" a12="0" a13="0" a14="-0.052" a21="0" a22="1" a23="0" a24="-0.12" a31="0" a32="0" a33="1" a34="0"></position>
+ </leg4>
+
+  <leg5>
+    <name>Left-middle</name>
+    <position a11="1" a12="0" a13="0" a14="-0.1025" a21="0" a22="1" a23="0" a24="0.0" a31="0" a32="0" a33="1" a34="0"></position>
+ </leg5>
+
+  <leg6>
+    <name>Left-front</name>
+    <position a11="1" a12="0" a13="0" a14="-0.052" a21="0" a22="1" a23="0" a24="0.12" a31="0" a32="0" a33="1" a34="0"></position>
+ </leg6>
