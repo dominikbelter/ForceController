@@ -17,39 +17,45 @@ RobotMessor::~RobotMessor(void)
 
 }
 
+///Compute configuration of the leg for the reference motion of the platform
+/**
+* @param motion - specified motion
+* @return reference values for servomotors
+*/
+std::vector<float_type> RobotMessor::computeLegConfiguration(int legNo, const Mat34 bodyMotion) {
+    Mat34 newLegMountPoint = bodyMotion * legMountPoints[legNo];
+    Mat34 currentFootPosition;
+
+    std::vector<float_type> conf1(configurationCurr.begin()+legNo*3, configurationCurr.begin()+legNo*3+3);
+    if (legNo < 3){
+        currentFootPosition = legMountPoints[legNo] * legModel->forwardKinematic(conf1, 3, 0).matrix();
+    }
+    else{
+        currentFootPosition = legMountPoints[legNo] * legModel->forwardKinematic(conf1, 3, 1).matrix();
+    }
+
+    Mat34 footInMount;
+    footInMount.matrix() = newLegMountPoint.matrix().inverse() * currentFootPosition.matrix();
+
+    std::vector<float_type> conf;
+    if (legNo<3){
+        conf = legModel->inverseKinematic(footInMount, 3, 0);
+    }
+    else{
+        conf = legModel->inverseKinematic(footInMount, 3, 1);
+    }
+    return conf;
+}
+
 ///Compute configuration of the robot for the reference motion
 std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 {
     std::vector<float_type> conf, conf2;
-    Mat34 x, y, s;
-
-    //-----------------------------------------
-    using namespace std;
 
     for (int i = 0; i<legsNo; i++){
-        x = motion * legMountPoints[i];
-
-        s = legMountPoints[i];
-
-        std::vector<float_type> conf1(configurationCurr.begin()+i*3, configurationCurr.begin()+i*3+3);
-        if (i < 3){
-            s.matrix() *= legModel->forwardKinematic(conf1, 3, 0).matrix();
-        }
-        else{
-            s.matrix() *= legModel->forwardKinematic(conf1, 3, 1).matrix();
-        }
-
-        y.matrix() = x.matrix().inverse() * s.matrix();
-
-        if (i<3){
-            conf2 = legModel->inverseKinematic(y, 3, 0);
-        }
-        else{
-            conf2 = legModel->inverseKinematic(y, 3, 1);
-        }
-		conf.push_back(conf2[0]);
-		conf.push_back(conf2[1]);
-		conf.push_back(conf2[2]);
+        conf2 = computeLegConfiguration(i, motion);
+        conf.reserve( conf.size() + conf2.size() );
+        conf.insert(conf.end(), conf2.begin(), conf2.end());
 	}
     //-------------------------------------------
 	return conf;
@@ -59,41 +65,16 @@ std::vector<float_type> RobotMessor::movePlatform(const Mat34& motion)
 std::vector<float_type> RobotMessor::movePlatform(const std::vector<Mat34>& motion)
 {
     std::vector<float_type> conf, conf2;
-    Mat34 x, y, s;
 
-    //-----------------------------------------
-    using namespace std;
     if (motion.size()!=legsNo){
         std::cout << "movePlatform: Incorrect number of orders\n";
     }
 
     for (int i = 0; i<legsNo; i++){
-        x = motion[i] * legMountPoints[i];
-
-        s = legMountPoints[i];
-
-        if (i < 3){
-            std::vector<float_type> conf1(configurationCurr.begin()+i*3, configurationCurr.begin()+i*3+3);
-            s.matrix() *= legModel->forwardKinematic(conf1, 3, 0).matrix();
-        }
-        else{
-            std::vector<float_type> conf1(configurationCurr.begin()+i*3, configurationCurr.begin()+i*3+3);
-            s.matrix() *= legModel->forwardKinematic(conf1, 3, 1).matrix();
-        }
-
-        y.matrix() = x.matrix().inverse() * s.matrix();
-
-        if (i<3){
-            conf2 = legModel->inverseKinematic(y, 3, 0);
-        }
-        else{
-            conf2 = legModel->inverseKinematic(y, 3, 1);
-        }
-        conf.push_back(conf2[0]);
-        conf.push_back(conf2[1]);
-        conf.push_back(conf2[2]);
+        conf2 = computeLegConfiguration(i, motion[i]);
+        conf.reserve( conf.size() + conf2.size() );
+        conf.insert(conf.end(), conf2.begin(), conf2.end());
     }
-    //-------------------------------------------
     return conf;
 }
 

@@ -87,6 +87,13 @@ public:
     */
     std::vector<float_type> movePlatform(const Mat34& motion);
 
+    ///Compute configuration of the leg for the reference motion of the platform
+    /**
+    * @param motion - specified motion
+    * @return reference values for servomotors
+    */
+    std::vector<float_type> computeLegConfiguration(int legNo, const Mat34 bodyMotion);
+
     ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
     /**
     * @param motion - standard robotic matrix 3x4, which includes robot Rotation and Translation to neutral pose

@@ -42,6 +42,13 @@ namespace controller {
             /// Name of the robot model
             virtual const std::string& getName() const { return name; }
 
+            ///Compute configuration of the leg for the reference motion of the platform
+            /**
+            * @param motion - specified motion
+            * @return reference values for servomotors
+            */
+            virtual std::vector<float_type> computeLegConfiguration(int legNo, const Mat34 bodyMotion) = 0;
+
             ///Compute configuration of the robot for the reference motion
             /**
             * @param motion - specified motion
