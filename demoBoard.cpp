@@ -71,6 +71,8 @@ int main( int argc, const char** argv )
     }
     demo->setPosition(wektorTestowy18);
 
+    wektorTestowy18[6]=-45*M_PI/180;
+
     while (true){
         cout << "Noga = ";
         cin >> noga;
