@@ -84,17 +84,33 @@ void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
 
 }
 
-void VisualizerIrrlicht::setPosition(std::vector<float_type> configuration)
-{
-    this->m_configuration = configuration;
+void VisualizerIrrlicht::setPosition(std::vector<float_type> configuration){
+    m_configuration = configuration;
+    m_configuration[0]=-configuration[9];
+    m_configuration[1]=configuration[10];
+    m_configuration[2]=configuration[11];
+    m_configuration[3]=-configuration[12];
+    m_configuration[4]=configuration[13];
+    m_configuration[5]=configuration[14];
+    m_configuration[6]=-configuration[15];
+    m_configuration[7]=configuration[16];
+    m_configuration[8]=configuration[17];
+
+    m_configuration[9]=-configuration[0];
+    m_configuration[10]=configuration[1];
+    m_configuration[11]=configuration[2];
+    m_configuration[12]=-configuration[3];
+    m_configuration[13]=configuration[4];
+    m_configuration[14]=configuration[5];
+    m_configuration[15]=-configuration[6];
+    m_configuration[16]=configuration[7];
+    m_configuration[17]=configuration[8];
 }
 
 
 void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) {
     this->m_configuration = configuration;
     while (device->run()) {
-
-
            if(receiver.IsKeyDown(irr::KEY_KEY_Q)) {
                vector3df pos = camera->getPosition();
                pos.X = pos.X + 1;
@@ -151,9 +167,6 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
             video->beginScene(true, true, video::SColor(255, 0, 10, 200));
             video->setMaterial(videoMaterial);
 
-
-
-
             drawAxis();
 
             mat34ToIrrlichtTransform(robotPose);
@@ -162,7 +175,6 @@ void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_typ
 
 
             drawLeg(1, vector3d<f32>(0, 0, 0), vector3d<f32>(0, 0, 0), this->m_configuration);
-
             drawLeg(2, vector3d<f32>(-12, 0, 5), vector3d<f32>(0, 0, 0), this->m_configuration);
             drawLeg(3, vector3d<f32>(-24, 0, 0), vector3d<f32>(0, 0, 0), this->m_configuration);
             drawLeg(4, vector3d<f32>(0, 0, -8), vector3d<f32>(0, PI, 0), this->m_configuration);
@@ -245,13 +257,8 @@ int VisualizerIrrlicht::initialize(int width, int height) {
 void VisualizerIrrlicht::drawLeg(int legIndex,  irr::core::vector3d<irr::f32> position, irr::core::vector3d<irr::f32> radians, std::vector<float_type> configuration) {
 
     core::matrix4  oldTransform;
-
     oldTransform = video->getTransform(video::ETS_WORLD);
-
     ourTransform(radians, position);
-
-
-
     ourTransform(0, PI / 2, configuration.at(3*(legIndex - 1) + 0), 0, 0, 0);
 
     video->drawMeshBuffer(coxaMeshBuffer);
@@ -259,17 +266,11 @@ void VisualizerIrrlicht::drawLeg(int legIndex,  irr::core::vector3d<irr::f32> po
     ///DB ugly patch -- 28deg and -50 deg offset
 
     ourTransform(0, -PI / 2 +28*3.14/180- configuration.at(3*(legIndex - 1) + 1) , 0, 0, 0, 5);
-
-
     video->drawMeshBuffer(femurMeshBuffer);
-
     ourTransform(0, -PI / 2 -50*3.14/180- configuration.at(3*(legIndex - 1) + 2) - 1.1989, 0, 11.2, 0, 5);
     //ourTransform(0, - configuration.at(3*(legIndex - 1) + 2) - 1.1989, 0, 11.2, 0, 5);
-
     video->drawMeshBuffer(vitulusMeshBuffer);
-
-   video->setTransform(video::ETS_WORLD, oldTransform);
-
+    video->setTransform(video::ETS_WORLD, oldTransform);
 }
 
 void VisualizerIrrlicht::ourTransform(irr::core::vector3d<irr::f32> radians, irr::core::vector3d<irr::f32> position) {
