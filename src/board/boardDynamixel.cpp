@@ -105,7 +105,6 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
     vector<float_type> angle_tmp;
     for(int i=0; i<18; i++){
         angle_tmp.push_back(1);
-
     }
     int cnt = 0;
     int tmp = 0;
@@ -116,8 +115,11 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
                 cnt++;
             }
             angle_tmp[i] = angle[i]*180/M_PI;
+	    if(i==2||i==5||i==8)
+                angle_tmp[i]*=(-1);
             angle_tmp[i] = angle_tmp[i]*10;
             angle_tmp[i]=-(angle_tmp[i]+angle_offset[cnt*3+tmp]-zero_angle[cnt*3+tmp])*0.341333 + 512;
+std::cout << "angle " << i << " val " << angle_tmp[i] << "\n";
             object1->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
         }
             else{
@@ -128,11 +130,12 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
 
             angle_tmp[i] = angle[i]*180/M_PI;
 
-//            if(i==10||i==13||i==16)
-//                angle_tmp[i]*=(-1);
+            if(i==10||i==13||i==16)
+                angle_tmp[i]*=(-1);
 
             angle_tmp[i] = angle_tmp[i]*10;
             angle_tmp[i]=-(angle_tmp[i]+angle_offset[cnt*3+tmp]-zero_angle[cnt*3+tmp])*0.341333 + 512;
+std::cout << "angle " << i << " val " << angle_tmp[i] << " left\n";
             object2->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
             }
         }

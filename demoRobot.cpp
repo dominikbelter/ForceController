@@ -72,6 +72,13 @@ int main( int argc, const char** argv ){
             configuration.push_back(-114*3.14/180);
         }
         std::unique_ptr<std::thread> visuThr;
+	std::cout << "output ref: ";
+	for (auto& val : configuration){
+            if (val>6.14) val-=6.283;
+            else if (val<-6.14) val=+6.283;
+            std::cout << val << ", ";
+        }
+	std::cout << "\n";
         if (useVisualization){
             //std::thread visuThr(drawRobot);
             visuThr = std::unique_ptr<std::thread>(new std::thread(drawRobot));
@@ -87,18 +94,20 @@ int main( int argc, const char** argv ){
         }*/
         usleep(2000000);
         Mat34 motion(Mat34::Identity());
-        motion(2,3)=0.07;
+        motion(0,3)=0.07;
         configuration = robot->movePlatform(motion);
+	std::cout << "output: ";
+	for (auto& val : configuration){
+            if (val>6.14) val-=6.283;
+            else if (val<-6.14) val=+6.283;
+            std::cout << val << ", ";
+        }
+	std::cout << "\n";
+	configuration[2]=-0.5;
         if (useVisualization)
             visualizer->setPosition(configuration);
         else
             demo->setPosition(configuration);
-std::cout << "output: ";
-        for (auto& val : configuration){
-            if (val>3.14) val-=6.283;
-            else if (val<-3.14) val=+6.283;
-            std::cout << val << ", ";
-        }
         std::cout << "\n";
         /*for (int j=0;j<move.size();j++){
             configurationtest.push_back(Rob->movePlatform(move[j]));
