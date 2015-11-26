@@ -40,24 +40,25 @@ int main( int argc, const char** argv ){
     try {
         Robot* robot;
         robot = createRobotMessor("../resources/robotModel.xml");
-        visualizer = createVisualizerIrrlicht("VisualizerWindow", 1024, 768, 0.01, false);
+        //visualizer = createVisualizerIrrlicht("VisualizerWindow", 1024, 768, 0.01, false);
 
         Board *demo = createBoardDynamixel();
         std::vector<float_type> configuration;
         Mat34 robotPose(Mat34::Identity());
 
-        //vector<float_type> motorSpeed(18,15.0);//set default speed
-        //demo->setSpeed(motorSpeed);
-
+        vector<float_type> motorSpeed(18,15.0);//set default speed
+        demo->setSpeed(motorSpeed);
+std::cout << "ff\n";
         // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
         for (int i = 0; i<6; i++){
             configuration.push_back(0);
             configuration.push_back(24*3.14/180);
             configuration.push_back(-114*3.14/180);
         }
-        visualizer->setPosition(configuration);
-
-        std::thread visuThr(drawRobot);
+        //visualizer->setPosition(configuration);
+	demo->setPosition(configuration);
+std::cout << "ff1\n";
+        //std::thread visuThr(drawRobot);
         /*for (int i=0;i<45;i++){
             usleep(2000000);
             configuration[15]=i*3.14/180;
@@ -67,8 +68,10 @@ int main( int argc, const char** argv ){
         Mat34 motion(Mat34::Identity());
         motion(2,3)=0.07;
         configuration = robot->movePlatform(motion);
-        visualizer->setPosition(configuration);
-
+std::cout << "ff2\n";
+        //visualizer->setPosition(configuration);
+	demo->setPosition(configuration);
+std::cout << "ff3\n";
         /*for (int j=0;j<move.size();j++){
             configurationtest.push_back(Rob->movePlatform(move[j]));
              for (int i=0;i<18;i++)
@@ -83,7 +86,8 @@ int main( int argc, const char** argv ){
          configuration2 = Rob->movePlatform(testmoveplatform);
          configurationneutral = Rob->movePlatform(moveneutral);
 */
-        visuThr.join();
+std::cout << "ff4\n";
+        //visuThr.join();
         return 0;
    }
     catch (const std::exception& ex) {
