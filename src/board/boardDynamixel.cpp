@@ -128,8 +128,8 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
 
             angle_tmp[i] = angle[i]*180/M_PI;
 
-            if(i==10||i==13||i==16)
-                angle_tmp[i]*=(-1);
+//            if(i==10||i==13||i==16)
+//                angle_tmp[i]*=(-1);
 
             angle_tmp[i] = angle_tmp[i]*10;
             angle_tmp[i]=-(angle_tmp[i]+angle_offset[cnt*3+tmp]-zero_angle[cnt*3+tmp])*0.341333 + 512;

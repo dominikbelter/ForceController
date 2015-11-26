@@ -38,27 +38,48 @@ void drawRobot(){
 
 int main( int argc, const char** argv ){
     try {
+        std::string filename = "../../resources/configGlobal.xml";
+        tinyxml2::XMLDocument config;
+        config.LoadFile(filename.c_str());
+        bool useVisualization;
+        if (config.FirstChildElement() == nullptr)
+            std::cout << "unable to load config global file.\n";
+        else {
+            tinyxml2::XMLElement * pRoot = config.FirstChildElement("parameters");
+            pRoot->QueryBoolAttribute("useVisualization", &useVisualization);
+        }
+        std::cout << useVisualization << "\n";
+
         Robot* robot;
         robot = createRobotMessor("../resources/robotModel.xml");
-        //visualizer = createVisualizerIrrlicht("VisualizerWindow", 1024, 768, 0.01, false);
-
-        Board *demo = createBoardDynamixel();
+        if (useVisualization)
+            visualizer = createVisualizerIrrlicht("VisualizerWindow", 1024, 768, 0.01, false);
+        Board *demo;
+        if (!useVisualization)
+            demo = createBoardDynamixel();
         std::vector<float_type> configuration;
         Mat34 robotPose(Mat34::Identity());
 
-        vector<float_type> motorSpeed(18,15.0);//set default speed
-        demo->setSpeed(motorSpeed);
-std::cout << "ff\n";
+        if (!useVisualization){
+            vector<float_type> motorSpeed(18,15.0);//set default speed
+            demo->setSpeed(motorSpeed);
+        }
+
         // tutaj macie katy 0,24,-114 dla kazdej nogi na sztywno wrzucone
         for (int i = 0; i<6; i++){
             configuration.push_back(0);
             configuration.push_back(24*3.14/180);
             configuration.push_back(-114*3.14/180);
         }
-        //visualizer->setPosition(configuration);
-	demo->setPosition(configuration);
-std::cout << "ff1\n";
-        //std::thread visuThr(drawRobot);
+        std::unique_ptr<std::thread> visuThr;
+        if (useVisualization){
+            //std::thread visuThr(drawRobot);
+            visuThr = std::unique_ptr<std::thread>(new std::thread(drawRobot));
+            visualizer->setPosition(configuration);
+        }
+        else
+            demo->setPosition(configuration);
+
         /*for (int i=0;i<45;i++){
             usleep(2000000);
             configuration[15]=i*3.14/180;
@@ -68,10 +89,17 @@ std::cout << "ff1\n";
         Mat34 motion(Mat34::Identity());
         motion(2,3)=0.07;
         configuration = robot->movePlatform(motion);
-std::cout << "ff2\n";
-        //visualizer->setPosition(configuration);
-	demo->setPosition(configuration);
-std::cout << "ff3\n";
+        if (useVisualization)
+            visualizer->setPosition(configuration);
+        else
+            demo->setPosition(configuration);
+std::cout << "output: ";
+        for (auto& val : configuration){
+            if (val>3.14) val-=6.283;
+            else if (val<-3.14) val=+6.283;
+            std::cout << val << ", ";
+        }
+        std::cout << "\n";
         /*for (int j=0;j<move.size();j++){
             configurationtest.push_back(Rob->movePlatform(move[j]));
              for (int i=0;i<18;i++)
@@ -86,8 +114,8 @@ std::cout << "ff3\n";
          configuration2 = Rob->movePlatform(testmoveplatform);
          configurationneutral = Rob->movePlatform(moveneutral);
 */
-std::cout << "ff4\n";
-        //visuThr.join();
+        if (useVisualization)
+            visuThr->join();
         return 0;
    }
     catch (const std::exception& ex) {
