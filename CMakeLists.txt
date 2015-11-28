@@ -27,8 +27,10 @@ option(BUILD_CONTROLLER_KINEMATIC "Build Kinematic library" YES)
 mark_as_advanced(BUILD_CONTROLLER_KINEMATIC)
 option(BUILD_CONTROLLER_LEG "Build Leg controller library" YES)
 mark_as_advanced(BUILD_CONTROLLER_LEG)
-option(BUILD_CONTROLLER_ROBOT "Build Controller Robot library" YES)
-mark_as_advanced(BUILD_CONTROLLER_ROBOT)
+option(BUILD_CONTROLLER_ROBOT "Build robot kinematic model library" YES)
+mark_as_advanced(BUILD_CONTROLLER)
+option(BUILD_CONTROLLER_CTRL "Build Controller Robot library" YES)
+mark_as_advanced(BUILD_CONTROLLER_CTRL)
 option(BUILD_CONTROLLER_VISUALIZATION "Build Visualization library" YES)
 mark_as_advanced(BUILD_CONTROLLER_VISUALIZATION)
 
@@ -52,6 +54,8 @@ option(BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT "Build Client for Visualizatio
 mark_as_advanced(BUILD_CONTROLLER_DEMO_VISUALIZATION_CLIENT)
 option(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY "Build Susceptibility program and libraries" YES)
 mark_as_advanced(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
+option(BUILD_CONTROLLER_DEMO_MESSOR2CTRL "Build Messor2 controller demo" YES)
+mark_as_advanced(BUILD_CONTROLLER_DEMO_MESSOR2CTRL)
 
 #additional dependencies
 #Boost
@@ -208,7 +212,7 @@ endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_LEG)
 
 ###############################################################################
 #
-# CONTROLLER Robot library
+# CONTROLLER Robot model library
 #
 ###############################################################################
 
@@ -221,7 +225,7 @@ if(BUILD_CONTROLLER AND BUILD_CONTROLLER_ROBOT)
         )
 
         ADD_LIBRARY(Robot STATIC ${ROBOT_SOURCES} ${ROBOT_HEADERS})
-	TARGET_LINK_LIBRARIES(Robot Leg Kinematic)
+        TARGET_LINK_LIBRARIES(Robot Leg Kinematic)
         INSTALL(TARGETS Robot RUNTIME DESTINATION bin LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
         INSTALL(FILES ${ROBOT_HEADERS} DESTINATION include/robotControl/)
 endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_ROBOT)
@@ -245,6 +249,26 @@ if(BUILD_CONTROLLER AND BUILD_CONTROLLER_VISUALIZATION)
         INSTALL(TARGETS Visualization RUNTIME DESTINATION bin LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
         INSTALL(FILES ${VISUALIZATION_HEADERS} DESTINATION include/visualization/)
 endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_VISUALIZATION)
+
+###############################################################################
+#
+# CONTROLLER Robot library
+#
+###############################################################################
+
+if(BUILD_CONTROLLER AND BUILD_CONTROLLER_CTRL)
+        file(GLOB ROBOTCTRL_SOURCES
+            "${CMAKE_SOURCE_DIR}/src/robotController/*.cpp"
+        )
+        file(GLOB ROBOTCTRL_HEADERS
+            "${CMAKE_SOURCE_DIR}/include/robotController/*.h"
+        )
+
+        ADD_LIBRARY(RobotCtrl STATIC ${ROBOTCTRL_SOURCES} ${ROBOTCTRL_HEADERS})
+        TARGET_LINK_LIBRARIES(RobotCtrl Robot Leg Kinematic Board Visualization Irrlicht)
+        INSTALL(TARGETS RobotCtrl RUNTIME DESTINATION bin LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+        INSTALL(FILES ${ROBOTCTRL_HEADERS} DESTINATION include/robotController/)
+endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_CTRL)
 
 ###############################################################################
 #
@@ -391,3 +415,18 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
         INSTALL(FILES ${DEMO_SUSCEPTIBILITY_SOURCES} DESTINATION bin)
 
 endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
+
+###############################################################################
+#
+# CONTROLLER DEMO executables
+#
+###############################################################################
+if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_MESSOR2CTRL)
+
+        SET(DEMO_MESSOR2CTRL_SOURCES ./demoMessor2Ctrl.cpp)
+        ADD_EXECUTABLE(demoMessor2Ctrl ${DEMO_MESSOR2CTRL_SOURCES})
+        TARGET_LINK_LIBRARIES(demoMessor2Ctrl Board Robot RobotCtrl Visualization)
+        INSTALL(TARGETS demoMessor2Ctrl RUNTIME DESTINATION bin)
+        INSTALL(FILES ${DEMO_MESSOR2_SOURCES} DESTINATION bin)
+
+endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_MESSOR2CTRL)
