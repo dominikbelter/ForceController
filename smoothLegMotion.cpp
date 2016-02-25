@@ -33,7 +33,7 @@ int main( int argc, const char** argv )
     std::vector<float_type> position2;
 
 
-    position1.push_back((10*M_PI)/180);
+    position1.push_back((0*M_PI)/180);
     position1.push_back((24*M_PI)/180);
     position1.push_back((114*M_PI)/180);
 
