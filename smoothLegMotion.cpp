@@ -43,6 +43,11 @@ int main( int argc, const char** argv )
 
     while(true)
     {
+    robot->setPosition(0, position1);
+    robot->setPosition(1, position1);
+    robot->setPosition(2, position1);
+    robot->setPosition(3, position1);
+    robot->setPosition(4, position1);
     robot->setPosition(5, position1);
 
     while(position == 0)
@@ -51,17 +56,21 @@ int main( int argc, const char** argv )
         robot->readPosition(5, 1, readAngle[1], true);
         robot->readPosition(5, 2, readAngle[2], true);
 
-        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
-        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
-        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+//        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+//        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+//        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 	
-        //if((readAngle[0]*180/M_PI > -2 && readAngle[0]*180/M_PI < 2) && (readAngle[1]*180/M_PI > 22 && readAngle[1]*180/M_PI < 26) && (readAngle[2]*180/M_PI > 112 && readAngle[2]*180/M_PI < 116))
         if((abs(readAngle[0] - position1[0]) < 0.04) && (abs(readAngle[1] - position1[1]) < 0.04) && (abs(readAngle[2] - position1[2]) < 0.04) )
         {
             position = 1;
         }
     }
 
+    robot->setPosition(0, position2);
+    robot->setPosition(1, position2);
+    robot->setPosition(2, position2);
+    robot->setPosition(3, position2);
+    robot->setPosition(4, position2);
     robot->setPosition(5, position2);
 
     while(position == 1)
@@ -70,11 +79,10 @@ int main( int argc, const char** argv )
         robot->readPosition(5, 1, readAngle[1], true);
         robot->readPosition(5, 2, readAngle[2], true);
 
-        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
-        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
-        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+//        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+//        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+//        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
-        //if((readAngle[0]*180/M_PI > 28 && readAngle[0]*180/M_PI < 32) && (readAngle[1]*180/M_PI > 12 && readAngle[1]*180/M_PI < 16) && (readAngle[2]*180/M_PI > 78 && readAngle[2]*180/M_PI < 82))
         if((abs(readAngle[0] - position2[0]) < 0.04) && (abs(readAngle[1] - position2[1]) < 0.04) && (abs(readAngle[2] - position2[2]) < 0.04) )
         {
             position = 0;
