@@ -10,13 +10,16 @@ using namespace controller;
 int main( int argc, const char** argv )
 {
 
+    int position = 0;
+    float_type readAngle[3];
+
 //    float_type readkat = 0;
 //    vector<float_type> readkatLeg;
 
 //    float_type momenty[] = {0, 0, 0};
     vector <float_type> motorSpeed;
     for(int i = 0; i < 18; i++ ){
-        motorSpeed.push_back(10);
+        motorSpeed.push_back(5);
     }
 
     Board *robot = createBoardDynamixel();
@@ -26,16 +29,48 @@ int main( int argc, const char** argv )
 
 
 
-    std::vector<float_type> wektorTestowy18;
+    std::vector<float_type> position1;
+    std::vector<float_type> position2;
 
 
-    wektorTestowy18.push_back((0*M_PI)/180);
-    wektorTestowy18.push_back((24*M_PI)/180);
-    wektorTestowy18.push_back((114*M_PI)/180);
+    position1.push_back((0*M_PI)/180);
+    position1.push_back((24*M_PI)/180);
+    position1.push_back((114*M_PI)/180);
 
+    position2.push_back((30*M_PI)/180);
+    position2.push_back((14*M_PI)/180);
+    position2.push_back((80*M_PI)/180);
 
-    robot->setPosition(5, wektorTestowy18);
+    while(true)
+    {
+    robot->setPosition(5, position1);
 
+    while(position == 0)
+    {
+        robot->readPosition(5, 0, readAngle[0]);
+        robot->readPosition(5, 1, readAngle[1]);
+        robot->readPosition(5, 2, readAngle[2]);
+
+        if((readAngle[0]*180/M_PI > -2 && readAngle[0]*180/M_PI < 2) && (readAngle[1]*180/M_PI > 22 && readAngle[1]*180/M_PI < 26) && (readAngle[2]*180/M_PI > 112 && readAngle[2]*180/M_PI < 116))
+        {
+            position = 1;
+        }
+    }
+
+    robot->setPosition(5, position2);
+
+    while(position == 1)
+    {
+        robot->readPosition(5, 0, readAngle[0]);
+        robot->readPosition(5, 1, readAngle[1]);
+        robot->readPosition(5, 2, readAngle[2]);
+
+        if((readAngle[0]*180/M_PI > 28 && readAngle[0]*180/M_PI < 32) && (readAngle[1]*180/M_PI > 12 && readAngle[1]*180/M_PI < 16) && (readAngle[2]*180/M_PI > 78 && readAngle[2]*180/M_PI < 82))
+        {
+            position = 0;
+        }
+    }
+    }
 
 //    while (true){
 //        cout << "Noga = ";
