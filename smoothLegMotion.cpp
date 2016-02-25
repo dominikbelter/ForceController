@@ -16,7 +16,7 @@ int main( int argc, const char** argv )
 //    float_type momenty[] = {0, 0, 0};
     vector <float_type> motorSpeed;
     for(int i = 0; i < 18; i++ ){
-        motorSpeed.push_back(50);
+        motorSpeed.push_back(10);
     }
 
     Board *robot = createBoardDynamixel();
@@ -28,13 +28,13 @@ int main( int argc, const char** argv )
 
     std::vector<float_type> wektorTestowy18;
 
-    for(int i=0; i<6;i++){
-        wektorTestowy18.push_back((0*M_PI)/180);
-        wektorTestowy18.push_back((24*M_PI)/180);
-        wektorTestowy18.push_back((114*M_PI)/180);
-    }
 
-    robot->setPosition(wektorTestowy18);
+    wektorTestowy18.push_back((0*M_PI)/180);
+    wektorTestowy18.push_back((24*M_PI)/180);
+    wektorTestowy18.push_back((114*M_PI)/180);
+
+
+    robot->setPosition(5, wektorTestowy18);
 
 
 //    while (true){
