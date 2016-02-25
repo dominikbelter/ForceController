@@ -56,7 +56,7 @@ int main( int argc, const char** argv )
         cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
         //if((readAngle[0]*180/M_PI > -2 && readAngle[0]*180/M_PI < 2) && (readAngle[1]*180/M_PI > 22 && readAngle[1]*180/M_PI < 26) && (readAngle[2]*180/M_PI > 112 && readAngle[2]*180/M_PI < 116))
-        if(abs(readAngle[0] - position1[0]) < 5 && abs(readAngle[1] - position1[1]) < 5 && abs(readAngle[2] - position1[2]) < 5 )
+        if(abs(readAngle[0] - position1[0]) < 2 && abs(readAngle[1] - position1[1]) < 2 && abs(readAngle[2] - position1[2]) < 2 )
         {
             position = 1;
         }
@@ -75,7 +75,7 @@ int main( int argc, const char** argv )
         cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
         //if((readAngle[0]*180/M_PI > 28 && readAngle[0]*180/M_PI < 32) && (readAngle[1]*180/M_PI > 12 && readAngle[1]*180/M_PI < 16) && (readAngle[2]*180/M_PI > 78 && readAngle[2]*180/M_PI < 82))
-        if(abs(readAngle[0] - position2[0]) < 5 && abs(readAngle[1] - position2[1]) < 5 && abs(readAngle[2] - position2[2]) < 5 )
+        if(abs(readAngle[0] - position2[0]) < 2 && abs(readAngle[1] - position2[1]) < 2 && abs(readAngle[2] - position2[2]) < 2 )
         {
             position = 0;
         }
