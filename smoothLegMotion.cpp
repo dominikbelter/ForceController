@@ -51,7 +51,9 @@ int main( int argc, const char** argv )
         robot->readPosition(5, 1, readAngle[1]);
         robot->readPosition(5, 2, readAngle[2]);
 
-        cout << readAngle << endl;
+        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
         if((readAngle[0]*180/M_PI > -2 && readAngle[0]*180/M_PI < 2) && (readAngle[1]*180/M_PI > 22 && readAngle[1]*180/M_PI < 26) && (readAngle[2]*180/M_PI > 112 && readAngle[2]*180/M_PI < 116))
         {
