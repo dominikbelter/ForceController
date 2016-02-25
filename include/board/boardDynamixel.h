@@ -214,6 +214,15 @@ class BoardDynamixel : public Board{
          * \param &angle Angle values.
          * \return Return error value.
          */
+        unsigned int readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle, bool reversePos1);
+
+        /**
+         * \brief Returns current position of the servomotors in particular leg.
+         * \param legNo Leg number.
+         * \param &angle Angle values.
+         * \param reversePos1 if 1st jointNo should be reversed
+         * \return Return error value.
+         */
         unsigned int readPositions(unsigned char legNo, std::vector<float_type>& angle);
 
         /**

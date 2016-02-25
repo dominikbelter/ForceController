@@ -339,6 +339,24 @@ unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char joi
     return 0;
 }
 
+/// Returns current position of the servomotor, returns error value
+unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle, bool reversePos1){
+    float_type ang_odt;
+    float_type ang;
+    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    //cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
+    ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
+    ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*3+jointNo]+zero_angle[legNo*3+jointNo];
+    angle=(ang/10)*(M_PI/180);
+    if(reversePos1)
+    {
+        if(legNo > 2){
+                angle = -angle;
+        }
+    }
+    return 0;
+}
+
 /// Returns current position of the servomotors, returns error value
 unsigned int BoardDynamixel::readPositions(unsigned char legNo, std::vector<float_type>& angle){
     float_type ang_odt;
