@@ -34,8 +34,9 @@ mark_as_advanced(BUILD_CONTROLLER_CTRL)
 option(BUILD_CONTROLLER_VISUALIZATION "Build Visualization library" YES)
 mark_as_advanced(BUILD_CONTROLLER_VISUALIZATION)
 
+
 # demos
-option(BUILD_CONTROLLER_DEMO "Build Controller demonstration programs and libraries" YES)
+option(BUILD_CONTROLLER_DEMO "Build Controller demonstration programs and libraries" NO)
 option(BUILD_CONTROLLER_DEMO_BASIC "Build basic Controller demonstration programs and libraries" YES)
 mark_as_advanced(BUILD_CONTROLLER_DEMO_BASIC)
 option(BUILD_CONTROLLER_DEMO_BOARD "Build Board program and libraries" YES)
@@ -56,6 +57,11 @@ option(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY "Build Susceptibility program and li
 mark_as_advanced(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
 option(BUILD_CONTROLLER_DEMO_MESSOR2CTRL "Build Messor2 controller demo" YES)
 mark_as_advanced(BUILD_CONTROLLER_DEMO_MESSOR2CTRL)
+
+#smooth smart walking
+option(BUILD_SMART_WALKING_PROGRAMS "Build smart walking programs and libraries" YES)
+option(BUILD_SMOOTH_LEG_MOTION "Build smooth leg motion library" YES)
+mark_as_advanced(BUILD_SMOOTH_LEG_MOTION)
 
 #additional dependencies
 #Boost
@@ -430,3 +436,18 @@ if(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_MESSOR2CTRL)
         INSTALL(FILES ${DEMO_MESSOR2_SOURCES} DESTINATION bin)
 
 endif(BUILD_CONTROLLER_DEMO AND BUILD_CONTROLLER_DEMO_MESSOR2CTRL)
+
+###############################################################################
+#
+# SMOOTH LEG MOTION executables
+#
+###############################################################################
+if(BUILD_SMART_WALKING_PROGRAMS AND BUILD_SMOOTH_LEG_MOTION)
+
+        SET(SMOOTH_WALKING_SOURCES ./smoothLegMotion.cpp)
+        ADD_EXECUTABLE(smoothLegMotion ${SMOOTH_WALKING_SOURCES})
+        TARGET_LINK_LIBRARIES(smoothLegMotion Leg Board Robot Visualization dynamixel)
+        INSTALL(TARGETS smoothLegMotion RUNTIME DESTINATION bin)
+        INSTALL(FILES ${SMOOTH_WALKING_FILES} DESTINATION bin)
+
+endif(BUILD_SMART_WALKING_PROGRAMS AND BUILD_SMOOTH_LEG_MOTION)
