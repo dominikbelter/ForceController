@@ -55,7 +55,7 @@ int main( int argc, const char** argv )
         cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
         cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
-        if((readAngle[0]*180/M_PI > -2 && readAngle[0]*180/M_PI < 2) && (readAngle[1]*180/M_PI > 22 && readAngle[1]*180/M_PI < 26) && (readAngle[2]*180/M_PI > -112 && readAngle[2]*180/M_PI < -116))
+        if((readAngle[0]*180/M_PI > -2 && readAngle[0]*180/M_PI < 2) && (readAngle[1]*180/M_PI > 22 && readAngle[1]*180/M_PI < 26) && (readAngle[2]*180/M_PI > -116 && readAngle[2]*180/M_PI < -112))
         {
             position = 1;
         }
@@ -69,7 +69,7 @@ int main( int argc, const char** argv )
         robot->readPosition(5, 1, readAngle[1]);
         robot->readPosition(5, 2, readAngle[2]);
 
-        if((readAngle[0]*180/M_PI > 28 && readAngle[0]*180/M_PI < 32) && (readAngle[1]*180/M_PI > 12 && readAngle[1]*180/M_PI < 16) && (readAngle[2]*180/M_PI > 78 && readAngle[2]*180/M_PI < 82))
+        if((readAngle[0]*180/M_PI > 28 && readAngle[0]*180/M_PI < 32) && (readAngle[1]*180/M_PI > 12 && readAngle[1]*180/M_PI < 16) && (readAngle[2]*180/M_PI > -82 && readAngle[2]*180/M_PI < -78))
         {
             position = 0;
         }
