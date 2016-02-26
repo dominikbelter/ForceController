@@ -454,7 +454,33 @@ unsigned int BoardDynamixel::readTorqueForce(const std::vector<float_type>& valu
 
 /// Returns contact or from microswitch
 bool BoardDynamixel::readContact(unsigned char legNo){
-    return false;
+
+    int fileDescriptor[6];
+    char buffer;
+    bool groundContactValue = false;
+    lseek(fileDescriptor[legNo], 0, SEEK_SET);
+    read( fileDescriptor[legNo], &buffer, 1 );
+
+    if ( buffer == '0')
+        groundContactValue = true;
+    else
+        groundContactValue = false;
+
+
+
+
+//   for(int i=0;i<6;i++){
+//        char buff[60];
+//        sprintf(buff, "/sys/class/gpio/gpio%s/value",buffer[i]);
+//        if ((fileDescriptor[i] = open(buff, O_RDONLY | O_NDELAY, 0))== 0)
+//        {
+//           printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
+//           exit(1);
+//        }
+//        printf("Value opened for writing.\n");
+//   }
+
+    return groundContactValue;
 }
 
 /// Returns contact or from microswitches

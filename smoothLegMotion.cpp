@@ -27,7 +27,15 @@ int main( int argc, const char** argv )
 
     robot->setSpeed(motorSpeed);
 
-
+    while(true)
+    {
+        if(readContact(5))
+        {
+            cout << "JEST" << endl;
+        }
+        else
+            cout << "NIE MA" << endl;
+    }
 
 
     std::vector<float_type> position1_0;
