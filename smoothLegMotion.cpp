@@ -12,6 +12,7 @@ int main( int argc, const char** argv )
 
     int position = 0;
     float_type readAngle[3];
+    float_type offset = 0.10;
 
 //    float_type readkat = 0;
 //    vector<float_type> readkatLeg;
@@ -88,30 +89,6 @@ int main( int argc, const char** argv )
     robot->setPosition(4, position1_1);
     robot->setPosition(5, position1_0);
 
-    usleep(3000000);
-
-
-
-    usleep(3000000);
-
-
-
-    usleep(3000000);
-
-
-
-    usleep(3000000);
-
-
-
-    usleep(3000000);
-
-
-
-    usleep(3000000);
-
-
-
 
     while(true)
         {
@@ -127,7 +104,7 @@ int main( int argc, const char** argv )
 //        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
 //        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 	
-        if((abs(readAngle[0] - position1_0[0]) < 0.04) && (abs(readAngle[1] - position1_0[1]) < 0.04) && (abs(readAngle[2] - position1_0[2]) < 0.04) )
+        if((abs(readAngle[0] - position1_0[0]) < offset) && (abs(readAngle[1] - position1_0[1]) < offset) && (abs(readAngle[2] - position1_0[2]) < offset) )
         {
             position = 1;
             robot->setPosition(0, position2_0);
@@ -148,7 +125,7 @@ int main( int argc, const char** argv )
 //        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
 //        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
-        if((abs(readAngle[0] - position2_0[0]) < 0.04) && (abs(readAngle[1] - position2_0[1]) < 0.04) && (abs(readAngle[2] - position2_0[2]) < 0.04) )
+        if((abs(readAngle[0] - position2_0[0]) < offset) && (abs(readAngle[1] - position2_0[1]) < offset) && (abs(readAngle[2] - position2_0[2]) < offset) )
         {
             position = 2;
             robot->setPosition(5, position3_0);
@@ -167,7 +144,7 @@ int main( int argc, const char** argv )
 //        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
 //        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
-        if((abs(readAngle[0] - position3_0[0]) < 0.04) && (abs(readAngle[1] - position3_0[1]) < 0.04) && (abs(readAngle[2] - position3_0[2]) < 0.04) )
+        if((abs(readAngle[0] - position3_0[0]) < offset) && (abs(readAngle[1] - position3_0[1]) < offset) && (abs(readAngle[2] - position3_0[2]) < offset) )
         {
             position = 3;
             robot->setPosition(0, position1_0);
@@ -186,7 +163,7 @@ int main( int argc, const char** argv )
 //        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
 //        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
-        if((abs(readAngle[0] - position1_0[0]) < 0.04) && (abs(readAngle[1] - position1_0[1]) < 0.04) && (abs(readAngle[2] - position1_0[2]) < 0.04) )
+        if((abs(readAngle[0] - position1_0[0]) < offset) && (abs(readAngle[1] - position1_0[1]) < offset) && (abs(readAngle[2] - position1_0[2]) < offset) )
         {
             position = 4;
             robot->setPosition(5, position2_0);
@@ -205,7 +182,7 @@ int main( int argc, const char** argv )
 //        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
 //        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
-        if((abs(readAngle[0] - position2_0[0]) < 0.04) && (abs(readAngle[1] - position2_0[1]) < 0.04) && (abs(readAngle[2] - position2_0[2]) < 0.04) )
+        if((abs(readAngle[0] - position2_0[0]) < offset) && (abs(readAngle[1] - position2_0[1]) < offset) && (abs(readAngle[2] - position2_0[2]) < offset) )
         {
             position = 5;
             robot->setPosition(0, position3_0);
@@ -224,7 +201,7 @@ int main( int argc, const char** argv )
 //        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
 //        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 
-        if((abs(readAngle[0] - position3_0[0]) < 0.04) && (abs(readAngle[1] - position3_0[1]) < 0.04) && (abs(readAngle[2] - position3_0[2]) < 0.04) )
+        if((abs(readAngle[0] - position3_0[0]) < offset) && (abs(readAngle[1] - position3_0[1]) < offset) && (abs(readAngle[2] - position3_0[2]) < offset) )
         {
             position = 0;
             robot->setPosition(5, position1_0);
