@@ -29,29 +29,104 @@ int main( int argc, const char** argv )
 
 
 
-    std::vector<float_type> position1;
-    std::vector<float_type> position2;
-    std::vector<float_type> position3;
-    std::vector<float_type> position4;
+    std::vector<float_type> position1_0;
+    std::vector<float_type> position1_1;
+    std::vector<float_type> position1_2;
 
-    position1.push_back((30*M_PI)/180);
-    position1.push_back((24*M_PI)/180);
-    position1.push_back((114*M_PI)/180);
+    std::vector<float_type> position2_0;
+    std::vector<float_type> position2_1;
+    std::vector<float_type> position2_2;
 
-    position2.push_back((0*M_PI)/180);
-    position2.push_back((24*M_PI)/180);
-    position2.push_back((114*M_PI)/180);
+    std::vector<float_type> position3_0;
+    std::vector<float_type> position3_1;
+    std::vector<float_type> position3_2;
 
-    position3.push_back((-30*M_PI)/180);
-    position3.push_back((24*M_PI)/180);
-    position3.push_back((114*M_PI)/180);
+    //INITIAL POSITION//
+    position1_0.push_back((30*M_PI)/180);
+    position1_0.push_back((24*M_PI)/180);
+    position1_0.push_back((114*M_PI)/180);
 
-    robot->setPosition(0, position1);
-    robot->setPosition(1, position2);
-    robot->setPosition(2, position3);
-    robot->setPosition(3, position3);
-    robot->setPosition(4, position2);
-    robot->setPosition(5, position1);
+    position1_1.push_back((0*M_PI)/180);
+    position1_1.push_back((24*M_PI)/180);
+    position1_1.push_back((114*M_PI)/180);
+
+    position1_2.push_back((-30*M_PI)/180);
+    position1_2.push_back((24*M_PI)/180);
+    position1_2.push_back((114*M_PI)/180);
+
+    //3 LEGS UP//
+    position2_0.push_back((30*M_PI)/180);
+    position2_0.push_back((44*M_PI)/180);
+    position2_0.push_back((114*M_PI)/180);
+
+    position2_1.push_back((0*M_PI)/180);
+    position2_1.push_back((44*M_PI)/180);
+    position2_1.push_back((114*M_PI)/180);
+
+    position2_2.push_back((-30*M_PI)/180);
+    position2_2.push_back((44*M_PI)/180);
+    position2_2.push_back((114*M_PI)/180);
+
+    //2 LEGS BACK (BOARD FORWARD)//
+    position3_0.push_back((20*M_PI)/180);
+    position3_0.push_back((24*M_PI)/180);
+    position3_0.push_back((114*M_PI)/180);
+
+    position3_1.push_back((-10*M_PI)/180);
+    position3_1.push_back((24*M_PI)/180);
+    position3_1.push_back((114*M_PI)/180);
+
+    position3_2.push_back((-40*M_PI)/180);
+    position3_2.push_back((24*M_PI)/180);
+    position3_2.push_back((114*M_PI)/180);
+
+
+    robot->setPosition(0, position1_0);
+    robot->setPosition(1, position1_1);
+    robot->setPosition(2, position1_2);
+    robot->setPosition(3, position1_2);
+    robot->setPosition(4, position1_1);
+    robot->setPosition(5, position1_0);
+
+    usleep(3000000);
+
+    robot->setPosition(0, position2_0);
+    robot->setPosition(4, position2_1);
+    robot->setPosition(2, position2_2);
+
+    usleep(3000000);
+
+    robot->setPosition(5, position3_0);
+    robot->setPosition(1, position3_1);
+    robot->setPosition(3, position3_2);
+
+    usleep(3000000);
+
+    robot->setPosition(0, position1_0);
+    robot->setPosition(4, position1_1);
+    robot->setPosition(2, position1_2);
+
+    usleep(3000000);
+
+    robot->setPosition(5, position2_0);
+    robot->setPosition(1, position2_1);
+    robot->setPosition(3, position2_2);
+
+    usleep(3000000);
+
+    robot->setPosition(0, position3_0);
+    robot->setPosition(4, position3_1);
+    robot->setPosition(2, position3_2);
+
+    usleep(3000000);
+
+    robot->setPosition(5, position1_0);
+    robot->setPosition(1, position1_1);
+    robot->setPosition(3, position1_2);
+
+
+
+
 
 
 //    while(true)
