@@ -68,15 +68,15 @@ int main( int argc, const char** argv )
     position2_2.push_back((114*M_PI)/180);
 
     //2 LEGS BACK (BOARD FORWARD)//
-    position3_0.push_back((20*M_PI)/180);
+    position3_0.push_back((10*M_PI)/180);
     position3_0.push_back((24*M_PI)/180);
     position3_0.push_back((114*M_PI)/180);
 
-    position3_1.push_back((-10*M_PI)/180);
+    position3_1.push_back((-20*M_PI)/180);
     position3_1.push_back((24*M_PI)/180);
     position3_1.push_back((114*M_PI)/180);
 
-    position3_2.push_back((-40*M_PI)/180);
+    position3_2.push_back((-50*M_PI)/180);
     position3_2.push_back((24*M_PI)/180);
     position3_2.push_back((114*M_PI)/180);
 
@@ -90,88 +90,152 @@ int main( int argc, const char** argv )
 
     usleep(3000000);
 
-    robot->setPosition(0, position2_0);
-    robot->setPosition(4, position2_1);
-    robot->setPosition(2, position2_2);
+
 
     usleep(3000000);
 
-    robot->setPosition(5, position3_0);
-    robot->setPosition(1, position3_1);
-    robot->setPosition(3, position3_2);
+
 
     usleep(3000000);
 
-    robot->setPosition(0, position1_0);
-    robot->setPosition(4, position1_1);
-    robot->setPosition(2, position1_2);
+
 
     usleep(3000000);
 
-    robot->setPosition(5, position2_0);
-    robot->setPosition(1, position2_1);
-    robot->setPosition(3, position2_2);
+
 
     usleep(3000000);
 
-    robot->setPosition(0, position3_0);
-    robot->setPosition(4, position3_1);
-    robot->setPosition(2, position3_2);
+
 
     usleep(3000000);
 
-    robot->setPosition(5, position1_0);
-    robot->setPosition(1, position1_1);
-    robot->setPosition(3, position1_2);
 
 
 
+    while(true)
+        {
 
 
+    while(position == 0)
+    {
+        robot->readPosition(5, 0, readAngle[0], true);
+        robot->readPosition(5, 1, readAngle[1], true);
+        robot->readPosition(5, 2, readAngle[2], true);
 
-//    while(true)
-//    {
-
-
-//    while(position == 0)
-//    {
-//        robot->readPosition(5, 0, readAngle[0], true);
-//        robot->readPosition(5, 1, readAngle[1], true);
-//        robot->readPosition(5, 2, readAngle[2], true);
-
-////        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
-////        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
-////        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+//        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+//        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+//        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
 	
-//        if((abs(readAngle[0] - position1[0]) < 0.04) && (abs(readAngle[1] - position1[1]) < 0.04) && (abs(readAngle[2] - position1[2]) < 0.04) )
-//        {
-//            position = 1;
-//        }
-//    }
+        if((abs(readAngle[0] - position1_0[0]) < 0.04) && (abs(readAngle[1] - position1_0[1]) < 0.04) && (abs(readAngle[2] - position1_0[2]) < 0.04) )
+        {
+            position = 1;
+            robot->setPosition(0, position2_0);
+            robot->setPosition(4, position2_1);
+            robot->setPosition(2, position2_2);
+        }
+    }
 
-//    robot->setPosition(0, position2);
-//    robot->setPosition(1, position2);
-//    robot->setPosition(2, position2);
-//    robot->setPosition(3, position2);
-//    robot->setPosition(4, position2);
-//    robot->setPosition(5, position2);
 
-//    while(position == 1)
-//    {
-//        robot->readPosition(5, 0, readAngle[0], true);
-//        robot->readPosition(5, 1, readAngle[1], true);
-//        robot->readPosition(5, 2, readAngle[2], true);
 
-////        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
-////        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
-////        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+    while(position == 1)
+    {
+        robot->readPosition(0, 0, readAngle[0], true);
+        robot->readPosition(0, 1, readAngle[1], true);
+        robot->readPosition(0, 2, readAngle[2], true);
 
-//        if((abs(readAngle[0] - position2[0]) < 0.04) && (abs(readAngle[1] - position2[1]) < 0.04) && (abs(readAngle[2] - position2[2]) < 0.04) )
-//        {
-//            position = 0;
-//        }
-//    }
-//    }
+//        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+//        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+//        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+
+        if((abs(readAngle[0] - position2_0[0]) < 0.04) && (abs(readAngle[1] - position2_0[1]) < 0.04) && (abs(readAngle[2] - position2_0[2]) < 0.04) )
+        {
+            position = 2;
+            robot->setPosition(5, position3_0);
+            robot->setPosition(1, position3_1);
+            robot->setPosition(3, position3_2);
+        }
+    }
+
+    while(position == 2)
+    {
+        robot->readPosition(5, 0, readAngle[0], true);
+        robot->readPosition(5, 1, readAngle[1], true);
+        robot->readPosition(5, 2, readAngle[2], true);
+
+//        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+//        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+//        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+
+        if((abs(readAngle[0] - position3_0[0]) < 0.04) && (abs(readAngle[1] - position3_0[1]) < 0.04) && (abs(readAngle[2] - position3_0[2]) < 0.04) )
+        {
+            position = 3;
+            robot->setPosition(0, position1_0);
+            robot->setPosition(4, position1_1);
+            robot->setPosition(2, position1_2);
+        }
+    }
+
+    while(position == 3)
+    {
+        robot->readPosition(0, 0, readAngle[0], true);
+        robot->readPosition(0, 1, readAngle[1], true);
+        robot->readPosition(0, 2, readAngle[2], true);
+
+//        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+//        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+//        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+
+        if((abs(readAngle[0] - position1_0[0]) < 0.04) && (abs(readAngle[1] - position1_0[1]) < 0.04) && (abs(readAngle[2] - position1_0[2]) < 0.04) )
+        {
+            position = 4;
+            robot->setPosition(5, position2_0);
+            robot->setPosition(1, position2_1);
+            robot->setPosition(3, position2_2);
+        }
+    }
+
+    while(position == 4)
+    {
+        robot->readPosition(5, 0, readAngle[0], true);
+        robot->readPosition(5, 1, readAngle[1], true);
+        robot->readPosition(5, 2, readAngle[2], true);
+
+//        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+//        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+//        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+
+        if((abs(readAngle[0] - position2_0[0]) < 0.04) && (abs(readAngle[1] - position2_0[1]) < 0.04) && (abs(readAngle[2] - position2_0[2]) < 0.04) )
+        {
+            position = 5;
+            robot->setPosition(0, position3_0);
+            robot->setPosition(4, position3_1);
+            robot->setPosition(2, position3_2);
+        }
+    }
+
+    while(position == 5)
+    {
+        robot->readPosition(0, 0, readAngle[0], true);
+        robot->readPosition(0, 1, readAngle[1], true);
+        robot->readPosition(0, 2, readAngle[2], true);
+
+//        cout << "servo 0: " << readAngle[0]*180/M_PI << endl;
+//        cout << "servo 1: " << readAngle[1]*180/M_PI << endl;
+//        cout << "servo 2: " << readAngle[2]*180/M_PI << endl;
+
+        if((abs(readAngle[0] - position3_0[0]) < 0.04) && (abs(readAngle[1] - position3_0[1]) < 0.04) && (abs(readAngle[2] - position3_0[2]) < 0.04) )
+        {
+            position = 0;
+            robot->setPosition(5, position1_0);
+            robot->setPosition(1, position1_1);
+            robot->setPosition(3, position1_2);
+        }
+    }
+
+
+
+    }
 
     return 0;
 }
