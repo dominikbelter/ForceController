@@ -4,6 +4,7 @@
 #include "../3rdParty/dynamixel/dynamixel.h"
 #include "../3rdParty/dynamixel/dxl_hal.h"
 #include "board/board.h"
+//#include <fcntl.h>
 
 using namespace controller;
 using namespace std;
