@@ -468,7 +468,7 @@ bool BoardDynamixel::readContact(unsigned char legNo){
             printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
             exit(1);
          }
-         printf("Value opened for writing.\n");
+         //printf("Value opened for writing.\n");
     }
 
     lseek(fileDescriptor[legNo], 0, SEEK_SET);
