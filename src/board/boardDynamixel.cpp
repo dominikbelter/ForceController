@@ -4,7 +4,7 @@
 #include "../3rdParty/dynamixel/dynamixel.h"
 #include "../3rdParty/dynamixel/dxl_hal.h"
 #include "board/board.h"
-//#include <fcntl.h>
+#include <fcntl.h>
 
 using namespace controller;
 using namespace std;
@@ -459,6 +459,18 @@ bool BoardDynamixel::readContact(unsigned char legNo){
     int fileDescriptor[6];
     char buffer;
     bool groundContactValue = false;
+
+    for(int i=1;i<2;i++){
+         char buff[60];
+         sprintf(buff, "/sys/class/gpio/gpio%s/value",i);
+         if ((fileDescriptor[i] = open(buff, O_RDONLY | O_NDELAY, 0))== 0)
+         {
+            printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
+            exit(1);
+         }
+         printf("Value opened for writing.\n");
+    }
+
     lseek(fileDescriptor[legNo], 0, SEEK_SET);
     read( fileDescriptor[legNo], &buffer, 1 );
 
@@ -470,16 +482,6 @@ bool BoardDynamixel::readContact(unsigned char legNo){
 
 
 
-//   for(int i=0;i<6;i++){
-//        char buff[60];
-//        sprintf(buff, "/sys/class/gpio/gpio%s/value",buffer[i]);
-//        if ((fileDescriptor[i] = open(buff, O_RDONLY | O_NDELAY, 0))== 0)
-//        {
-//           printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
-//           exit(1);
-//        }
-//        printf("Value opened for writing.\n");
-//   }
 
     return groundContactValue;
 }

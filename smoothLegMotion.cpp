@@ -29,7 +29,7 @@ int main( int argc, const char** argv )
 
     while(true)
     {
-        if(robot->readContact(5))
+        if(robot->readContact(1))
         {
             cout << "JEST" << endl;
         }
