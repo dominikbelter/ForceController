@@ -460,19 +460,30 @@ bool BoardDynamixel::readContact(unsigned char legNo){
     char buffer;
     bool groundContactValue = false;
 
-    for(int i=0;i<6;i++){
-         char buff[60];
-         sprintf(buff, "/sys/class/gpio/gpio%d/value",i);
-         if ((fileDescriptor[i] = open(buff, O_RDONLY | O_NDELAY, 0))== 0)
-         {
-            printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
-            exit(1);
-         }
-         //printf("Value opened for writing.\n");
-    }
 
+
+//    for(int i=0;i<6;i++){
+//         char buff[60];
+//         sprintf(buff, "/sys/class/gpio/gpio%d/value",i);
+//         if ((fileDescriptor[i] = open(buff, O_RDONLY | O_NDELAY, 0))== 0)
+//         {
+//            printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
+//            exit(1);
+//         }
+//         //printf("Value opened for writing.\n");
+//    }
+
+             char buff[60];
+             sprintf(buff, "/sys/class/gpio/gpio%d/value",legNo);
+             if ((fileDescriptor[legNo] = open(buff, O_RDONLY | O_NDELAY, 0))== 0)
+             {
+                printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
+                exit(1);
+             }
+             //printf("Value opened for writing.\n");
     lseek(fileDescriptor[legNo], 0, SEEK_SET);
     read( fileDescriptor[legNo], &buffer, 1 );
+
 
     if ( buffer == '0')
         groundContactValue = true;

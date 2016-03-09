@@ -35,6 +35,8 @@ int main( int argc, const char** argv )
         }
         else
             cout << "NIE MA" << endl;
+
+        usleep(1000000);
     }
 
 
