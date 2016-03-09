@@ -460,9 +460,9 @@ bool BoardDynamixel::readContact(unsigned char legNo){
     char buffer;
     bool groundContactValue = false;
 
-    for(int i=1;i<2;i++){
+    for(int i=0;i<6;i++){
          char buff[60];
-         sprintf(buff, "/sys/class/gpio/gpio%s/value",i);
+         sprintf(buff, "/sys/class/gpio/gpio%d/value",i);
          if ((fileDescriptor[i] = open(buff, O_RDONLY | O_NDELAY, 0))== 0)
          {
             printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
