@@ -103,6 +103,9 @@ public:
     ///Compute configuration of the robot for the reference motion (each foot generates separate motion)
     std::vector<float_type> movePlatform(const std::vector<Mat34>& motion);
 
+    std::vector<float_type> moveLeg(const Mat34& trajectory);
+
+
     std::vector<float_type> movePlatformNeutral(const Mat34 motion);
 
     /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)

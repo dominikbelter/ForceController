@@ -41,6 +41,8 @@ namespace controller {
             ///Compliant tripod step
             virtual void tripodStepCompliant(Mat34& motion, double speed) = 0;
 
+            virtual void moveLeg(unsigned char legNo, const Mat34& trajectory) = 0;
+
             /// Virtual descrutor
             virtual ~RobotController() {}
 

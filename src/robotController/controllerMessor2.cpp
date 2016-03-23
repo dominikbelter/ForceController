@@ -94,3 +94,16 @@ controller::RobotController* controller::createControllerMessor2(std::string fil
     controllerMessor2.reset(new ControllerMessor2(filename));
     return controllerMessor2.get();
 }
+
+void ControllerMessor2::moveLeg(unsigned char legNo, const Mat34& trajectory)
+{
+    std::vector<float_type> configuration;
+
+    configuration = robot->moveLeg(trajectory);
+
+    if (config.useVisualizer)
+        visualizer->setPosition(legNo,configuration);
+    else
+        board->setPosition(legNo, configuration);
+
+}

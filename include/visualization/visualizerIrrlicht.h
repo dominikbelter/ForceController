@@ -51,6 +51,8 @@ using namespace controller;
 
         void setPosition(std::vector<float_type> configuration);
 
+        void setPosition(unsigned char legNo, std::vector<float_type> configuration);
+
         void setDebugMode(bool enable);
 
         /// Virtual descrutor

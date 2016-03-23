@@ -61,11 +61,13 @@ int main( int argc, const char** argv )
 
          configuration = Rob->movePlatform(testmoveplatform);
 
+         std::cout << configuration[0];
          for (int i=0;i<configuration.size();i++){
-             if (configuration[i]>3.14)
-                 configuration[i]-=6.28;
-             else if (configuration[i]<-3.14)
-                 configuration[i]=+6.28;
+
+//             if (configuration[i]>3.14)
+//                 configuration[i]-=6.28;
+//             else if (configuration[i]<-3.14)
+//                 configuration[i]=+6.28;
          }
 
          for(int i = 0; i < 6; i++)

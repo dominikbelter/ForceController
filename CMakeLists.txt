@@ -446,7 +446,7 @@ if(BUILD_SMART_WALKING_PROGRAMS AND BUILD_SMOOTH_LEG_MOTION)
 
         SET(SMOOTH_WALKING_SOURCES ./smoothLegMotion.cpp)
         ADD_EXECUTABLE(smoothLegMotion ${SMOOTH_WALKING_SOURCES})
-        TARGET_LINK_LIBRARIES(smoothLegMotion Leg Board Robot Visualization dynamixel)
+        TARGET_LINK_LIBRARIES(smoothLegMotion Leg Board Robot Visualization dynamixel RobotCtrl)
         INSTALL(TARGETS smoothLegMotion RUNTIME DESTINATION bin)
         INSTALL(FILES ${SMOOTH_WALKING_FILES} DESTINATION bin)
 

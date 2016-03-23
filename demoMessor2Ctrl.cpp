@@ -7,8 +7,13 @@ int main( int argc, const char** argv ) {
         controller::RobotController* controller = createControllerMessor2("controllerMessor2.xml");
         usleep(1000000);
         Mat34 motion(Mat34::Identity());
-        motion(1,3)=0.07;
+        //motion(1,3)=0.07;
+        std::cout<<"CHUJ";
         controller->movePlatform(motion,1.0);
+        usleep(1000000);
+        motion(1,3)=0.1;
+        controller->movePlatform(motion,1.0);
+
         if (((ControllerMessor2*)controller)->useVisualizer()){
             ((ControllerMessor2*)controller)->finishVisualizer();
         }

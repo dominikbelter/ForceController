@@ -52,6 +52,9 @@ using namespace controller;
 
         void setPosition(std::vector<float_type> configuration){};
 
+        void setPosition(unsigned char legNo, std::vector<float_type> configuration){};
+
+
 		/// Virtual descrutor
 		~VisualizerGL() {}
 
