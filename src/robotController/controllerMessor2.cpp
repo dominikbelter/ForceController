@@ -99,7 +99,7 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const Mat34& trajectory)
 {
     std::vector<float_type> configuration;
 
-    configuration = robot->moveLeg(trajectory);
+    configuration = robot->moveLeg(legNo, trajectory);
 
     if (config.useVisualizer)
         visualizer->setPosition(legNo,configuration);

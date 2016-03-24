@@ -68,15 +68,12 @@ std::vector<float_type> RobotMessor::movePlatform(const std::vector<Mat34>& moti
     return conf;
 }
 
-std::vector<float_type> RobotMessor::moveLeg(const Mat34& trajectory)
+std::vector<float_type> RobotMessor::moveLeg(unsigned char legNo, const Mat34& trajectory)
 {
-    std::vector<float_type> conf, conf2;
+    std::vector<float_type> conf;
 
-    for (int i = 0; i<legsNo; i++){
-        conf2 = computeLegConfiguration(i, trajectory, configurationStart);
-        conf.reserve( conf.size() + conf2.size() );
-        conf.insert(conf.end(), conf2.begin(), conf2.end());
-    }
+    conf = computeLegConfiguration(legNo, trajectory, configurationStart);
+
     //-------------------------------------------
     return conf;
 

@@ -56,7 +56,7 @@ namespace controller {
             */
             virtual std::vector<float_type> movePlatform(const Mat34& motion) = 0;
 
-            virtual std::vector<float_type> moveLeg(const Mat34& trajectory) = 0;
+            virtual std::vector<float_type> moveLeg(unsigned char legNo, const Mat34& trajectory) = 0;
 
             ///Compute configuration of the robot for the reference motion (each foot generates separate motion)
             std::vector<float_type> movePlatform(const std::vector<Mat34>& motion);
