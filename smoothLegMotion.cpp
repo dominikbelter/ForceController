@@ -27,7 +27,7 @@ int main( int argc, const char** argv )
         m2.push_back(motion2);
 
         usleep(1000000);
-        controller->movePlatform(motion2,1.0);
+        //controller->movePlatform(motion2,1.0);
         //controller->moveLeg(6,motion2);
 
         for(int i=0; i<=2; i++)

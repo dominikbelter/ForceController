@@ -114,53 +114,23 @@ void VisualizerIrrlicht::setPosition(std::vector<float_type> configuration){
 }
 
 void VisualizerIrrlicht::setPosition(unsigned char legNo, std::vector<float_type> configuration){
-    //m_configuration = configuration;
 
-    //1st leg
-    if(legNo == 0)
-    {
-        m_configuration[9]=-configuration[0];
-        m_configuration[10]=configuration[1];
-        m_configuration[11]=configuration[2];
-    }
+    configuration[0] = -configuration[0];
 
-    else if(legNo == 1)
+    for(int i=0; i<3; i++)
     {
-        m_configuration[12]=-configuration[0];
-        m_configuration[13]=configuration[1];
-        m_configuration[14]=configuration[2];
-    }
-
-    else if(legNo == 2)
-    {
-        m_configuration[15]=-configuration[0];
-        m_configuration[16]=configuration[1];
-        m_configuration[17]=configuration[2];
-    }
-
-    else if(legNo == 3)
-    {
-        m_configuration[6]=-configuration[0];
-        m_configuration[7]=configuration[1];
-        m_configuration[8]=configuration[2];
-    }
-
-    else if(legNo == 4)
-    {
-        m_configuration[3]=-configuration[0];
-        m_configuration[4]=configuration[1];
-        m_configuration[5]=configuration[2];
-    }
-
-    else if(legNo == 5)
-    {
-        m_configuration[0]=-configuration[0];
-        m_configuration[1]=configuration[1];
-        m_configuration[2]=configuration[2];
+        if(legNo < 3)
+            m_configuration[legNo*3+9+i] = configuration[i];
+        else
+            m_configuration[9-(legNo-2)*3+i] = configuration[i];
     }
 
 }
 
+std::vector<float_type> getPosition(int legNo)
+{
+
+}
 
 void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) {
     this->m_configuration = configuration;
