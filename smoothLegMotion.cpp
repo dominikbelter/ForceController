@@ -21,22 +21,24 @@ int main( int argc, const char** argv )
         m1.push_back(motion1);
 
         Mat34 motion2(Mat34::Identity());
-        motion2(2,3) = 0.1;
+       // motion2(2,3) = 0.1;
 
         vector<Mat34> m2;
         m2.push_back(motion2);
 
         usleep(1000000);
-        //controller->movePlatform(motion2,1.0);
-        for(int i=1; i<=3; i++)
+        controller->movePlatform(motion2,1.0);
+        //controller->moveLeg(6,motion2);
+
+        for(int i=0; i<=2; i++)
         {
             usleep(1000000);
             controller->moveLeg(i,motion2);
         }
-        for(int i=4; i<=6; i++)
+        for(int i=3; i<=5; i++)
         {
             usleep(1000000);
-            controller->moveLeg(i,motion1);
+            controller->moveLeg(i,motion2);
         }
         if (((ControllerMessor2*)controller)->useVisualizer()){
             ((ControllerMessor2*)controller)->finishVisualizer();

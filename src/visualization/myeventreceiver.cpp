@@ -1,5 +1,8 @@
 #include "../include/visualization/myeventreceiver.h"
+#include <iostream>
+#include <stdio.h>
 
+using namespace std;
 
 MyEventReceiver::MyEventReceiver()
 {
@@ -10,9 +13,14 @@ MyEventReceiver::MyEventReceiver()
 
 bool MyEventReceiver::OnEvent(const SEvent& event)
 {
+
     if (event.EventType == irr::EET_KEY_INPUT_EVENT)
+{
 
         KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
+
+    }
+
     return false;
 }
 

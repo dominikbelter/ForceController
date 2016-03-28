@@ -85,7 +85,7 @@ void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
 }
 
 void VisualizerIrrlicht::setPosition(std::vector<float_type> configuration){
-    m_configuration = configuration;
+    //m_configuration = configuration;
     //6th leg
     m_configuration[0]=-configuration[9];
     m_configuration[1]=configuration[10];
@@ -117,42 +117,42 @@ void VisualizerIrrlicht::setPosition(unsigned char legNo, std::vector<float_type
     //m_configuration = configuration;
 
     //1st leg
-    if(legNo == 1)
+    if(legNo == 0)
     {
         m_configuration[9]=-configuration[0];
         m_configuration[10]=configuration[1];
         m_configuration[11]=configuration[2];
     }
 
-    else if(legNo == 2)
+    else if(legNo == 1)
     {
         m_configuration[12]=-configuration[0];
         m_configuration[13]=configuration[1];
         m_configuration[14]=configuration[2];
     }
 
-    else if(legNo == 3)
+    else if(legNo == 2)
     {
         m_configuration[15]=-configuration[0];
         m_configuration[16]=configuration[1];
         m_configuration[17]=configuration[2];
     }
 
-    else if(legNo == 4)
+    else if(legNo == 3)
     {
         m_configuration[6]=-configuration[0];
         m_configuration[7]=configuration[1];
         m_configuration[8]=configuration[2];
     }
 
-    else if(legNo == 5)
+    else if(legNo == 4)
     {
         m_configuration[3]=-configuration[0];
         m_configuration[4]=configuration[1];
         m_configuration[5]=configuration[2];
     }
 
-    else if(legNo == 6)
+    else if(legNo == 5)
     {
         m_configuration[0]=-configuration[0];
         m_configuration[1]=configuration[1];
