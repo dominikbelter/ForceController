@@ -6,8 +6,15 @@
 //#include "3rdParty/dynamixel/dxl_hal.h"
 #include <iostream>
 #include <stdio.h>
+#include <thread>
 using namespace std;
 using namespace controller;
+
+void MoveLegsInThreads(int l, vector<Mat34> traj, RobotController* cont)
+{
+    cont->moveLeg(l, traj);
+}
+
 int main( int argc, const char** argv )
 {
 
@@ -17,19 +24,18 @@ int main( int argc, const char** argv )
         vector<Mat34> m1;
         Mat34 motion1(Mat34::Identity());
 
+        //m1.push_back(motion1);
+        motion1(2,3) = 0.1;
         m1.push_back(motion1);
 
-        motion1(1,3) = 0.1;
+        motion1(2,3) = -0.08;
         m1.push_back(motion1);
 
-        motion1(1,3) = 0;
-        motion1(2,3) = -0.1;
+        motion1(2,3) = 0.1;
         m1.push_back(motion1);
 
-        motion1(1,3) = 0;
         motion1(2,3) = 0;
         m1.push_back(motion1);
-
 
         usleep(1000000);
         //controller->movePlatform(motion2,1.0);
@@ -42,9 +48,27 @@ int main( int argc, const char** argv )
 //            controller->moveLeg(i,motion1);
 //            motion1(1,3) = -0.1;
 //            controller->moveLeg(i,motion1);
-            controller->moveLeg(i,m1);
+            //controller->moveLeg(i,m1);
         }
+        while(true){
+        std::thread first(MoveLegsInThreads,0,m1,controller);
+        std::thread second(MoveLegsInThreads,2,m1,controller);
+        std::thread third(MoveLegsInThreads,4,m1,controller);
 
+        first.join();
+        second.join();
+        third.join();
+        cout << "DONE 1" << endl;
+
+        std::thread first2(MoveLegsInThreads,1,m1,controller);
+        std::thread second2(MoveLegsInThreads,3,m1,controller);
+        std::thread third2(MoveLegsInThreads,5,m1,controller);
+
+        first2.join();
+        second2.join();
+        third2.join();
+        cout << "DONE 2" << endl;
+}
 
 
         if (((ControllerMessor2*)controller)->useVisualizer()){
