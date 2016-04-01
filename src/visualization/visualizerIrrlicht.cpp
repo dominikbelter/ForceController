@@ -127,9 +127,20 @@ void VisualizerIrrlicht::setPosition(unsigned char legNo, std::vector<float_type
 
 }
 
-std::vector<float_type> getPosition(int legNo)
+std::vector<float_type> VisualizerIrrlicht::getPosition(int legNo)
 {
+    std::vector<float_type> configuration;
+    for(int i=0; i<3; i++)
+    {
+        if(legNo < 3)
+            configuration.push_back(m_configuration[legNo*3+9+i]);
+        else
+            configuration.push_back(m_configuration[9-(legNo-2)*3+i]);
+    }
 
+    configuration[0] = -configuration[0];
+
+    return configuration;
 }
 
 void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) {

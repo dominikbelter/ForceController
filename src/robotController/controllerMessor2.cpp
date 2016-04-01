@@ -97,13 +97,76 @@ controller::RobotController* controller::createControllerMessor2(std::string fil
 
 void ControllerMessor2::moveLeg(unsigned char legNo, const Mat34& trajectory)
 {
+
+
     std::vector<float_type> configuration;
+
 
     configuration = robot->moveLeg(legNo, trajectory);
 
+
     if (config.useVisualizer)
-        visualizer->setPosition(legNo,configuration);
+    {
+        std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
+
+        float_type step = 0.05;
+        int n = 1/step;
+        //std::cout << n << "    " << step << endl;
+        std::vector<float_type> diff;
+        for(int s=0; s<configuration.size(); s++)
+        {
+            if(s == 0)
+            {
+                if(configuration[s] > 3.14)
+                {
+                    configuration[s] -= 6.28;
+                }
+            }
+            diff.push_back(configuration[s] - currentConfiguration[s]);
+            diff[s] = diff[s]*step;
+        }
+
+        int i = 0;
+        while(i<=n)
+        {
+            //cout << visualizer->getPosition(legNo)[0] << endl;
+            for(int s=0; s<configuration.size(); s++)
+            {
+                configuration[s] = currentConfiguration[s] + diff[s]*i;
+            }
+            visualizer->setPosition(legNo,configuration);
+            i++;
+            usleep(50000);
+        }
+    }
     else
+    {
+        vector<float_type> readAngle(3);
+        bool motionFinished = false;
+        float_type offset = 0.10;
         board->setPosition(legNo, configuration);
+        while(!motionFinished)
+        {
+            board->readPosition(legNo, 0, readAngle[0]);
+            board->readPosition(legNo, 1, readAngle[1]);
+            board->readPosition(legNo, 2, readAngle[2]);
+
+            if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
+            {
+                motionFinished = true;
+            }
+        }
+
+    }
+
+}
+
+void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory)
+{
+
+    for(int i=0; i<trajectory.size(); i++)
+    {
+        this->moveLeg(legNo, trajectory[i]);
+    }
 
 }

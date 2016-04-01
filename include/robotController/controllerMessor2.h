@@ -65,6 +65,8 @@ class ControllerMessor2 : public RobotController
 
         void moveLeg(unsigned char legNo, const Mat34& trajectory);
 
+        void moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory);
+
         /// use visualizer?
         inline bool useVisualizer(void) {return config.useVisualizer;}
 

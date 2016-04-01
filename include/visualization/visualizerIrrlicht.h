@@ -55,6 +55,7 @@ using namespace controller;
 
         void setDebugMode(bool enable);
 
+        std::vector<float_type> getPosition(int legNo);
         /// Virtual descrutor
         ~VisualizerIrrlicht() {}
 

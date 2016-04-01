@@ -43,6 +43,8 @@ namespace controller {
 
             virtual void moveLeg(unsigned char legNo, const Mat34& trajectory) = 0;
 
+            virtual void moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory) = 0;
+
             /// Virtual descrutor
             virtual ~RobotController() {}
 

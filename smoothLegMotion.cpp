@@ -14,32 +14,39 @@ int main( int argc, const char** argv )
     try {
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
+        vector<Mat34> m1;
         Mat34 motion1(Mat34::Identity());
 
-        vector<Mat34> m1;
-        motion1(1,3) = -0.1;
         m1.push_back(motion1);
 
-        Mat34 motion2(Mat34::Identity());
-       // motion2(2,3) = 0.1;
+        motion1(1,3) = 0.1;
+        m1.push_back(motion1);
 
-        vector<Mat34> m2;
-        m2.push_back(motion2);
+        motion1(1,3) = 0;
+        motion1(2,3) = -0.1;
+        m1.push_back(motion1);
+
+        motion1(1,3) = 0;
+        motion1(2,3) = 0;
+        m1.push_back(motion1);
+
 
         usleep(1000000);
         //controller->movePlatform(motion2,1.0);
-        //controller->moveLeg(6,motion2);
+       // controller->moveLeg(6,motion2);
 
-        for(int i=0; i<=2; i++)
+        for(int i=0; i<=5; i++)
         {
-            usleep(1000000);
-            controller->moveLeg(i,motion2);
+//            controller->moveLeg(i,motion2);
+//            motion1(1,3) = 0.1;
+//            controller->moveLeg(i,motion1);
+//            motion1(1,3) = -0.1;
+//            controller->moveLeg(i,motion1);
+            controller->moveLeg(i,m1);
         }
-        for(int i=3; i<=5; i++)
-        {
-            usleep(1000000);
-            controller->moveLeg(i,motion2);
-        }
+
+
+
         if (((ControllerMessor2*)controller)->useVisualizer()){
             ((ControllerMessor2*)controller)->finishVisualizer();
         }

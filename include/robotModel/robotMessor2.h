@@ -105,7 +105,6 @@ public:
 
     std::vector<float_type> moveLeg(unsigned char legNo, const Mat34& trajectory);
 
-
     std::vector<float_type> movePlatformNeutral(const Mat34 motion);
 
     /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)
