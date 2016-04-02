@@ -5,6 +5,7 @@
 
 #include "../include/robotController/controllerMessor2.h"
 #include <iostream>
+#include <thread>
 
 using namespace controller;
 
@@ -95,7 +96,7 @@ controller::RobotController* controller::createControllerMessor2(std::string fil
     return controllerMessor2.get();
 }
 
-void ControllerMessor2::moveLeg(unsigned char legNo, const Mat34& trajectory, float_type speed)
+void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed)
 {
 
 
@@ -110,7 +111,7 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const Mat34& trajectory, fl
     {
         std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
 
-        float_type step = 0.05;
+        float_type step = 0.04;
         int n = 1/step;
         //std::cout << n << "    " << step << endl;
         for(int s=0; s<configuration.size(); s++)
@@ -185,7 +186,93 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& t
 
     for(int i=0; i<trajectory.size(); i++)
     {
-        this->moveLeg(legNo, trajectory[i], speed);
+        this->moveLegSingle(legNo, trajectory[i], speed);
     }
 
+}
+
+void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed)
+{
+
+    if(legNo.size() == 1)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
+        first.join();
+    }
+
+    else if(legNo.size() == 2)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
+        first.join();
+        second.join();
+    }
+
+    else if(legNo.size() == 3)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed);
+        first.join();
+        second.join();
+        third.join();
+    }
+
+    else if(legNo.size() == 4)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+    }
+
+    else if(legNo.size() == 5)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed);
+        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+        fifth.join();
+    }
+
+    else if(legNo.size() == 6)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed);
+        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed);
+        std::thread sixth(&ControllerMessor2::moveLeg,this,legNo[5],trajectory[5], speed);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+        fifth.join();
+        sixth.join();
+    }
+
+
+
+//    std::vector<std::thread> legsThreads;
+
+//    for(int i=0; i<legNo.size(); i++){
+//        legsThreads.emplace_back(&ControllerMessor2::moveLeg,this,legNo[i],trajectory[i], speed);
+//    }
+
+//    // later
+//    for (int i=0; i<legNo.size(); i++) {
+//        legsThreads.at(i).join();
+//    }
+
+//    // OK to destroy now
+//    legsThreads.clear();
 }

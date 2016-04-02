@@ -63,9 +63,11 @@ class ControllerMessor2 : public RobotController
         ///Compliant tripod step
         void tripodStepCompliant(Mat34& motion, double speed);
 
-        void moveLeg(unsigned char legNo, const Mat34& trajectory, float_type speed);
+        void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed);
 
         void moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed);
+
+        void moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed);
 
         /// use visualizer?
         inline bool useVisualizer(void) {return config.useVisualizer;}

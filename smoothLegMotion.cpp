@@ -24,6 +24,8 @@ int main( int argc, const char** argv )
         vector<Mat34> m1;
         Mat34 motion1(Mat34::Identity());
 
+        Mat34 motion2(Mat34::Identity());
+
         //m1.push_back(motion1);
         motion1(2,3) = 0.1;
         m1.push_back(motion1);
@@ -37,38 +39,160 @@ int main( int argc, const char** argv )
         motion1(2,3) = 0;
         m1.push_back(motion1);
 
+        std::vector<std::vector<Mat34>> trajForLegs;
+
+        trajForLegs.push_back(m1);
+        trajForLegs.push_back(m1);
+        trajForLegs.push_back(m1);
+
+        std::vector<unsigned char> legNosLeft;
+        std::vector<unsigned char> legNosRight;
+        std::vector<unsigned char> legNosL;
+        std::vector<unsigned char> legNosR;
+
+
+        legNosLeft.push_back(0);
+        legNosLeft.push_back(2);
+        legNosLeft.push_back(4);
+
+        legNosRight.push_back(1);
+        legNosRight.push_back(3);
+        legNosRight.push_back(5);
+
+        legNosL.push_back(0);
+        legNosL.push_back(2);
+        legNosL.push_back(4);
+        legNosL.push_back(1);
+        legNosL.push_back(3);
+        legNosL.push_back(5);
+
+        legNosR.push_back(1);
+        legNosR.push_back(3);
+        legNosR.push_back(5);
+        legNosR.push_back(0);
+        legNosR.push_back(2);
+        legNosR.push_back(4);
+
+        Mat34 initial(Mat34::Identity());
+        Mat34 legBack(Mat34::Identity());
+        Mat34 legUp(Mat34::Identity());
+        Mat34 legDown(Mat34::Identity());
+
+        vector<Mat34> trajBack;
+        vector<Mat34> trajBackToInitial;
+        vector<Mat34> trajToInitial;
+        vector<Mat34> trajUp;
+        vector<Mat34> trajDown;
+
+        std::vector<std::vector<Mat34>> executeLegsMovementBack;
+        std::vector<std::vector<Mat34>> executeLegsMovementUp;
+        std::vector<std::vector<Mat34>> executeLegsMovementInitial;
+        std::vector<std::vector<Mat34>> executeLegsMovementBackUp;
+        std::vector<std::vector<Mat34>> executeLegsMovementBackInitial;
+
+
+        legBack(1,3)=0.07;
+        trajBack.push_back(legBack);
+
+        legUp(2,3) = -0.1;
+        trajUp.push_back(legUp);
+
+        legDown(2,3) = 0.1;
+        trajDown.push_back(legDown);
+
+        trajBackToInitial.push_back(legUp);
+        trajBackToInitial.push_back(initial);
+
+        trajToInitial.push_back(initial);
+
+        executeLegsMovementBack.push_back(trajBack);
+        executeLegsMovementBack.push_back(trajBack);
+        executeLegsMovementBack.push_back(trajBack);
+
+        executeLegsMovementUp.push_back(trajUp);
+        executeLegsMovementUp.push_back(trajUp);
+        executeLegsMovementUp.push_back(trajUp);
+
+        executeLegsMovementInitial.push_back(trajToInitial);
+        executeLegsMovementInitial.push_back(trajToInitial);
+        executeLegsMovementInitial.push_back(trajToInitial);
+
+        executeLegsMovementBackInitial.push_back(trajBackToInitial);
+        executeLegsMovementBackInitial.push_back(trajBackToInitial);
+        executeLegsMovementBackInitial.push_back(trajBackToInitial);
+
+        executeLegsMovementBackUp.push_back(trajUp);
+        executeLegsMovementBackUp.push_back(trajUp);
+        executeLegsMovementBackUp.push_back(trajUp);
+        executeLegsMovementBackUp.push_back(trajBack);
+        executeLegsMovementBackUp.push_back(trajBack);
+        executeLegsMovementBackUp.push_back(trajBack);
+
+
         usleep(1000000);
-        //controller->movePlatform(motion2,1.0);
-       // controller->moveLeg(6,motion2);
 
-        for(int i=0; i<=5; i++)
+        controller->moveLegs(legNosLeft, executeLegsMovementBackInitial, speedo);
+        controller->moveLegs(legNosRight, executeLegsMovementBackInitial, speedo);
+
+        bool threeLegMoveent = false;
+        bool fiveLegMovement = true;
+        ///////RUCH TRÓJPODPOROWY/////////
+        if(threeLegMoveent)
         {
-//            controller->moveLeg(i,motion2);
-//            motion1(1,3) = 0.1;
-//            controller->moveLeg(i,motion1);
-//            motion1(1,3) = -0.1;
-//            controller->moveLeg(i,motion1);
-            //controller->moveLeg(i,m1);
+            while(true)
+            {
+                controller->moveLegs(legNosL, executeLegsMovementBackUp, speedo);
+                controller->moveLegs(legNosLeft, executeLegsMovementInitial, speedo);
+
+                controller->moveLegs(legNosR, executeLegsMovementBackUp, speedo);
+                controller->moveLegs(legNosRight, executeLegsMovementInitial, speedo);
+
+            }
+
+            while(true)
+            {
+                controller->moveLegs(legNosLeft, executeLegsMovementUp, speedo);
+                controller->moveLegs(legNosRight, executeLegsMovementBack, speedo);
+
+                controller->moveLegs(legNosLeft, executeLegsMovementInitial, speedo);
+                controller->moveLegs(legNosRight, executeLegsMovementUp, speedo);
+
+                controller->moveLegs(legNosLeft, executeLegsMovementBack, speedo);
+                controller->moveLegs(legNosRight, executeLegsMovementInitial, speedo);
+            }
         }
-        while(true){
-        std::thread first(MoveLegsInThreads,0,m1, speedo, controller);
-        std::thread second(MoveLegsInThreads,2,m1, speedo, controller);
-        std::thread third(MoveLegsInThreads,4,m1, speedo, controller);
 
-        first.join();
-        second.join();
-        third.join();
-        cout << "DONE 1" << endl;
+        ///////RUCH PIĘCIOPODPOROWY/////////
+        if(fiveLegMovement)
+        {
+            executeLegsMovementBack.push_back(trajBack);
+            executeLegsMovementBack.push_back(trajBack);
 
-        std::thread first2(MoveLegsInThreads,1,m1, speedo, controller);
-        std::thread second2(MoveLegsInThreads,3,m1, speedo, controller);
-        std::thread third2(MoveLegsInThreads,5,m1, speedo, controller);
+            std::vector<unsigned char> legNos;
 
-        first2.join();
-        second2.join();
-        third2.join();
-        cout << "DONE 2" << endl;
-}
+            legNos.push_back(1);
+            legNos.push_back(2);
+            legNos.push_back(3);
+            legNos.push_back(4);
+            legNos.push_back(5);
+
+            while(true)
+            {
+                controller->moveLeg(0, trajUp, speedo);
+                controller->moveLegs(legNos, executeLegsMovementBack, speedo);
+
+                controller->moveLeg(0, trajToInitial, speedo);
+
+                controller->moveLeg(5, trajBackToInitial, speedo);
+                controller->moveLeg(1, trajBackToInitial, speedo);
+                controller->moveLeg(4, trajBackToInitial, speedo);
+                controller->moveLeg(2, trajBackToInitial, speedo);
+                controller->moveLeg(3, trajBackToInitial, speedo);
+
+            }
+        }
+
+
 
 
         if (((ControllerMessor2*)controller)->useVisualizer()){
