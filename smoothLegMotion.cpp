@@ -10,9 +10,9 @@
 using namespace std;
 using namespace controller;
 
-void MoveLegsInThreads(int l, vector<Mat34> traj, RobotController* cont)
+void MoveLegsInThreads(int l, vector<Mat34> traj, float_type speed, RobotController* cont)
 {
-    cont->moveLeg(l, traj);
+    cont->moveLeg(l, traj, speed);
 }
 
 int main( int argc, const char** argv )
@@ -20,7 +20,7 @@ int main( int argc, const char** argv )
 
     try {
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
-
+        float_type speedo = 10;
         vector<Mat34> m1;
         Mat34 motion1(Mat34::Identity());
 
@@ -51,18 +51,18 @@ int main( int argc, const char** argv )
             //controller->moveLeg(i,m1);
         }
         while(true){
-        std::thread first(MoveLegsInThreads,0,m1,controller);
-        std::thread second(MoveLegsInThreads,2,m1,controller);
-        std::thread third(MoveLegsInThreads,4,m1,controller);
+        std::thread first(MoveLegsInThreads,0,m1, speedo, controller);
+        std::thread second(MoveLegsInThreads,2,m1, speedo, controller);
+        std::thread third(MoveLegsInThreads,4,m1, speedo, controller);
 
         first.join();
         second.join();
         third.join();
         cout << "DONE 1" << endl;
 
-        std::thread first2(MoveLegsInThreads,1,m1,controller);
-        std::thread second2(MoveLegsInThreads,3,m1,controller);
-        std::thread third2(MoveLegsInThreads,5,m1,controller);
+        std::thread first2(MoveLegsInThreads,1,m1, speedo, controller);
+        std::thread second2(MoveLegsInThreads,3,m1, speedo, controller);
+        std::thread third2(MoveLegsInThreads,5,m1, speedo, controller);
 
         first2.join();
         second2.join();
