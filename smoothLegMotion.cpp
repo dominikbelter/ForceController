@@ -129,13 +129,15 @@ int main( int argc, const char** argv )
         executeLegsMovementBackUp.push_back(trajBack);
 
 
-        usleep(1000000);
+        controller->moveLegSingle(0, legUp, speedo);
+        //usleep(1000000);
 
-        controller->moveLegs(legNosLeft, executeLegsMovementBackInitial, speedo);
-        controller->moveLegs(legNosRight, executeLegsMovementBackInitial, speedo);
+        //Robot wstaje do pozycji home
+        //controller->moveLegs(legNosLeft, executeLegsMovementBackInitial, speedo);
+        //controller->moveLegs(legNosRight, executeLegsMovementBackInitial, speedo);
 
         bool threeLegMoveent = false;
-        bool fiveLegMovement = true;
+        bool fiveLegMovement = false;
         ///////RUCH TRÓJPODPOROWY/////////
         if(threeLegMoveent)
         {
@@ -195,9 +197,9 @@ int main( int argc, const char** argv )
 
 
 
-        if (((ControllerMessor2*)controller)->useVisualizer()){
-            ((ControllerMessor2*)controller)->finishVisualizer();
-        }
+//        if (((ControllerMessor2*)controller)->useVisualizer()){
+//            ((ControllerMessor2*)controller)->finishVisualizer();
+//        }
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
