@@ -15,8 +15,9 @@ ControllerMessor2::Ptr controllerMessor2;
 ControllerMessor2::ControllerMessor2(void) : RobotController("Controller Messor2", TYPE_MESSOR2) {
     robot = createRobotMessor("../resources/robotModel.xml");
     board = createBoardDynamixel();
-    visualizer = createVisualizerIrrlicht("VisualizerWindow", 1024, 768, 0.01, false);
+
     if (config.useVisualizer) {
+        visualizer = createVisualizerIrrlicht("VisualizerWindow", 1024, 768, 0.01, false);
         continueVisualizer=true;
         visualizerThr.reset(new std::thread(&ControllerMessor2::drawRobot, this));
     }
@@ -43,8 +44,9 @@ ControllerMessor2::Config::Config(std::string configFilename){
 ControllerMessor2::ControllerMessor2(std::string configFilename) : config(configFilename), RobotController("Controller Messor2", TYPE_MESSOR2){
     robot = createRobotMessor("../resources/robotModel.xml");
     board = createBoardDynamixel();
-    visualizer = createVisualizerIrrlicht("VisualizerWindow", 1024, 768, 0.01, false);
+
     if (config.useVisualizer) {
+        visualizer = createVisualizerIrrlicht("VisualizerWindow", 1024, 768, 0.01, false);
         continueVisualizer=true;
         visualizerThr.reset(new std::thread(&ControllerMessor2::drawRobot, this));
     }
