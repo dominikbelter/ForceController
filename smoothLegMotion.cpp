@@ -20,6 +20,7 @@ int main( int argc, const char** argv )
 
     try {
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
+
         float_type speedo = 10;
         vector<Mat34> m1;
         Mat34 motion1(Mat34::Identity());
