@@ -8,7 +8,6 @@ int main( int argc, const char** argv ) {
         usleep(1000000);
         Mat34 motion(Mat34::Identity());
         //motion(1,3)=0.07;
-        std::cout<<"CHUJ";
         controller->movePlatform(motion,1.0);
         usleep(1000000);
         motion(1,3)=0.1;

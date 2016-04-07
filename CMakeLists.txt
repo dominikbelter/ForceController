@@ -36,7 +36,7 @@ mark_as_advanced(BUILD_CONTROLLER_VISUALIZATION)
 
 
 # demos
-option(BUILD_CONTROLLER_DEMO "Build Controller demonstration programs and libraries" NO)
+option(BUILD_CONTROLLER_DEMO "Build Controller demonstration programs and libraries" YES)
 option(BUILD_CONTROLLER_DEMO_BASIC "Build basic Controller demonstration programs and libraries" YES)
 mark_as_advanced(BUILD_CONTROLLER_DEMO_BASIC)
 option(BUILD_CONTROLLER_DEMO_BOARD "Build Board program and libraries" YES)
