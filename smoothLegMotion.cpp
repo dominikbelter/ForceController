@@ -21,58 +21,43 @@ int main( int argc, const char** argv )
     try {
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
+        vector <float_type> motorSpeed;
+        for(int i = 0; i < 18; i++ ){
+        motorSpeed.push_back(10);
+        }
+        Board *robot = createBoardDynamixel();
+        robot->setSpeed(motorSpeed);
+
         float_type speedo = 10;
-        vector<Mat34> m1;
-        Mat34 motion1(Mat34::Identity());
-
-        Mat34 motion2(Mat34::Identity());
-
-        //m1.push_back(motion1);
-        motion1(2,3) = 0.1;
-        m1.push_back(motion1);
-
-        motion1(2,3) = -0.08;
-        m1.push_back(motion1);
-
-        motion1(2,3) = 0.1;
-        m1.push_back(motion1);
-
-        motion1(2,3) = 0;
-        m1.push_back(motion1);
-
-        std::vector<std::vector<Mat34>> trajForLegs;
-
-        trajForLegs.push_back(m1);
-        trajForLegs.push_back(m1);
-        trajForLegs.push_back(m1);
-
-        std::vector<unsigned char> legNosLeft;
-        std::vector<unsigned char> legNosRight;
-        std::vector<unsigned char> legNosL;
-        std::vector<unsigned char> legNosR;
 
 
-        legNosLeft.push_back(0);
-        legNosLeft.push_back(2);
-        legNosLeft.push_back(4);
+        std::vector<unsigned char> legNos024;
+        std::vector<unsigned char> legNos135;
+        std::vector<unsigned char> legNos024135;
+        std::vector<unsigned char> legNos135024;
 
-        legNosRight.push_back(1);
-        legNosRight.push_back(3);
-        legNosRight.push_back(5);
 
-        legNosL.push_back(0);
-        legNosL.push_back(2);
-        legNosL.push_back(4);
-        legNosL.push_back(1);
-        legNosL.push_back(3);
-        legNosL.push_back(5);
+        legNos024.push_back(0);
+        legNos024.push_back(2);
+        legNos024.push_back(4);
 
-        legNosR.push_back(1);
-        legNosR.push_back(3);
-        legNosR.push_back(5);
-        legNosR.push_back(0);
-        legNosR.push_back(2);
-        legNosR.push_back(4);
+        legNos135.push_back(1);
+        legNos135.push_back(3);
+        legNos135.push_back(5);
+
+        legNos024135.push_back(0);
+        legNos024135.push_back(2);
+        legNos024135.push_back(4);
+        legNos024135.push_back(1);
+        legNos024135.push_back(3);
+        legNos024135.push_back(5);
+
+        legNos135024.push_back(1);
+        legNos135024.push_back(3);
+        legNos135024.push_back(5);
+        legNos135024.push_back(0);
+        legNos135024.push_back(2);
+        legNos135024.push_back(4);
 
         Mat34 initial(Mat34::Identity());
         Mat34 legBack(Mat34::Identity());
@@ -96,6 +81,7 @@ int main( int argc, const char** argv )
         trajBack.push_back(legBack);
 
         legUp(2,3) = -0.1;
+        legUp(0,3) = -0.05;
         trajUp.push_back(legUp);
 
         legDown(2,3) = 0.1;
@@ -131,43 +117,43 @@ int main( int argc, const char** argv )
 
 
         usleep(1000000);
-        while(true)
-        {
-            controller->moveLegSingle(0, legUp, speedo);
-            controller->moveLegSingle(0, legBack, speedo);
-            controller->moveLegSingle(0, legUp, speedo);
-            controller->moveLegSingle(0, initial, speedo);
-        }
+//        while(true)
+//        {
+//            controller->moveLegSingle(0, legUp, speedo);
+//            controller->moveLegSingle(0, legBack, speedo);
+//            controller->moveLegSingle(0, legUp, speedo);
+//            controller->moveLegSingle(0, initial, speedo);
+//        }
 
         //Robot wstaje do pozycji home
-        //controller->moveLegs(legNosLeft, executeLegsMovementBackInitial, speedo);
-        //controller->moveLegs(legNosRight, executeLegsMovementBackInitial, speedo);
+        controller->moveLegs(legNos024, executeLegsMovementBackInitial, speedo);
+        controller->moveLegs(legNos135, executeLegsMovementBackInitial, speedo);
 
-        bool threeLegMoveent = false;
+        bool threeLegMoveent = true;
         bool fiveLegMovement = false;
         ///////RUCH TRÓJPODPOROWY/////////
         if(threeLegMoveent)
         {
             while(true)
             {
-                controller->moveLegs(legNosL, executeLegsMovementBackUp, speedo);
-                controller->moveLegs(legNosLeft, executeLegsMovementInitial, speedo);
+                controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
+                controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
 
-                controller->moveLegs(legNosR, executeLegsMovementBackUp, speedo);
-                controller->moveLegs(legNosRight, executeLegsMovementInitial, speedo);
+                controller->moveLegs(legNos135024, executeLegsMovementBackUp, speedo);
+                controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
 
             }
 
             while(true)
             {
-                controller->moveLegs(legNosLeft, executeLegsMovementUp, speedo);
-                controller->moveLegs(legNosRight, executeLegsMovementBack, speedo);
+                controller->moveLegs(legNos024, executeLegsMovementUp, speedo);
+                controller->moveLegs(legNos135, executeLegsMovementBack, speedo);
 
-                controller->moveLegs(legNosLeft, executeLegsMovementInitial, speedo);
-                controller->moveLegs(legNosRight, executeLegsMovementUp, speedo);
+                controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
+                controller->moveLegs(legNos135, executeLegsMovementUp, speedo);
 
-                controller->moveLegs(legNosLeft, executeLegsMovementBack, speedo);
-                controller->moveLegs(legNosRight, executeLegsMovementInitial, speedo);
+                controller->moveLegs(legNos024, executeLegsMovementBack, speedo);
+                controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
             }
         }
 
