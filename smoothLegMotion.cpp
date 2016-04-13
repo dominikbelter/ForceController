@@ -27,7 +27,14 @@ int main( int argc, const char** argv )
         }
         Board* board = createBoardDynamixel();
 
+        std::vector<float_type> position1;
+        position1.push_back((0*M_PI)/180);
+        position1.push_back((24*M_PI)/180);
+        position1.push_back((114*M_PI)/180);
+
         board->setSpeed(motorSpeed);
+
+        board->setPosition(0, position1);
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
