@@ -34,7 +34,10 @@ int main( int argc, const char** argv )
 
         board->setSpeed(motorSpeed);
 
-        board->setPosition(0, position1);
+        for(int i=0; i<6; i++)
+        {
+            board->setPosition(i, position1);
+        }
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
@@ -130,10 +133,10 @@ int main( int argc, const char** argv )
         usleep(1000000);
         while(true)
         {
-            controller->moveLegSingle(0, legUp, speedo);
-            controller->moveLegSingle(0, legBack, speedo);
-            controller->moveLegSingle(0, legUp, speedo);
-            controller->moveLegSingle(0, initial, speedo);
+            controller->moveLegSingle(2, legUp, speedo);
+            controller->moveLegSingle(2, legBack, speedo);
+            controller->moveLegSingle(2, legUp, speedo);
+            controller->moveLegSingle(2, initial, speedo);
         }
 
         //Robot wstaje do pozycji home

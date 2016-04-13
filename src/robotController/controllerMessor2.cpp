@@ -157,9 +157,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
         for(int i=0; i<configuration.size(); i++)
         {
-            //mtx.lock();
+            mtx.lock();
             board->readPosition(legNo, i, readAngle[i]);
-            //mtx.unlock();
+            mtx.unlock();
             diff[i] = abs(readAngle[i] - configuration[i]);
             if(diff[i] > longestJourney)
             {
@@ -170,26 +170,26 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         for(int i=0; i<configuration.size(); i++)
         {
             speedScale[i] = diff[i] / longestJourney;
-            //mtx.lock();
+            mtx.lock();
             board->setSpeed(legNo, i, speed);
-            //mtx.unlock();
+            mtx.unlock();
 
         }
 
 
         bool motionFinished = false;
         float_type offset = 0.10;
-        //mtx.lock();
+        mtx.lock();
         board->setPosition(legNo, configuration);
-        //mtx.unlock();
+        mtx.unlock();
 
         while(!motionFinished)
         {
-            //mtx.lock();
+            mtx.lock();
             board->readPosition(legNo, 0, readAngle[0]);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
-            //mtx.unlock();
+            mtx.unlock();
 
 
             cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
