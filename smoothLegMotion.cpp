@@ -78,17 +78,27 @@ int main( int argc, const char** argv )
         Mat34 legUp(Mat34::Identity());
         Mat34 legDown(Mat34::Identity());
 
+        Mat34 legBackR(Mat34::Identity());
+        Mat34 legUpR(Mat34::Identity());
+
         vector<Mat34> trajBack;
         vector<Mat34> trajBackToInitial;
         vector<Mat34> trajToInitial;
         vector<Mat34> trajUp;
         vector<Mat34> trajDown;
 
+        vector<Mat34> trajBackR;
+        vector<Mat34> trajUpR;
+
+
         std::vector<std::vector<Mat34>> executeLegsMovementBack;
         std::vector<std::vector<Mat34>> executeLegsMovementUp;
         std::vector<std::vector<Mat34>> executeLegsMovementInitial;
         std::vector<std::vector<Mat34>> executeLegsMovementBackUp;
         std::vector<std::vector<Mat34>> executeLegsMovementBackInitial;
+
+        std::vector<std::vector<Mat34>> executeLegsMovementBackUpR;
+        std::vector<std::vector<Mat34>> executeLegsMovementBackInitialR;
 
 
         legBack(1,3)=0.07;
@@ -97,6 +107,13 @@ int main( int argc, const char** argv )
         legUp(2,3) = -0.1;
         legUp(0,3) = -0.05;
         trajUp.push_back(legUp);
+
+        legBackR(1,3)=-0.07;
+        trajBackR.push_back(legBackR);
+
+        legUpR(2,3) = -0.1;
+        legUpR(0,3) = 0.05;
+        trajUpR.push_back(legUpR);
 
         legDown(2,3) = 0.1;
         trajDown.push_back(legDown);
@@ -124,10 +141,17 @@ int main( int argc, const char** argv )
 
         executeLegsMovementBackUp.push_back(trajUp);
         executeLegsMovementBackUp.push_back(trajUp);
-        executeLegsMovementBackUp.push_back(trajUp);
+        executeLegsMovementBackUp.push_back(trajUpR);
         executeLegsMovementBackUp.push_back(trajBack);
-        executeLegsMovementBackUp.push_back(trajBack);
-        executeLegsMovementBackUp.push_back(trajBack);
+        executeLegsMovementBackUp.push_back(trajBackR);
+        executeLegsMovementBackUp.push_back(trajBackR);
+
+        executeLegsMovementBackUpR.push_back(trajUp);
+        executeLegsMovementBackUpR.push_back(trajUpR);
+        executeLegsMovementBackUpR.push_back(trajUpR);
+        executeLegsMovementBackUpR.push_back(trajBack);
+        executeLegsMovementBackUpR.push_back(trajBack);
+        executeLegsMovementBackUpR.push_back(trajBackR);
 
 
         usleep(1000000);
@@ -153,7 +177,7 @@ int main( int argc, const char** argv )
                 controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
                 controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
 
-                controller->moveLegs(legNos135024, executeLegsMovementBackUp, speedo);
+                controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
                 controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
 
             }
