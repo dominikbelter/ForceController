@@ -1,14 +1,16 @@
 #include "include/defs/defs.h"
-//#include "include/board/board.h"
+#include "include/board/board.h"
 #include "include/robotController/controllerMessor2.h"
-//#include "include/board/boardDynamixel.h"
-//#include "3rdParty/dynamixel/dynamixel.h"
-//#include "3rdParty/dynamixel/dxl_hal.h"
+#include "include/robotModel/robotMessor2.h"
+#include "include/board/boardDynamixel.h"
+#include "3rdParty/dynamixel/dynamixel.h"
+#include "3rdParty/dynamixel/dxl_hal.h"
 #include <iostream>
 #include <stdio.h>
 #include <thread>
 using namespace std;
 using namespace controller;
+
 
 void MoveLegsInThreads(int l, vector<Mat34> traj, float_type speed, RobotController* cont)
 {
@@ -20,13 +22,6 @@ int main( int argc, const char** argv )
 
     try {
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
-
-        vector <float_type> motorSpeed;
-        for(int i = 0; i < 18; i++ ){
-        motorSpeed.push_back(10);
-        }
-        Board *robot = createBoardDynamixel();
-        robot->setSpeed(motorSpeed);
 
         float_type speedo = 10;
 

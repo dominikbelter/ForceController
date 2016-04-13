@@ -166,7 +166,11 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                 longestJourney = diff[i];
             }
         }
-
+        vector <float_type> motorSpeed;
+        for(int i = 0; i < 18; i++ ){
+        motorSpeed.push_back(10);
+        }
+        board->setSpeed(motorSpeed);
         for(int i=0; i<configuration.size(); i++)
         {
             speedScale[i] = diff[i] / longestJourney;
