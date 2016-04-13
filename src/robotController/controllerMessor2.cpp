@@ -110,7 +110,10 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
 
     configuration = robot->moveLeg(legNo, trajectory);
-
+    if(legNo > 2)
+{
+ configuration[0] -= 6.28;
+}
 
     if (config.useVisualizer)
     {
@@ -178,7 +181,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
 
         bool motionFinished = false;
-        float_type offset = 0.10;
+        float_type offset = 0.20;
         mtx.lock();
         board->setPosition(legNo, configuration);
         mtx.unlock();
@@ -186,7 +189,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         while(!motionFinished)
         {
             mtx.lock();
-            board->readPosition(legNo, 0, readAngle[0]);
+            board->readPosition(legNo, 0, readAngle[0],true);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
             mtx.unlock();
@@ -197,7 +200,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
             {
                 motionFinished = true;
-                cout << "move finished";
+                cout << "move finished " << legNo << endl;
             }
         }
 

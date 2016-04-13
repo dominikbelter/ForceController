@@ -101,14 +101,14 @@ int main( int argc, const char** argv )
         std::vector<std::vector<Mat34>> executeLegsMovementBackInitialR;
 
 
-        legBack(1,3)=0.07;
+        legBack(1,3)=0.05;
         trajBack.push_back(legBack);
 
         legUp(2,3) = -0.1;
         legUp(0,3) = -0.05;
         trajUp.push_back(legUp);
 
-        legBackR(1,3)=-0.07;
+        legBackR(1,3)=-0.05;
         trajBackR.push_back(legBackR);
 
         legUpR(2,3) = -0.1;
