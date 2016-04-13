@@ -25,10 +25,10 @@ int main( int argc, const char** argv )
         for(int i = 0; i < 18; i++ ){
         motorSpeed.push_back(10);
         }
-        Board* board;
-        board = createBoardDynamixel();
+        Board* board = createBoardDynamixel();
+
         board->setSpeed(motorSpeed);
-        board->~Board();
+
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
 
