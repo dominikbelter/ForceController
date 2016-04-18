@@ -48,6 +48,13 @@
 #define _DEG2DYNAMIXEL          (0.341333)
 #define _stalePrzesuniecie      512
 
+#define READ_WORD               0
+#define WRITE_WORD              1
+#define READ_BYTE               2
+#define WRITE_BYTE              3
+#define INITIALIZE              4
+#define TERMINATE               5
+
 namespace controller {
 
     /// create a single board controller (with usb2dynamixel)
@@ -85,6 +92,18 @@ class BoardDynamixel : public Board{
          * \param angle Angle value.
          * \return Return error value.
          */
+
+        unsigned int  sendCommand(int dynamixelCmd, int usb2dynNo, int servoNo, int command, float value);
+
+        /**
+         * \brief Function replacing bibliotecal dxl_write_word
+         * \param usd2dynNo Usb number
+         * \param dynamixelCmd e.g. write_word, read_word, initialize
+         * \param servoNo servomotor number
+         * \param command e.g. movingSpeed, complianceMargin
+         * \param value value of command
+        */
+
         unsigned int setPosition(unsigned char legNo, unsigned char jointNo, float_type angle);
         //CDynamixel obiect;
         /**
