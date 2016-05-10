@@ -86,21 +86,24 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
 }
 
 
-unsigned int BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float value){
+float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float_type value){
 
     std::mutex mtx;
+    float_type temp = 0;
     //READ_WORD
     if(dynamixelCmd == 0){
 
         if (usb2dynNo==0){
           mtx.lock();
-          dynamixelMotors[0].dxl_read_word(servoNo, command);
+          temp = dynamixelMotors[0].dxl_read_word(servoNo, command);
           mtx.unlock();
+          return temp;
         }
         else if (usb2dynNo==1){
           mtx.lock();
-          dynamixelMotors[1].dxl_read_word(servoNo, command);
+          temp = dynamixelMotors[1].dxl_read_word(servoNo, command);
           mtx.unlock();
+          return temp;
         }
     }
     //WRITE_WORD
@@ -122,13 +125,15 @@ unsigned int BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsign
 
         if (usb2dynNo==0){
           mtx.lock();
-          dynamixelMotors[0].dxl_read_byte(servoNo, command);
+          temp = dynamixelMotors[0].dxl_read_byte(servoNo, command);
           mtx.unlock();
+          return temp;
         }
         else if (usb2dynNo==1){
           mtx.lock();
-          dynamixelMotors[1].dxl_read_byte(servoNo, command);
+          temp =  dynamixelMotors[1].dxl_read_byte(servoNo, command);
           mtx.unlock();
+          return temp;
         }
     }
     //WRITE_BYTE

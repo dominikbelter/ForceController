@@ -93,7 +93,7 @@ class BoardDynamixel : public Board{
          * \return Return error value.
          */
 
-        unsigned int  sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float value);
+        float_type sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float_type value);
 
         /**
          * \brief Function replacing bibliotecal dxl_write_word
