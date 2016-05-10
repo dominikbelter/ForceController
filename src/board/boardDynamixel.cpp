@@ -113,11 +113,13 @@ float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned
           mtx.lock();
           dynamixelMotors[0].dxl_write_word(servoNo, command, value);
           mtx.unlock();
+          return 0;
         }
         else if (usb2dynNo==1){
           mtx.lock();
           dynamixelMotors[1].dxl_write_word(servoNo, command, value);
           mtx.unlock();
+          return 0;
         }
     }
     //READ_BYTE
@@ -142,11 +144,13 @@ float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned
           mtx.lock();
           dynamixelMotors[0].dxl_write_byte(servoNo, command, value);
           mtx.unlock();
+          return 0;
         }
         else if (usb2dynNo==1){
           mtx.lock();
           dynamixelMotors[1].dxl_write_byte(servoNo, command, value);
           mtx.unlock();
+          return 0;
         }
     }
     //INITIALIZE
@@ -157,11 +161,13 @@ float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned
           mtx.lock();
           dynamixelMotors[0].dxl_initialize(servoNo, command);
           mtx.unlock();
+          return 0;
         }
         else if (usb2dynNo==1){
           mtx.lock();
           dynamixelMotors[1].dxl_initialize(servoNo, command);
           mtx.unlock();
+          return 0;
         }
     }
     //TERMINATE
@@ -171,11 +177,13 @@ float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned
           mtx.lock();
           dynamixelMotors[0].dxl_terminate();
           mtx.unlock();
+          return 0;
         }
         else if (usb2dynNo==1){
           mtx.lock();
           dynamixelMotors[1].dxl_terminate();
           mtx.unlock();
+          return 0;
         }
     }
  }
