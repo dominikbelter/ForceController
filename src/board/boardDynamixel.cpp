@@ -88,7 +88,7 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
 
 float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float_type value){
 
-    std::mutex mtx;
+
     float_type temp = 0;
     //READ_WORD
     if(dynamixelCmd == 0){

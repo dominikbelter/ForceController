@@ -69,6 +69,7 @@ using namespace controller;
  */
 class BoardDynamixel : public Board{
     public:
+        std::mutex mtx;
         /// Default values of angles for serwomotors.
         int zero_angle[18];
         //std::vector <float_type> zero_angle;  //rad
