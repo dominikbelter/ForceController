@@ -184,6 +184,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
         while(!motionFinished)
         {
+             usleep(200000);
             board->readPosition(legNo, 0, readAngle[0],true);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
