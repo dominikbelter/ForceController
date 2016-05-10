@@ -94,12 +94,14 @@ unsigned int BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, int se
 
         if (usb2dynNo==0){
           mtx.lock();
-          dynamixelMotors[0].dxl_read_word(servoNo, command);
+          CDynamixel *object1=&dynamixelMotors[0];
+          object1->dxl_read_word(servoNo, command);
           mtx.unlock();
         }
         else if (usb2dynNo==1){
           mtx.lock();
-          dynamixelMotors[1].dxl_read_word(servoNo, command);
+          CDynamixel *object2=&dynamixelMotors[1];
+          object2->dxl_read_word(servoNo, command);
           mtx.unlock();
         }
     }

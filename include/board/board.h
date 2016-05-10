@@ -279,6 +279,17 @@ namespace controller {
             /// Virtual descrutor
             virtual ~Board() {}
 
+            virtual unsigned int  sendCommand(int dynamixelCmd, int usb2dynNo, int servoNo, int command, float value) = 0;
+
+            /**
+             * \brief Function replacing bibliotecal dxl_write_word
+             * \param usd2dynNo Usb number
+             * \param dynamixelCmd e.g. write_word, read_word, initialize
+             * \param servoNo servomotor number
+             * \param command e.g. movingSpeed, complianceMargin
+             * \param value value of command
+            */
+
         protected:
             /// Board type
             Type type;
