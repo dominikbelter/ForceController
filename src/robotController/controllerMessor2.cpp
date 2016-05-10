@@ -10,7 +10,7 @@
 
 using namespace controller;
 
-std::mutex mtx;
+
 
 /// A single instance of Controller Messor2
 ControllerMessor2::Ptr controllerMessor2;
@@ -115,6 +115,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
  configuration[0] -= 6.28;
 }
 
+    std::cout << "c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
     if (config.useVisualizer)
     {
         std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
@@ -143,9 +144,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             {
                 configuration[s] = currentConfiguration[s] + diff[s]*i;
             }
-            mtx.lock();
+
             visualizer->setPosition(legNo,configuration);
-            mtx.unlock();
+
             i++;
             usleep(50000);
 
@@ -160,9 +161,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
         for(int i=0; i<configuration.size(); i++)
         {
-            mtx.lock();
+
             board->readPosition(legNo, i, readAngle[i]);
-            mtx.unlock();
             diff[i] = abs(readAngle[i] - configuration[i]);
             if(diff[i] > longestJourney)
             {
@@ -173,28 +173,22 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         for(int i=0; i<configuration.size(); i++)
         {
             speedScale[i] = diff[i] / longestJourney;
-            mtx.lock();
             board->setSpeed(legNo, i, speed);
-            mtx.unlock();
 
         }
 
 
         bool motionFinished = false;
         float_type offset = 0.20;
-        mtx.lock();
         board->setPosition(legNo, configuration);
-        mtx.unlock();
 
         while(!motionFinished)
         {
-            mtx.lock();
             board->readPosition(legNo, 0, readAngle[0],true);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
-            mtx.unlock();
 
-
+            std::cout << legNo << std::endl;
             cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
 
             if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
