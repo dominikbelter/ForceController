@@ -104,7 +104,7 @@ controller::RobotController* controller::createControllerMessor2(std::string fil
 void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed)
 {
 
-
+    std::mutex mtx;
     std::vector<float_type> configuration;
     std::vector<float_type> diff(3);
 
@@ -114,10 +114,12 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 {
  configuration[0] -= 6.28;
 }
-
-//    std::cout << "c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
+    mtx.lock();
+    std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
+    mtx.unlock();
     if (config.useVisualizer)
     {
+
         std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
 
         float_type step = 0.04;
@@ -155,6 +157,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
     }
     else
     {
+
         vector<float_type> readAngle(3);
         vector<float_type> speedScale(3);
         float_type longestJourney = 0;
@@ -188,10 +191,10 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             board->readPosition(legNo, 0, readAngle[0],true);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
-
-//            std::cout << (int)legNo << std::endl;
-//            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
-
+            mtx.lock();
+            std::cout << (int)legNo << std::endl;
+            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
+            mtx.unlock();
             if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
             {
                 motionFinished = true;
