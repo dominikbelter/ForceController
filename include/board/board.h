@@ -279,7 +279,7 @@ namespace controller {
             /// Virtual descrutor
             virtual ~Board() {}
 
-            virtual unsigned int  sendCommand(int dynamixelCmd, int usb2dynNo, int servoNo, int command, float value) = 0;
+            virtual unsigned int  sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float value) = 0;
 
             /**
              * \brief Function replacing bibliotecal dxl_write_word

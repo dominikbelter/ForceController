@@ -86,7 +86,7 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
 }
 
 
-unsigned int BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, int servoNo, int command, float value){
+unsigned int BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float value){
 
     std::mutex mtx;
     //READ_WORD
@@ -94,14 +94,12 @@ unsigned int BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, int se
 
         if (usb2dynNo==0){
           mtx.lock();
-          CDynamixel *object1=&dynamixelMotors[0];
-          object1->dxl_read_word(servoNo, command);
+          dynamixelMotors[0].dxl_read_word(servoNo, command);
           mtx.unlock();
         }
         else if (usb2dynNo==1){
           mtx.lock();
-          CDynamixel *object2=&dynamixelMotors[1];
-          object2->dxl_read_word(servoNo, command);
+          dynamixelMotors[1].dxl_read_word(servoNo, command);
           mtx.unlock();
         }
     }
