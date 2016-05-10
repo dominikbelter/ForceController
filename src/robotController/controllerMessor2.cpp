@@ -115,7 +115,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
  configuration[0] -= 6.28;
 }
 
-    std::cout << "c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
+//    std::cout << "c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
     if (config.useVisualizer)
     {
         std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
@@ -189,8 +189,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
 
-            std::cout << (int)legNo << std::endl;
-            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
+//            std::cout << (int)legNo << std::endl;
+//            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
 
             if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
             {
