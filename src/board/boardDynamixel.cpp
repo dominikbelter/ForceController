@@ -453,10 +453,10 @@ unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqu
 unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle){
     float_type ang_odt;
     float_type ang;
-    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     //cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
-    //ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
-    ang_odt = sendCommand(READ_WORD, legNo < 3 ?0:1, legNo*10 + jointNo, P_PRESENT_POSITION_L, 0);
+    ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
+    //ang_odt = sendCommand(READ_WORD, legNo < 3 ?0:1, legNo*10 + jointNo, P_PRESENT_POSITION_L, 0);
     ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*3+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
     if(legNo < 3 && jointNo == 2){
