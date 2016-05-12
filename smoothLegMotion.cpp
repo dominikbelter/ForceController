@@ -157,10 +157,10 @@ int main( int argc, const char** argv )
         usleep(1000000);
         while(true)
         {
-            controller->moveLegSingle(2, legUp, speedo);
-            controller->moveLegSingle(2, legBack, speedo);
-            controller->moveLegSingle(2, legUp, speedo);
-            controller->moveLegSingle(2, initial, speedo);
+            controller->moveLegSingleLin(2, legUp, speedo);
+           // controller->moveLegSingleLin(2, legBack, speedo);
+           // controller->moveLegSingleLin(2, legUp, speedo);
+            controller->moveLegSingleLin(2, initial, speedo);
         }
 
         //Robot wstaje do pozycji home

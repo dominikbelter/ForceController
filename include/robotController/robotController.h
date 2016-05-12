@@ -43,6 +43,8 @@ namespace controller {
 
             virtual void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed) = 0;
 
+            virtual void moveLegSingleLin(unsigned char legNo, const Mat34& trajectory, float_type speed) = 0;
+
             virtual void moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed) = 0;
 
             virtual void moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed) = 0;

@@ -78,6 +78,8 @@ namespace controller {
             */
             virtual std::vector<float_type> computeCompliance(const std::vector<float_type> configuration) = 0;
 
+            virtual Mat34 legCPos(std::vector<float_type> configuration, int legNo) = 0;
+
             /// Virtual descrutor
             virtual ~Robot() {}
 

@@ -121,6 +121,8 @@ public:
     */
     std::vector<float_type> computeCompliance(const std::vector<float_type> configuration);
 
+    Mat34 legCPos(std::vector<float_type> configuration, int legNo);
+
     ~RobotMessor(void);
 
 private:

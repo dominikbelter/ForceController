@@ -10,7 +10,7 @@
 
 using namespace controller;
 
-
+std::mutex mtx;
 
 /// A single instance of Controller Messor2
 ControllerMessor2::Ptr controllerMessor2;
@@ -101,19 +101,81 @@ controller::RobotController* controller::createControllerMessor2(std::string fil
     return controllerMessor2.get();
 }
 
+void ControllerMessor2::moveLegSingleLin(unsigned char legNo, const Mat34& trajectory, float_type speed)
+{
+    std::vector<float_type> configuration;
+    Mat34 currrentCPos;
+
+    cout << "go to : ";
+    for (int i = 0; i < 3; i++)
+    {
+
+        cout  << trajectory(i,3) << ", ";
+
+    }
+    cout << endl;
+
+    moveLegSingle(legNo, trajectory, speed);
+
+    configuration = robot->moveLeg(legNo, trajectory);
+
+    if (config.useVisualizer)
+    {
+        std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
+        currrentCPos = robot->legCPos(configuration, legNo);
+
+//        mtx.lock();
+//        for (int i = 0; i < 4; i++)
+//        {
+//            for (int j = 0; j < 4; j++)
+//            {
+//                cout << currrentCPos(i,j) << ", ";
+//            }
+//            cout << endl;
+//        }
+//        cout << endl;
+
+//        mtx.unlock();
+    }
+    else
+    {
+        vector<float_type> readCurrAngle(3);
+
+        board->readPosition(legNo, 0, readCurrAngle[0],true);
+        board->readPosition(legNo, 1, readCurrAngle[1]);
+        board->readPosition(legNo, 2, readCurrAngle[2]);
+
+        currrentCPos =robot->legCPos(configuration, legNo);
+        mtx.lock();
+        for (int i = 0; i < 3; i++)
+        {
+
+            cout << currrentCPos(i,3) << ", ";
+
+        }
+        cout << endl;
+        mtx.unlock();
+        //while(true){};
+    }
+
+
+
+
+}
+
 void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed)
 {
 
-    std::mutex mtx;
+
     std::vector<float_type> configuration;
     std::vector<float_type> diff(3);
 
-
     configuration = robot->moveLeg(legNo, trajectory);
+
     if(legNo > 2)
-{
- configuration[0] -= 6.28;
-}
+    {
+        configuration[0] -= 6.28;
+    }
     mtx.lock();
     std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
     mtx.unlock();
@@ -131,7 +193,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             {
                 if(configuration[s] > 3.14)
                 {
-                    configuration[s] -= 6.28;
+                    //configuration[s] -= 6.28;
                 }
             }
             diff[s]=(configuration[s] - currentConfiguration[s])*step;
@@ -211,7 +273,7 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& t
 
     for(int i=0; i<trajectory.size(); i++)
     {
-        this->moveLegSingle(legNo, trajectory[i], speed);
+        this->moveLegSingleLin(legNo, trajectory[i], speed);
     }
 
 }
