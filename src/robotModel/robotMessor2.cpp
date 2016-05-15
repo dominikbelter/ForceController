@@ -46,8 +46,8 @@ std::vector<float_type> RobotMessor::fluentPlatform(Mat34 asked, int legNo)
     Mat34 initial(Mat34::Identity());
     Mat34 global(Mat34::Identity());
     global(0,3) = 10;
-    global(1,3) = 5;
-    global(2,3) = 5;
+    global(1,3) = 10;
+    global(2,3) = 10;
 
     std::vector<float_type> conf, confObserve, confGtoX, confGtoR, confAsked;
     conf = computeLegConfiguration(legNo, initial, configurationStart);             //calculate initial configuration
