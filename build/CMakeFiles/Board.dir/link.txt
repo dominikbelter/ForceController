@@ -1,0 +1,2 @@
+/usr/bin/ar cr lib/libBoard.a  CMakeFiles/Board.dir/src/board/boardDynamixel.cpp.o
+/usr/bin/ranlib lib/libBoard.a

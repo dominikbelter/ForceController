@@ -1,0 +1,2 @@
+/usr/bin/ar cr lib/libRobot.a  CMakeFiles/Robot.dir/src/robotModel/robotMessor2.cpp.o
+/usr/bin/ranlib lib/libRobot.a

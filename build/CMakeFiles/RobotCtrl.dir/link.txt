@@ -1,0 +1,2 @@
+/usr/bin/ar cr lib/libRobotCtrl.a  CMakeFiles/RobotCtrl.dir/src/robotController/controllerMessor2.cpp.o
+/usr/bin/ranlib lib/libRobotCtrl.a

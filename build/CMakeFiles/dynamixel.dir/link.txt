@@ -1,0 +1,2 @@
+/usr/bin/ar cr lib/libdynamixel.a  CMakeFiles/dynamixel.dir/3rdParty/dynamixel/dynamixel.cpp.o CMakeFiles/dynamixel.dir/3rdParty/dynamixel/dxl_hal.cpp.o
+/usr/bin/ranlib lib/libdynamixel.a

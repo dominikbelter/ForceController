@@ -1,0 +1,2 @@
+/usr/bin/ar cr lib/libLeg.a  CMakeFiles/Leg.dir/src/legModel/insectLeg.cpp.o
+/usr/bin/ranlib lib/libLeg.a

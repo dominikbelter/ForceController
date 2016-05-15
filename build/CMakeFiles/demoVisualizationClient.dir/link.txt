@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++0x -pthread -O3 -DNDEBUG    CMakeFiles/demoVisualizationClient.dir/demoVisualizationClient.cpp.o  -o bin/demoVisualizationClient -rdynamic lib/libLeg.a lib/libBoard.a lib/libRobot.a lib/libVisualization.a -lIrrlicht -lpthread -lboost_system lib/libdynamixel.a lib/libRobot.a lib/libLeg.a lib/libKinematic.a lib/libtinyxml2.a 

@@ -123,6 +123,8 @@ public:
 
     Mat34 legCPos(std::vector<float_type> configuration, int legNo);
 
+    std::vector<float_type> fluentPlatform(Mat34 askedP, int legNo);
+
     ~RobotMessor(void);
 
 private:

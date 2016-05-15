@@ -32,6 +32,19 @@ int main( int argc, const char** argv )
         position1.push_back((24*M_PI)/180);
         position1.push_back((114*M_PI)/180);
 
+         Mat34 initialization(Mat34::Identity());
+         initialization(1,3) = 0.1;
+         initialization = initialization.matrix();
+         for(int i=0;i <4 ; i++)
+         {
+             for(int j=0;j<4;j++)
+             {
+                 cout << initialization(i,j);
+             }
+             cout << endl;
+         }
+
+
         board->setSpeed(motorSpeed);
 
         for(int i=0; i<6; i++)
