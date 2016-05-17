@@ -74,10 +74,28 @@ void ControllerMessor2::finishVisualizer(void){
 ///Move platform
 void ControllerMessor2::movePlatform(Mat34& motion, double speed){
     std::vector<double> configuration = robot->movePlatform(motion);
-    if (config.useVisualizer)
-        visualizer->setPosition(configuration);
-    else
-        board->setPosition(configuration);
+    std::vector<unsigned char> legsNo;
+    std::vector<float_type> conf;
+    std::vector<std::vector<float_type> > configs;
+    for (int i=0; i<6; i++)
+    {
+        legsNo.push_back(i);
+        for (int j=0; j<3; j++)
+        {
+            conf.push_back(configuration[i*3+j]);
+        }
+        configs.push_back(conf);
+        conf.clear();
+    }
+
+    std::vector<std::vector<std::vector<float_type> > > confTotal;
+    confTotal.push_back(configs);
+
+    moveLegs(legsNo, confTotal, speed);
+//    if (config.useVisualizer)
+//        visualizer->setPosition(configuration);
+//    else
+//        board->setPosition(configuration);
 }
 
 ControllerMessor2::~ControllerMessor2(void) {
@@ -268,12 +286,128 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
 }
 
+void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<float_type>& configuration1, float_type speed)
+{
+
+    std::vector<float_type> configuration(3);
+    std::vector<float_type> diff(3);
+    mtx.lock();
+    configuration[0] = configuration1[0];
+    configuration[1] = configuration1[1];
+    configuration[2] = configuration1[2];
+    mtx.unlock();
+
+    if(legNo > 2)
+    {
+        configuration[0] -= 6.28;
+    }
+    mtx.lock();
+    std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
+    mtx.unlock();
+    if (config.useVisualizer)
+    {
+        std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
+
+        float_type step = 0.04;
+        int n = 1/step;
+        //std::cout << n << "    " << step << endl;
+        for(int s=0; s<configuration.size(); s++)
+        {
+            if(s == 0)
+            {
+                if(configuration[s] > 3.14)
+                {
+                    //configuration[s] -= 6.28;
+                }
+            }
+            diff[s]=(configuration[s] - currentConfiguration[s])*step;
+        }
+
+        int i = 0;
+        while(i<=n)
+        {
+
+            //cout << visualizer->getPosition(legNo)[0] << endl;
+            for(int s=0; s<configuration.size(); s++)
+            {
+                configuration[s] = currentConfiguration[s] + diff[s]*i;
+            }
+
+            visualizer->setPosition(legNo,configuration);
+
+            i++;
+            usleep(50000);
+
+
+        }
+    }
+    else
+    {
+
+        vector<float_type> readAngle(3);
+        vector<float_type> speedScale(3);
+        float_type longestJourney = 0;
+
+        for(int i=0; i<configuration.size(); i++)
+        {
+
+            board->readPosition(legNo, i, readAngle[i]);
+            diff[i] = abs(readAngle[i] - configuration[i]);
+            if(diff[i] > longestJourney)
+            {
+                longestJourney = diff[i];
+            }
+        }
+
+        for(int i=0; i<configuration.size(); i++)
+        {
+            speedScale[i] = diff[i] / longestJourney;
+            board->setSpeed(legNo, i, speed*speedScale[i]);
+
+        }
+
+
+        bool motionFinished = false;
+        float_type offset = 0.20;
+        board->setPosition(legNo, configuration);
+
+        while(!motionFinished)
+        {
+            usleep(200000);
+            board->readPosition(legNo, 0, readAngle[0],true);
+            board->readPosition(legNo, 1, readAngle[1]);
+            board->readPosition(legNo, 2, readAngle[2]);
+            mtx.lock();
+            std::cout << (int)legNo << std::endl;
+            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
+            mtx.unlock();
+            if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
+            {
+                motionFinished = true;
+                cout << "move finished " << legNo << endl;
+            }
+        }
+
+    }
+
+}
+
+
 void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed)
 {
 
     for(int i=0; i<trajectory.size(); i++)
     {
         this->moveLegSingleLin(legNo, trajectory[i], speed);
+    }
+
+}
+
+void ControllerMessor2::moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed)
+{
+    for(int i=0; i<configuration.size(); i++)
+    {
+        this->moveLegSingle(legNo, configuration[i], speed);
     }
 
 }
@@ -363,3 +497,90 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
 //    // OK to destroy now
 //    legsThreads.clear();
 }
+
+void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo,const std::vector<std::vector<std::vector<float_type> > >& configuration, float_type speed)
+{
+    if(legNo.size() == 1)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
+        first.join();
+    }
+
+    else if(legNo.size() == 2)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
+        first.join();
+        second.join();
+    }
+
+    else if(legNo.size() == 3)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
+        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed);
+        first.join();
+        second.join();
+        third.join();
+    }
+
+    else if(legNo.size() == 4)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
+        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed);
+        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+    }
+
+    else if(legNo.size() == 5)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
+        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed);
+        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed);
+        std::thread fifth(&ControllerMessor2::moveLegConf,this,legNo[4],configuration[4], speed);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+        fifth.join();
+    }
+
+    else if(legNo.size() == 6)
+    {
+
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
+        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed);
+        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed);
+        std::thread fifth(&ControllerMessor2::moveLegConf,this,legNo[4],configuration[4], speed);
+        std::thread sixth(&ControllerMessor2::moveLegConf,this,legNo[5],configuration[5], speed);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+        fifth.join();
+        sixth.join();
+    }
+
+
+
+//    std::vector<std::thread> legsThreads;
+
+//    for(int i=0; i<legNo.size(); i++){
+//        legsThreads.emplace_back(&ControllerMessor2::moveLeg,this,legNo[i],trajectory[i], speed);
+//    }
+
+//    // later
+//    for (int i=0; i<legNo.size(); i++) {
+//        legsThreads.at(i).join();
+//    }
+
+//    // OK to destroy now
+//    legsThreads.clear();
+}
+

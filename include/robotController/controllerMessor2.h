@@ -71,6 +71,13 @@ class ControllerMessor2 : public RobotController
 
         void moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed);
 
+        void moveLegSingle(unsigned char legNo,const std::vector<float_type>& configuration1, float_type speed);
+
+        void moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed);
+
+        void moveLegs(std::vector<unsigned char> legNo,const std::vector<std::vector<std::vector<float_type> > >& configuration, float_type speed);
+
+
         /// use visualizer?
         inline bool useVisualizer(void) {return config.useVisualizer;}
 

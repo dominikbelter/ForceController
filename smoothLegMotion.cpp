@@ -45,18 +45,24 @@ int main( int argc, const char** argv )
 
         float_type speedo = 20;
         char wait;
-        std::cin >>wait;
+        usleep(1000000);
         Mat34 motion(Mat34::Identity());
-        motion(2,3)=0.03;
         controller->movePlatform(motion,1.0);
-        std::cin >>wait;
+        usleep(1000000);
+        motion(1,3)=0.03;
+        controller->movePlatform(motion,1.0);
+        usleep(1000000);
         motion(0,3)=0.03;
         controller->movePlatform(motion,1.0);
-        while(true)
-        {
+        usleep(1000000);
+        motion(2,3)=0.03;
+        controller->movePlatform(motion,1.0);
+
+        if (((ControllerMessor2*)controller)->useVisualizer()){
+            ((ControllerMessor2*)controller)->finishVisualizer();
         }
 
-
+        std::cout << "KONIEC";
 
         std::vector<unsigned char> legNos024;
         std::vector<unsigned char> legNos135;
