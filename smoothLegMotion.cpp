@@ -138,7 +138,7 @@ int main( int argc, const char** argv )
 
         executeLegsMovementBack.push_back(trajBack);
         executeLegsMovementBack.push_back(trajBack);
-        executeLegsMovementBack.push_back(trajBack);
+        executeLegsMovementBack.push_back(trajBackR);
 
         executeLegsMovementUp.push_back(trajUp);
         executeLegsMovementUp.push_back(trajUp);
@@ -211,8 +211,8 @@ int main( int argc, const char** argv )
         ///////RUCH PIĘCIOPODPOROWY/////////
         if(fiveLegMovement)
         {
-            executeLegsMovementBack.push_back(trajBack);
-            executeLegsMovementBack.push_back(trajBack);
+            executeLegsMovementBack.push_back(trajBackR);
+            executeLegsMovementBack.push_back(trajBackR);
 
             std::vector<unsigned char> legNos;
 
