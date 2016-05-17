@@ -55,7 +55,7 @@ int main( int argc, const char** argv )
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
 
-        float_type speedo = 10;
+        float_type speedo = 30;
 
 
         std::vector<unsigned char> legNos024;
