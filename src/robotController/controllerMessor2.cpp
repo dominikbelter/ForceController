@@ -74,29 +74,29 @@ void ControllerMessor2::finishVisualizer(void){
 ///Move platform
 void ControllerMessor2::movePlatform(Mat34& motion, double speed){
     std::vector<double> configuration = robot->movePlatform(motion);
-    std::vector<unsigned char> legsNo;
-    std::vector<float_type> conf;
-    std::vector<std::vector<float_type> > configs;
-    std::vector<std::vector<std::vector<float_type> > > confTotal;
-    for (int i=0; i<6; i++)
-    {
-        legsNo.push_back(i);
-        for (int j=0; j<3; j++)
-        {
-            conf.push_back(configuration[i*3+j]);
-        }
-        configs.push_back(conf);
-        confTotal.push_back(configs);
-        conf.clear();
-        configs.clear();
-    }
+//    std::vector<unsigned char> legsNo;
+//    std::vector<float_type> conf;
+//    std::vector<std::vector<float_type> > configs;
+//    std::vector<std::vector<std::vector<float_type> > > confTotal;
+//    for (int i=0; i<6; i++)
+//    {
+//        legsNo.push_back(i);
+//        for (int j=0; j<3; j++)
+//        {
+//            conf.push_back(configuration[i*3+j]);
+//        }
+//        configs.push_back(conf);
+//        confTotal.push_back(configs);
+//        conf.clear();
+//        configs.clear();
+//    }
 
 
-    moveLegs(legsNo, confTotal, speed);
-//    if (config.useVisualizer)
-//        visualizer->setPosition(configuration);
-//    else
-//        board->setPosition(configuration);
+//    moveLegs(legsNo, confTotal, speed);
+    if (config.useVisualizer)
+        visualizer->setPosition(configuration);
+    else
+        board->setPosition(configuration);
 }
 
 ControllerMessor2::~ControllerMessor2(void) {
