@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++0x -pthread -O3 -DNDEBUG    CMakeFiles/demoBoard.dir/demoBoard.cpp.o  -o bin/demoBoard -rdynamic lib/libLeg.a lib/libBoard.a lib/libRobot.a lib/libVisualization.a lib/libdynamixel.a lib/libRobot.a lib/libLeg.a lib/libKinematic.a lib/libtinyxml2.a 

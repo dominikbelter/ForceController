@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++0x -pthread -O3 -DNDEBUG    CMakeFiles/demoMessor2Ctrl.dir/demoMessor2Ctrl.cpp.o  -o bin/demoMessor2Ctrl -rdynamic lib/libBoard.a lib/libRobot.a lib/libRobotCtrl.a lib/libVisualization.a lib/libBoard.a lib/libdynamixel.a lib/libRobot.a lib/libLeg.a lib/libKinematic.a lib/libtinyxml2.a -lIrrlicht 

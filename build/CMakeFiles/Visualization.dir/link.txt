@@ -1,2 +1,0 @@
-/usr/bin/ar cr lib/libVisualization.a  CMakeFiles/Visualization.dir/src/visualization/visualizerGL.cpp.o CMakeFiles/Visualization.dir/src/visualization/myeventreceiver.cpp.o CMakeFiles/Visualization.dir/src/visualization/visualizerIrrlicht.cpp.o
-/usr/bin/ranlib lib/libVisualization.a

@@ -1,2 +1,0 @@
-/usr/bin/ar cr lib/libCONTROLLER_DEFS.a  
-/usr/bin/ranlib lib/libCONTROLLER_DEFS.a

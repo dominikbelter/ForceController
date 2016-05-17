@@ -1,2 +1,0 @@
-/usr/bin/ar cr lib/libKinematic.a  CMakeFiles/Kinematic.dir/src/kinematic/kinematicLie.cpp.o
-/usr/bin/ranlib lib/libKinematic.a

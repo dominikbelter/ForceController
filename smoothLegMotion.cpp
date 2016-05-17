@@ -168,20 +168,20 @@ int main( int argc, const char** argv )
 
 
         usleep(1000000);
-        while(true)
-        {
-            controller->moveLegSingleLin(2, legUp, speedo);
-           // controller->moveLegSingleLin(2, legBack, speedo);
-           // controller->moveLegSingleLin(2, legUp, speedo);
-            controller->moveLegSingleLin(2, initial, speedo);
-        }
+//        while(true)
+//        {
+//            controller->moveLegSingleLin(2, legUp, speedo);
+//           // controller->moveLegSingleLin(2, legBack, speedo);
+//           // controller->moveLegSingleLin(2, legUp, speedo);
+//            controller->moveLegSingleLin(2, initial, speedo);
+//        }
 
         //Robot wstaje do pozycji home
         //controller->moveLegs(legNos024, executeLegsMovementBackInitial, speedo);
         //controller->moveLegs(legNos135, executeLegsMovementBackInitial, speedo);
 
-        bool threeLegMoveent = true;
-        bool fiveLegMovement = false;
+        bool threeLegMoveent = false;
+        bool fiveLegMovement = true;
         ///////RUCH TRÓJPODPOROWY/////////
         if(threeLegMoveent)
         {
