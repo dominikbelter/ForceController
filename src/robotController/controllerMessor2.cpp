@@ -238,7 +238,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         for(int i=0; i<configuration.size(); i++)
         {
             speedScale[i] = diff[i] / longestJourney;
-            board->setSpeed(legNo, i, speed);
+            board->setSpeed(legNo, i, speed*speedScale[i]);
 
         }
 
