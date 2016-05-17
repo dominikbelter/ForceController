@@ -32,18 +32,6 @@ int main( int argc, const char** argv )
         position1.push_back((24*M_PI)/180);
         position1.push_back((114*M_PI)/180);
 
-         Mat34 initialization(Mat34::Identity());
-         initialization(1,3) = 0.1;
-         initialization = initialization.matrix();
-         for(int i=0;i <4 ; i++)
-         {
-             for(int j=0;j<4;j++)
-             {
-                 cout << initialization(i,j);
-             }
-             cout << endl;
-         }
-
 
         board->setSpeed(motorSpeed);
 
@@ -56,6 +44,14 @@ int main( int argc, const char** argv )
 
 
         float_type speedo = 20;
+
+        Mat34 motion(Mat34::Identity());
+        motion(1,3)=0.03;
+        controller->movePlatform(motion,1.0);
+        while(true)
+        {
+        }
+
 
 
         std::vector<unsigned char> legNos024;
