@@ -96,6 +96,7 @@ int main( int argc, const char** argv )
 
         vector<Mat34> trajBack;
         vector<Mat34> trajBackToInitial;
+        vector<Mat34> trajBackToInitialR;
         vector<Mat34> trajToInitial;
         vector<Mat34> trajUp;
         vector<Mat34> trajDown;
@@ -133,6 +134,9 @@ int main( int argc, const char** argv )
 
         trajBackToInitial.push_back(legUp);
         trajBackToInitial.push_back(initial);
+
+        trajBackToInitialR.push_back(legUpR);
+        trajBackToInitialR.push_back(initial);
 
         trajToInitial.push_back(initial);
 
@@ -229,11 +233,11 @@ int main( int argc, const char** argv )
 
                 controller->moveLeg(0, trajToInitial, speedo);
 
-                controller->moveLeg(5, trajBackToInitial, speedo);
+                controller->moveLeg(5, trajBackToInitialR, speedo);
                 controller->moveLeg(1, trajBackToInitial, speedo);
-                controller->moveLeg(4, trajBackToInitial, speedo);
+                controller->moveLeg(4, trajBackToInitialR, speedo);
                 controller->moveLeg(2, trajBackToInitial, speedo);
-                controller->moveLeg(3, trajBackToInitial, speedo);
+                controller->moveLeg(3, trajBackToInitialR, speedo);
 
             }
         }
