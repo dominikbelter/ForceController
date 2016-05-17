@@ -44,9 +44,10 @@ int main( int argc, const char** argv )
 
 
         float_type speedo = 20;
-
+        char wait;
+        std::cin >>wait;
         Mat34 motion(Mat34::Identity());
-        motion(1,3)=0.03;
+        motion(2,3)=0.03;
         controller->movePlatform(motion,1.0);
         while(true)
         {
