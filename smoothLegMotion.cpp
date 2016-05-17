@@ -49,6 +49,9 @@ int main( int argc, const char** argv )
         Mat34 motion(Mat34::Identity());
         motion(2,3)=0.03;
         controller->movePlatform(motion,1.0);
+        std::cin >>wait;
+        motion(0,3)=0.03;
+        controller->movePlatform(motion,1.0);
         while(true)
         {
         }
