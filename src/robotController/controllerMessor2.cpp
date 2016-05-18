@@ -74,34 +74,37 @@ void ControllerMessor2::finishVisualizer(void){
 ///Move platform
 void ControllerMessor2::movePlatform(Mat34& motion, double speed){
     std::vector<double> configuration = robot->movePlatform(motion);
-//    std::vector<unsigned char> legsNo;
-//    std::vector<float_type> conf;
-//    std::vector<std::vector<float_type> > configs;
-//    std::vector<std::vector<std::vector<float_type> > > confTotal;
-//    for (int i=0; i<6; i++)
-//    {
-//        legsNo.push_back(i);
-//        for (int j=0; j<3; j++)
-//        {
-//            conf.push_back(configuration[i*3+j]);
-//        }
-//        configs.push_back(conf);
-//        confTotal.push_back(configs);
-//        conf.clear();
-//        configs.clear();
-//    }
+    std::vector<unsigned char> legsNo;
+    std::vector<float_type> conf;
+    std::vector<std::vector<float_type> > configs;
+    std::vector<std::vector<std::vector<float_type> > > confTotal;
+    for (int i=0; i<6; i++)
+    {
+        legsNo.push_back(i);
+        for (int j=0; j<3; j++)
+        {
+            conf.push_back(configuration[i*3+j]);
+        }
+        configs.push_back(conf);
+        confTotal.push_back(configs);
+        conf.clear();
+        configs.clear();
+    }
 
     vector <float_type> motorSpeed;
-    for(int i = 0; i < 18; i++ )
-    {
-        motorSpeed.push_back(speed);
-    }
-    board->setSpeed(motorSpeed);
-//    moveLegs(legsNo, confTotal, speed);
-    if (config.useVisualizer)
-        visualizer->setPosition(configuration);
-    else
-        board->setPosition(configuration);
+
+    moveLegs(legsNo, confTotal, speed);
+//    if (config.useVisualizer)
+//        visualizer->setPosition(configuration);
+//    else
+//    {
+//        for(int i = 0; i < 18; i++ )
+//        {
+//            motorSpeed.push_back(speed);
+//        }
+//        board->setSpeed(motorSpeed);
+//        board->setPosition(configuration);
+//    }
 }
 
 ControllerMessor2::~ControllerMessor2(void) {
@@ -196,9 +199,19 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
     configuration = robot->moveLeg(legNo, trajectory);
 
-    if(legNo > 2)
+    for(int s=0; s<configuration.size(); s++)
     {
-        configuration[0] -= 6.28;
+        if(s == 0)
+        {
+            if(configuration[s] > 3.14)
+            {
+                configuration[s] -= 6.28;
+            }
+            else if(configuration[s] < -3.14)
+            {
+                configuration[s] += 6.28;
+            }
+        }
     }
     mtx.lock();
     std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
@@ -207,19 +220,15 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
     {
 
         std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
+        mtx.lock();
+        std::cout << currentConfiguration[0] <<"  c1: " << currentConfiguration[1] <<"  c2: " << currentConfiguration[2] << std::endl;
+        mtx.unlock();
 
         float_type step = 0.04;
         int n = 1/step;
         //std::cout << n << "    " << step << endl;
         for(int s=0; s<configuration.size(); s++)
         {
-            if(s == 0)
-            {
-                if(configuration[s] > 3.14)
-                {
-                    //configuration[s] -= 6.28;
-                }
-            }
             diff[s]=(configuration[s] - currentConfiguration[s])*step;
         }
 
@@ -302,10 +311,19 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
     configuration[1] = configuration1[1];
     configuration[2] = configuration1[2];
     mtx.unlock();
-
-    if(legNo > 2)
+    for(int s=0; s<configuration.size(); s++)
     {
-        configuration[0] -= 6.28;
+        if(s == 0)
+        {
+            if(configuration[s] > 3.14)
+            {
+                configuration[s] -= 6.28;
+            }
+            else if(configuration[s] < -3.14)
+            {
+                configuration[s] += 6.28;
+            }
+        }
     }
     mtx.lock();
     std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
@@ -319,13 +337,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
         //std::cout << n << "    " << step << endl;
         for(int s=0; s<configuration.size(); s++)
         {
-            if(s == 0)
-            {
-                if(configuration[s] > 3.14)
-                {
-                    configuration[s] -= 6.28;
-                }
-            }
             diff[s]=(configuration[s] - currentConfiguration[s])*step;
         }
 
@@ -410,8 +421,6 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& t
 
 void ControllerMessor2::moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed)
 {
-    std::cout << "pokaz" << configuration.size();
-
     for(int i=0; i<configuration.size(); i++)
     {
         this->moveLegSingle(legNo, configuration[i], speed);
