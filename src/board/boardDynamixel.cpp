@@ -14,8 +14,15 @@ BoardDynamixel::Ptr boardDynamixel;
 
 BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIXEL) {
     //Every operation is executed on two objects in the same time (One object on one side of port)
+    int result;
     for(int i=0 ; i < 2 ; i++){
-       int result =  dynamixelMotors[i].dxl_initialize(i+1, DEFAULT_BAUDNUM);
+
+       if (i==0)
+           result = dynamixelMotors[i].dxl_initialize(2, DEFAULT_BAUDNUM);
+       else
+           result = dynamixelMotors[i].dxl_initialize(1, DEFAULT_BAUDNUM);
+
+
        for (int j=0;j<6;j++){   //deafault values for servos
                   if(result == 1) {
                       for (int k=0;k<3;k++) {

@@ -92,16 +92,17 @@ void ControllerMessor2::movePlatform(Mat34& motion, double speed){
     }
 
     vector <float_type> motorSpeed;
+            for(int i = 0; i < 18; i++ )
+            {
+                motorSpeed.push_back(speed);
+            }
 
     moveLegs(legsNo, confTotal, speed);
 //    if (config.useVisualizer)
 //        visualizer->setPosition(configuration);
 //    else
 //    {
-//        for(int i = 0; i < 18; i++ )
-//        {
-//            motorSpeed.push_back(speed);
-//        }
+
 //        board->setSpeed(motorSpeed);
 //        board->setPosition(configuration);
 //    }
