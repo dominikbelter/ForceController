@@ -43,7 +43,7 @@ int main( int argc, const char** argv )
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
 
-        float_type speedo = 10;
+        float_type speedo = 5;
         char wait;
         usleep(1000000);
         Mat34 motion1(Mat34::Identity());
@@ -62,14 +62,15 @@ int main( int argc, const char** argv )
         motion4(2,3)=0.03;
         controller->movePlatform(motion4,speedo);
 
-        trajectoryForPlatform.push_back(motion1);
-        trajectoryForPlatform.push_back(motion2);
-        trajectoryForPlatform.push_back(motion3);
-        trajectoryForPlatform.push_back(motion4);
-
+        while(true){
+            trajectoryForPlatform.push_back(motion1);
+            trajectoryForPlatform.push_back(motion2);
+            trajectoryForPlatform.push_back(motion3);
+            trajectoryForPlatform.push_back(motion4);
+        };
         controller->movePlatform(trajectoryForPlatform, speedo);
 
-        while(true){};
+
 
 //        if (((ControllerMessor2*)controller)->useVisualizer()){
 //            ((ControllerMessor2*)controller)->finishVisualizer();
