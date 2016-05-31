@@ -48,13 +48,10 @@ int main( int argc, const char** argv )
         usleep(1000000);
         Mat34 motion(Mat34::Identity());
         controller->movePlatform(motion,speedo);
-        usleep(1500000);
         motion(1,3)=0.03;
         controller->movePlatform(motion,speedo);
-        usleep(1500000);
         motion(0,3)=0.03;
         controller->movePlatform(motion,speedo);
-        usleep(1500000);
         motion(2,3)=0.03;
         controller->movePlatform(motion,speedo);
         while(true){};
