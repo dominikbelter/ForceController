@@ -62,13 +62,14 @@ int main( int argc, const char** argv )
         motion4(2,3)=0.03;
         controller->movePlatform(motion4,speedo);
 
+        trajectoryForPlatform.push_back(motion1);
+        trajectoryForPlatform.push_back(motion2);
+        trajectoryForPlatform.push_back(motion3);
+        trajectoryForPlatform.push_back(motion4);
         while(true){
-            trajectoryForPlatform.push_back(motion1);
-            trajectoryForPlatform.push_back(motion2);
-            trajectoryForPlatform.push_back(motion3);
-            trajectoryForPlatform.push_back(motion4);
+            controller->movePlatform(trajectoryForPlatform, speedo);
         };
-        controller->movePlatform(trajectoryForPlatform, speedo);
+
 
 
 
