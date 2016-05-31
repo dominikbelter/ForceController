@@ -55,6 +55,8 @@ namespace controller {
 
             virtual void moveLegs(std::vector<unsigned char> legNo,const  std::vector<std::vector<std::vector<float_type> > >& configuration, float_type speed) = 0;
 
+            virtual void movePlatform(std::vector<Mat34>& motion, double speed) = 0;
+
             /// Virtual descrutor
             virtual ~RobotController() {}
 
