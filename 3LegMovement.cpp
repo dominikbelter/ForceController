@@ -35,19 +35,14 @@ int main( int argc, const char** argv )
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
-
         float_type speedo = 5;
-        char wait;
-
 
         usleep(1000000);
-
 
         std::vector<unsigned char> legNos024;
         std::vector<unsigned char> legNos135;
         std::vector<unsigned char> legNos024135;
         std::vector<unsigned char> legNos135024;
-
 
         legNos024.push_back(0);
         legNos024.push_back(2);
@@ -74,17 +69,13 @@ int main( int argc, const char** argv )
         Mat34 initial(Mat34::Identity());
         Mat34 legBack(Mat34::Identity());
         Mat34 legUp(Mat34::Identity());
-        Mat34 legDown(Mat34::Identity());
 
         Mat34 legBackR(Mat34::Identity());
         Mat34 legUpR(Mat34::Identity());
 
         vector<Mat34> trajBack;
-        vector<Mat34> trajBackToInitial;
-        vector<Mat34> trajBackToInitialR;
         vector<Mat34> trajToInitial;
         vector<Mat34> trajUp;
-        vector<Mat34> trajDown;
 
         vector<Mat34> trajBackR;
         vector<Mat34> trajUpR;
@@ -94,11 +85,9 @@ int main( int argc, const char** argv )
         std::vector<std::vector<Mat34>> executeLegsMovementUp;
         std::vector<std::vector<Mat34>> executeLegsMovementInitial;
         std::vector<std::vector<Mat34>> executeLegsMovementBackUp;
-        std::vector<std::vector<Mat34>> executeLegsMovementBackInitial;
-
         std::vector<std::vector<Mat34>> executeLegsMovementBackUpR;
-        std::vector<std::vector<Mat34>> executeLegsMovementBackInitialR;
 
+        initial(1,3)=-0.05;
 
         legBack(1,3)=0.05;
         trajBack.push_back(legBack);
@@ -114,14 +103,6 @@ int main( int argc, const char** argv )
         legUpR(0,3) = 0.05;
         trajUpR.push_back(legUpR);
 
-        legDown(2,3) = 0.1;
-        trajDown.push_back(legDown);
-
-        trajBackToInitial.push_back(legUp);
-        trajBackToInitial.push_back(initial);
-
-        trajBackToInitialR.push_back(legUpR);
-        trajBackToInitialR.push_back(initial);
 
         trajToInitial.push_back(initial);
 
@@ -137,9 +118,7 @@ int main( int argc, const char** argv )
         executeLegsMovementInitial.push_back(trajToInitial);
         executeLegsMovementInitial.push_back(trajToInitial);
 
-        executeLegsMovementBackInitial.push_back(trajBackToInitial);
-        executeLegsMovementBackInitial.push_back(trajBackToInitial);
-        executeLegsMovementBackInitial.push_back(trajBackToInitial);
+
 
         executeLegsMovementBackUp.push_back(trajUp);
         executeLegsMovementBackUp.push_back(trajUp);
