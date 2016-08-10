@@ -81,22 +81,20 @@ int main( int argc, const char** argv )
         vector<Mat34> trajUpR;
 
 
-        std::vector<std::vector<Mat34>> executeLegsMovementBack;
-        std::vector<std::vector<Mat34>> executeLegsMovementUp;
         std::vector<std::vector<Mat34>> executeLegsMovementInitial;
         std::vector<std::vector<Mat34>> executeLegsMovementBackUp;
         std::vector<std::vector<Mat34>> executeLegsMovementBackUpR;
 
-        initial(1,3)=-0.05;
+        initial(1,3)=-0.04;
 
-        legBack(1,3)=0.05;
+        legBack(1,3)=0.04;
         trajBack.push_back(legBack);
 
         legUp(2,3) = -0.1;
         legUp(0,3) = -0.05;
         trajUp.push_back(legUp);
 
-        legBackR(1,3)=-0.05;
+        legBackR(1,3)=-0.04;
         trajBackR.push_back(legBackR);
 
         legUpR(2,3) = -0.1;
@@ -106,19 +104,9 @@ int main( int argc, const char** argv )
 
         trajToInitial.push_back(initial);
 
-        executeLegsMovementBack.push_back(trajBack);
-        executeLegsMovementBack.push_back(trajBack);
-        executeLegsMovementBack.push_back(trajBackR);
-
-        executeLegsMovementUp.push_back(trajUp);
-        executeLegsMovementUp.push_back(trajUp);
-        executeLegsMovementUp.push_back(trajUp);
-
         executeLegsMovementInitial.push_back(trajToInitial);
         executeLegsMovementInitial.push_back(trajToInitial);
         executeLegsMovementInitial.push_back(trajToInitial);
-
-
 
         executeLegsMovementBackUp.push_back(trajUp);
         executeLegsMovementBackUp.push_back(trajUp);
@@ -134,37 +122,16 @@ int main( int argc, const char** argv )
         executeLegsMovementBackUpR.push_back(trajBack);
         executeLegsMovementBackUpR.push_back(trajBack);
 
-
         usleep(1000000);
 
-
-        bool faster = true;
-        ///////RUCH TRÓJPODPOROWY/////////
-        if(faster)
+        while(true)
         {
-            while(true)
-            {
-                controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
-                controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
+            controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
+            controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
 
-                controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
-                controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
+            controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
+            controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
 
-            }
-        }
-        else
-        {
-            while(true)
-            {
-                controller->moveLegs(legNos024, executeLegsMovementUp, speedo);
-                controller->moveLegs(legNos135, executeLegsMovementBack, speedo);
-
-                controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
-                controller->moveLegs(legNos135, executeLegsMovementUp, speedo);
-
-                controller->moveLegs(legNos024, executeLegsMovementBack, speedo);
-                controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
-            }
         }
 
 
