@@ -67,7 +67,7 @@ int main( int argc, const char** argv )
         legUp0(2,3) = -0.1;
         legUp0(1,3)=-0.04;
         legUp0(0,3) = -0.05;
-        trajUp0.push_back(legUp);
+        trajUp0.push_back(legUp0);
 
         legUpR(2,3) = -0.1;
         legUpR(0,3) = 0.05;
