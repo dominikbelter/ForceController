@@ -64,28 +64,6 @@ BoardDynamixel::~BoardDynamixel(void) {
 }
 
 
-/// Set reference position value for servomotor, returns error value
-unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char jointNo, float_type angle){
-    if(legNo<3 && jointNo==2){
-         angle=-angle;
-    }
-
-
-    if(legNo>2 && jointNo==1){
-         angle=-angle;
-    }
-
-    angle = angle * _DEG2RAD10;
-
-
-    angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])* _DEG2DYNAMIXEL + _stalePrzesuniecie;
-
-
-    //CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
-    //pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
-    sendCommand(WRITE_WORD,legNo < 3 ?0:1,legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
-    return 0;
-}
 
 
 float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float_type value){
@@ -189,6 +167,30 @@ float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned
         }
     }
  }
+
+
+/// Set reference position value for servomotor, returns error value
+unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char jointNo, float_type angle){
+    if(legNo<3 && jointNo==2){
+         angle=-angle;
+    }
+
+
+    if(legNo>2 && jointNo==1){
+         angle=-angle;
+    }
+
+    angle = angle * _DEG2RAD10;
+
+
+    angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])* _DEG2DYNAMIXEL + _stalePrzesuniecie;
+
+
+    //CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
+    //pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
+    sendCommand(WRITE_WORD,legNo < 3 ?0:1,legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
+    return 0;
+}
 
 
 /// Set reference position value for servomotors, returns error value

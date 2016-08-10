@@ -168,7 +168,7 @@ int main( int argc, const char** argv )
                 controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
                 controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
 
-                controller->moveLegs(legNos135024, executeLegsMovementBackUp, speedo);
+                controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
                 controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
 
             }

@@ -179,15 +179,15 @@ int main( int argc, const char** argv )
         executeLegsMovementBackUp.push_back(trajUp);
         executeLegsMovementBackUp.push_back(trajUpR);
         executeLegsMovementBackUp.push_back(trajBack);
-        executeLegsMovementBackUp.push_back(trajBackR);
-        executeLegsMovementBackUp.push_back(trajBackR);
+        executeLegsMovementBackUp.push_back(trajBack);
+        executeLegsMovementBackUp.push_back(trajBack);
 
         executeLegsMovementBackUpR.push_back(trajUp);
         executeLegsMovementBackUpR.push_back(trajUpR);
         executeLegsMovementBackUpR.push_back(trajUpR);
         executeLegsMovementBackUpR.push_back(trajBack);
         executeLegsMovementBackUpR.push_back(trajBack);
-        executeLegsMovementBackUpR.push_back(trajBackR);
+        executeLegsMovementBackUpR.push_back(trajBack);
 
 
         usleep(1000000);
