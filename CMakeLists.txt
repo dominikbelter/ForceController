@@ -62,6 +62,10 @@ mark_as_advanced(BUILD_CONTROLLER_DEMO_MESSOR2CTRL)
 option(BUILD_SMART_WALKING_PROGRAMS "Build smart walking programs and libraries" YES)
 option(BUILD_SMOOTH_LEG_MOTION "Build smooth leg motion library" YES)
 mark_as_advanced(BUILD_SMOOTH_LEG_MOTION)
+option(3_LEG_MOVEMENT "Build 3 leg movement application" YES)
+mark_as_advanced(3_LEG_MOVEMENT)
+option(5_LEG_MOVEMENT "Build 5 leg movement application" YES)
+mark_as_advanced(5_LEG_MOVEMENT)
 
 #additional dependencies
 #Boost
@@ -451,3 +455,25 @@ if(BUILD_SMART_WALKING_PROGRAMS AND BUILD_SMOOTH_LEG_MOTION)
         INSTALL(FILES ${SMOOTH_WALKING_FILES} DESTINATION bin)
 
 endif(BUILD_SMART_WALKING_PROGRAMS AND BUILD_SMOOTH_LEG_MOTION)
+
+if(BUILD_SMART_WALKING_PROGRAMS AND 3_LEG_MOVEMENT)
+
+        SET(SMOOTH_WALKING_SOURCES ./3LegMovement.cpp)
+        ADD_EXECUTABLE(3LegMovement ${SMOOTH_WALKING_SOURCES})
+        TARGET_LINK_LIBRARIES(3LegMovement Leg Board Robot Visualization dynamixel RobotCtrl)
+        INSTALL(TARGETS 3LegMovement RUNTIME DESTINATION bin)
+        INSTALL(FILES ${SMOOTH_WALKING_FILES} DESTINATION bin)
+
+endif(BUILD_SMART_WALKING_PROGRAMS AND 3_LEG_MOVEMENT)
+
+if(BUILD_SMART_WALKING_PROGRAMS AND 5_LEG_MOVEMENT)
+
+        SET(SMOOTH_WALKING_SOURCES ./5LegMovement.cpp)
+        ADD_EXECUTABLE(5LegMovement ${SMOOTH_WALKING_SOURCES})
+        TARGET_LINK_LIBRARIES(5LegMovement Leg Board Robot Visualization dynamixel RobotCtrl)
+        INSTALL(TARGETS 5LegMovement RUNTIME DESTINATION bin)
+        INSTALL(FILES ${SMOOTH_WALKING_FILES} DESTINATION bin)
+
+endif(BUILD_SMART_WALKING_PROGRAMS AND 5_LEG_MOVEMENT)
+
+
