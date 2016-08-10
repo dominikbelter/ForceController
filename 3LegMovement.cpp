@@ -159,9 +159,9 @@ int main( int argc, const char** argv )
         usleep(1000000);
 
 
-        bool threeLegMoveent = false;
+        bool faster = true;
         ///////RUCH TRÓJPODPOROWY/////////
-        if(threeLegMoveent)
+        if(faster)
         {
             while(true)
             {
@@ -172,7 +172,9 @@ int main( int argc, const char** argv )
                 controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
 
             }
-
+        }
+        else
+        {
             while(true)
             {
                 controller->moveLegs(legNos024, executeLegsMovementUp, speedo);
