@@ -41,7 +41,6 @@ int main( int argc, const char** argv )
         Mat34 legBack(Mat34::Identity());
         Mat34 legUp(Mat34::Identity());
 
-        Mat34 legBackR(Mat34::Identity());
         Mat34 legUpR(Mat34::Identity());
 
         vector<Mat34> trajBack;
@@ -50,7 +49,6 @@ int main( int argc, const char** argv )
         vector<Mat34> trajToInitial;
         vector<Mat34> trajUp;
 
-        vector<Mat34> trajBackR;
         vector<Mat34> trajUpR;
 
         std::vector<std::vector<Mat34>> executeLegsMovementBack;
@@ -63,9 +61,6 @@ int main( int argc, const char** argv )
         legUp(2,3) = -0.1;
         legUp(0,3) = -0.05;
         trajUp.push_back(legUp);
-
-        legBackR(1,3)=-0.04;
-        trajBackR.push_back(legBackR);
 
         legUpR(2,3) = -0.1;
         legUpR(0,3) = 0.05;
@@ -81,9 +76,9 @@ int main( int argc, const char** argv )
 
         executeLegsMovementBack.push_back(trajBack);
         executeLegsMovementBack.push_back(trajBack);
-        executeLegsMovementBack.push_back(trajBackR);
-        executeLegsMovementBack.push_back(trajBackR);
-        executeLegsMovementBack.push_back(trajBackR);
+        executeLegsMovementBack.push_back(trajBack);
+        executeLegsMovementBack.push_back(trajBack);
+        executeLegsMovementBack.push_back(trajBack);
 
         usleep(1000000);
 
