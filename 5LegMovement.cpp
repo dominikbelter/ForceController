@@ -40,6 +40,7 @@ int main( int argc, const char** argv )
         Mat34 initial(Mat34::Identity());
         Mat34 legBack(Mat34::Identity());
         Mat34 legUp(Mat34::Identity());
+        Mat34 legUp0(Mat34::Identity());
 
         Mat34 legUpR(Mat34::Identity());
 
@@ -48,6 +49,7 @@ int main( int argc, const char** argv )
         vector<Mat34> trajBackToInitialR;
         vector<Mat34> trajToInitial;
         vector<Mat34> trajUp;
+        vector<Mat34> trajUp0;
 
         vector<Mat34> trajUpR;
 
@@ -61,6 +63,11 @@ int main( int argc, const char** argv )
         legUp(2,3) = -0.1;
         legUp(0,3) = -0.05;
         trajUp.push_back(legUp);
+
+        legUp0(2,3) = -0.1;
+        legUp0(1,3)=-0.04;
+        legUp0(0,3) = -0.05;
+        trajUp0.push_back(legUp);
 
         legUpR(2,3) = -0.1;
         legUpR(0,3) = 0.05;
@@ -94,7 +101,7 @@ int main( int argc, const char** argv )
 
         while(true)
         {
-            controller->moveLeg(0, trajUp, speedo);
+            controller->moveLeg(0, trajUp0, speedo);
             controller->moveLegs(legNos, executeLegsMovementBack, speedo);
 
             controller->moveLeg(0, trajToInitial, speedo);
