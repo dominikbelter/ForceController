@@ -41,6 +41,22 @@ namespace controller {
             ///Compliant tripod step
             virtual void tripodStepCompliant(Mat34& motion, double speed) = 0;
 
+            virtual void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed) = 0;
+
+            virtual void moveLegSingleLin(unsigned char legNo, const Mat34& trajectory, float_type speed) = 0;
+
+            virtual void moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed) = 0;
+
+            virtual void moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed) = 0;
+
+            virtual void moveLegSingle(unsigned char legNo,const std::vector<float_type>& configuration1, float_type speed) = 0;
+
+            virtual void moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed) = 0;
+
+            virtual void moveLegs(std::vector<unsigned char> legNo,const  std::vector<std::vector<std::vector<float_type> > >& configuration, float_type speed) = 0;
+
+            virtual void movePlatform(std::vector<Mat34>& motion, double speed) = 0;
+
             /// Virtual descrutor
             virtual ~RobotController() {}
 

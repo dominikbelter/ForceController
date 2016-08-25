@@ -48,6 +48,13 @@
 #define _DEG2DYNAMIXEL          (0.341333)
 #define _stalePrzesuniecie      512
 
+#define READ_WORD               0
+#define WRITE_WORD              1
+#define READ_BYTE               2
+#define WRITE_BYTE              3
+#define INITIALIZE              4
+#define TERMINATE               5
+
 namespace controller {
 
     /// create a single board controller (with usb2dynamixel)
@@ -62,6 +69,7 @@ using namespace controller;
  */
 class BoardDynamixel : public Board{
     public:
+        std::mutex mtx;
         /// Default values of angles for serwomotors.
         int zero_angle[18];
         //std::vector <float_type> zero_angle;  //rad
@@ -85,6 +93,18 @@ class BoardDynamixel : public Board{
          * \param angle Angle value.
          * \return Return error value.
          */
+
+        float_type sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float_type value);
+
+        /**
+         * \brief Function replacing bibliotecal dxl_write_word
+         * \param usd2dynNo Usb number
+         * \param dynamixelCmd e.g. write_word, read_word, initialize
+         * \param servoNo servomotor number
+         * \param command e.g. movingSpeed, complianceMargin
+         * \param value value of command
+        */
+
         unsigned int setPosition(unsigned char legNo, unsigned char jointNo, float_type angle);
         //CDynamixel obiect;
         /**
@@ -214,6 +234,15 @@ class BoardDynamixel : public Board{
          * \param &angle Angle values.
          * \return Return error value.
          */
+        unsigned int readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle, bool reversePos1);
+
+        /**
+         * \brief Returns current position of the servomotors in particular leg.
+         * \param legNo Leg number.
+         * \param &angle Angle values.
+         * \param reversePos1 if 1st jointNo should be reversed
+         * \return Return error value.
+         */
         unsigned int readPositions(unsigned char legNo, std::vector<float_type>& angle);
 
         /**
@@ -332,6 +361,8 @@ class BoardDynamixel : public Board{
     private:
         /// Two objects for executing the operations
         CDynamixel dynamixelMotors[2];
+        /// GPIO files
+        int fileDescriptorsGPIO[6];
 
 };
 

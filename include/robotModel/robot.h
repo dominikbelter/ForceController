@@ -56,6 +56,8 @@ namespace controller {
             */
             virtual std::vector<float_type> movePlatform(const Mat34& motion) = 0;
 
+            virtual std::vector<float_type> moveLeg(unsigned char legNo, const Mat34& trajectory) = 0;
+
             ///Compute configuration of the robot for the reference motion (each foot generates separate motion)
             std::vector<float_type> movePlatform(const std::vector<Mat34>& motion);
 
@@ -75,6 +77,10 @@ namespace controller {
             * @return tmp
             */
             virtual std::vector<float_type> computeCompliance(const std::vector<float_type> configuration) = 0;
+
+            virtual Mat34 legCPos(std::vector<float_type> configuration, int legNo) = 0;
+
+            virtual std::vector<float_type> fluentPlatform(Mat34 askedP, int legNo) = 0;
 
             /// Virtual descrutor
             virtual ~Robot() {}

@@ -4,6 +4,8 @@
 #include "../3rdParty/dynamixel/dynamixel.h"
 #include "../3rdParty/dynamixel/dxl_hal.h"
 #include "board/board.h"
+#include <fcntl.h>
+#include <mutex>
 
 using namespace controller;
 using namespace std;
@@ -12,18 +14,27 @@ BoardDynamixel::Ptr boardDynamixel;
 
 BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIXEL) {
     //Every operation is executed on two objects in the same time (One object on one side of port)
+
     for(int i=0 ; i < 2 ; i++){
        int result =  dynamixelMotors[i].dxl_initialize(i+1, DEFAULT_BAUDNUM);
+
        for (int j=0;j<6;j++){   //deafault values for servos
                   if(result == 1) {
                       for (int k=0;k<3;k++) {
-                          dynamixelMotors[i].dxl_write_word(j*10+k, P_MOVING_SPEED_L, 512);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_MOVING_SPEED_L,512);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_CW_COMPLIANCE_MARGIN, 1);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_CCW_COMPLIANCE_MARGIN, 1);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_CW_COMPLIANCE_SLOPE, 32);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_CCW_COMPLIANCE_SLOPE, 32);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_TORQUE_LIMIT_L, 1012);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_TEMERATURE_LIMIT_L, 99);
+                          /*dynamixelMotors[i].dxl_write_word(j*10+k, P_MOVING_SPEED_L, 512);
                           dynamixelMotors[i].dxl_write_word(j*10+k, P_CW_COMPLIANCE_MARGIN, 1);
                           dynamixelMotors[i].dxl_write_word(j*10+k, P_CCW_COMPLIANCE_MARGIN, 1);
                           dynamixelMotors[i].dxl_write_word(j*10+k, P_CW_COMPLIANCE_SLOPE, 32);
                           dynamixelMotors[i].dxl_write_word(j*10+k, P_CCW_COMPLIANCE_SLOPE, 32);
                           dynamixelMotors[i].dxl_write_word(j*10+k, P_TORQUE_LIMIT_L, 1012);
-                          dynamixelMotors[i].dxl_write_word(j*10+k, P_TEMERATURE_LIMIT_L, 99);
+                          dynamixelMotors[i].dxl_write_word(j*10+k, P_TEMERATURE_LIMIT_L, 99);*/
                       }
                   }
               }
@@ -42,14 +53,168 @@ BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIX
     angle_offset[9]=60; angle_offset[10]=40; angle_offset[11]=0;
     angle_offset[12]=-190; angle_offset[13]=45; angle_offset[14]=80;
     angle_offset[15]=10; angle_offset[16]=75; angle_offset[17]=100;
+
+    std::cout << "Setting up GPIOs\n";
+    /// Setting up ground contacts
+    // Enabling GPIOs
+    int fd;
+    if ((fd = open("/sys/class/gpio/export", O_WRONLY | O_NDELAY, 0)) == 0) {
+        printf("Error: Can't open /sys/class/gpio/export.\n");
+    }
+
+    char buffer[6][32];
+    strcpy(buffer[0],"32");
+    strcpy(buffer[1],"33");
+    strcpy(buffer[2],"34");
+    strcpy(buffer[3],"35");
+    strcpy(buffer[4],"36");
+    strcpy(buffer[5],"61");
+
+    for(int i=0;i<6;i++)
+        write(fd, buffer[i], strlen(buffer[i]));
+    close(fd);
+
+    // Setting the direction of GPIOs
+    for(int i=0;i<6;i++){
+        char buff[60];
+        sprintf(buff, "/sys/class/gpio/gpio%s/direction",buffer[i]);
+        if ((fd = open(buff, O_WRONLY | O_NDELAY,
+                0)) == 0) {
+            printf("Error: Can't open /sys/class/gpio/gpioX/direction.\n");
+            exit(1);
+        }
+        strcpy(buff, "in");
+        write(fd, buff, strlen(buff));
+        close(fd);
+    }
+
+    // Opening the files for switches
+    for(int i=0;i<6;i++){
+        char buff[60];
+        sprintf(buff, "/sys/class/gpio/gpio%s/value",buffer[i]);
+        if ((fileDescriptorsGPIO[i] = open(buff, O_RDONLY | O_NDELAY, 0))
+                == 0) {
+            printf("Error: Can't open /sys/class/gpio/gpioX/value.\n");
+            exit(1);
+        }
+        printf("Value opened for writing.\n");
+    }
+    std::cout << "Added GPIOs\n";
+
 }
 
 BoardDynamixel::~BoardDynamixel(void) {
     for(int i = 0; i < 2;  i++){
-        CDynamixel *pointMotor = &dynamixelMotors[i];
-        pointMotor->dxl_terminate();     //end of transmision
+        //CDynamixel *pointMotor = &dynamixelMotors[i];
+        //pointMotor->dxl_terminate();     //end of transmision
+        sendCommand(TERMINATE,i, 0,0,0);
     }
 }
+
+
+
+
+float_type BoardDynamixel::sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float_type value){
+
+
+    float_type temp = 0;
+    //READ_WORD
+    if(dynamixelCmd == 0){
+
+        if (usb2dynNo==0){
+          mtx.lock();
+          temp = dynamixelMotors[0].dxl_read_word(servoNo, command);
+          mtx.unlock();
+          return temp;
+        }
+        else if (usb2dynNo==1){
+          mtx.lock();
+          temp = dynamixelMotors[1].dxl_read_word(servoNo, command);
+          mtx.unlock();
+          return temp;
+        }
+    }
+    //WRITE_WORD
+    else if(dynamixelCmd ==1){
+
+        if (usb2dynNo==0){
+          mtx.lock();
+          dynamixelMotors[0].dxl_write_word(servoNo, command, value);
+          mtx.unlock();
+          return 0;
+        }
+        else if (usb2dynNo==1){
+          mtx.lock();
+          dynamixelMotors[1].dxl_write_word(servoNo, command, value);
+          mtx.unlock();
+          return 0;
+        }
+    }
+    //READ_BYTE
+    else if(dynamixelCmd ==2){
+
+        if (usb2dynNo==0){
+          mtx.lock();
+          temp = dynamixelMotors[0].dxl_read_byte(servoNo, command);
+          mtx.unlock();
+          return temp;
+        }
+        else if (usb2dynNo==1){
+          mtx.lock();
+          temp =  dynamixelMotors[1].dxl_read_byte(servoNo, command);
+          mtx.unlock();
+          return temp;
+        }
+    }
+    //WRITE_BYTE
+    else if(dynamixelCmd ==3){
+        if (usb2dynNo==0){
+          mtx.lock();
+          dynamixelMotors[0].dxl_write_byte(servoNo, command, value);
+          mtx.unlock();
+          return 0;
+        }
+        else if (usb2dynNo==1){
+          mtx.lock();
+          dynamixelMotors[1].dxl_write_byte(servoNo, command, value);
+          mtx.unlock();
+          return 0;
+        }
+    }
+    //INITIALIZE
+    else if(dynamixelCmd ==4){
+
+
+        if (usb2dynNo==0){
+          mtx.lock();
+          dynamixelMotors[0].dxl_initialize(servoNo, command);
+          mtx.unlock();
+          return 0;
+        }
+        else if (usb2dynNo==1){
+          mtx.lock();
+          dynamixelMotors[1].dxl_initialize(servoNo, command);
+          mtx.unlock();
+          return 0;
+        }
+    }
+    //TERMINATE
+    else if(dynamixelCmd ==5){
+
+        if (usb2dynNo==0){
+          mtx.lock();
+          dynamixelMotors[0].dxl_terminate();
+          mtx.unlock();
+          return 0;
+        }
+        else if (usb2dynNo==1){
+          mtx.lock();
+          dynamixelMotors[1].dxl_terminate();
+          mtx.unlock();
+          return 0;
+        }
+    }
+ }
 
 
 /// Set reference position value for servomotor, returns error value
@@ -69,39 +234,57 @@ unsigned int BoardDynamixel::setPosition(unsigned char legNo, unsigned char join
     angle=-(angle+angle_offset[legNo*3+jointNo]-zero_angle[legNo*3+jointNo])* _DEG2DYNAMIXEL + _stalePrzesuniecie;
 
 
-    CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
-    pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
-
+    //CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1];
+    //pointMotor->dxl_write_word(legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
+    sendCommand(WRITE_WORD,legNo < 3 ?0:1,legNo*10+jointNo, MOVE_SERWOMOTOR, angle);
     return 0;
 }
+
 
 /// Set reference position value for servomotors, returns error value
 unsigned int BoardDynamixel::setPosition(unsigned char legNo, const std::vector<float_type>& angle){
     vector <float_type> angleLocal;
     // angleLocal(angle.begin(), angle.begin()+3); //nie dziala
     for(int i = 0; i < 3 ; i++){    //typical duplication of vector doesnt work :(
+        //if (legNo >2)
+          //  angleLocal.push_back( -angle[i] );
+        //else
+          //  angleLocal.push_back( angle[i] );
+
         if (legNo >2)
-            angleLocal.push_back( -angle[i] );
-        else
-            angleLocal.push_back( angle[i] );
+                {
+                    if(i == 1)
+                        angleLocal.push_back( -angle[i] );
+                    else
+                        angleLocal.push_back(angle[i]);
+                }
+                else
+                {
+                    if(i==2)
+                        angleLocal.push_back( -angle[i] );
+                    else
+                        angleLocal.push_back(angle[i]);
+                }
+
     }
 
-    CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    //CDynamixel *pointMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
 
     for(int i=0; i<3; i++ ){    // i -> jointNo
 
         angleLocal[i] = angleLocal[i]*_DEG2RAD10;
         angleLocal[i]=-(angleLocal[i]+angle_offset[legNo*3+i]-zero_angle[legNo*3+i])*0.341333 + 512;
 
-        pointMotor->dxl_write_word(legNo*10+i, MOVE_SERWOMOTOR, angleLocal[i]);
+        //pointMotor->dxl_write_word(legNo*10+i, MOVE_SERWOMOTOR, angleLocal[i]);
+        sendCommand(WRITE_WORD, legNo < 3 ?0:1, legNo*10+i, MOVE_SERWOMOTOR, angleLocal[i]);
     }
     return 0;
 }
 
 /// Set reference position value for servomotors, returns error value
 unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
-    CDynamixel *object1=&dynamixelMotors[0];
-    CDynamixel *object2=&dynamixelMotors[1];
+    //CDynamixel *object1=&dynamixelMotors[0];
+    //CDynamixel *object2=&dynamixelMotors[1];
     vector<float_type> angle_tmp;
     for(int i=0; i<18; i++){
         angle_tmp.push_back(1);
@@ -119,7 +302,8 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
                     angle_tmp[i]*=(-1);
             angle_tmp[i] = angle_tmp[i]*10;
             angle_tmp[i]=-(angle_tmp[i]+angle_offset[cnt*3+tmp]-zero_angle[cnt*3+tmp])*0.341333 + 512;
-            object1->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
+            //object1->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
+            sendCommand(WRITE_WORD, 0, cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
         }
             else{
             tmp=i%3;
@@ -134,7 +318,8 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
 
             angle_tmp[i] = angle_tmp[i]*10;
             angle_tmp[i]=-(angle_tmp[i]+angle_offset[cnt*3+tmp]-zero_angle[cnt*3+tmp])*0.341333 + 512;
-            object2->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
+            //object2->dxl_write_word(cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
+            sendCommand(WRITE_WORD, 1, cnt*10+tmp,MOVE_SERWOMOTOR,angle_tmp[i]);
             }
         }
 
@@ -143,16 +328,18 @@ unsigned int BoardDynamixel::setPosition(const std::vector<float_type>& angle){
 
 /// Set reference speed value for servomotor, returns error value
 unsigned int BoardDynamixel::setSpeed(unsigned char legNo, unsigned char jointNo, float_type speed){
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-            object->dxl_write_word(legNo*10 + jointNo, MOVING_SPEED, speed*9);
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+            //object->dxl_write_word(legNo*10 + jointNo, MOVING_SPEED, speed*9);
+            sendCommand(WRITE_WORD, legNo <3 ?0:1, legNo*10 + jointNo, MOVING_SPEED, speed*9);
     return 0;
 }
 
 /// Set reference speed value for servomotors, returns error value
 unsigned int BoardDynamixel::setSpeed(unsigned char legNo, const std::vector<float_type>& speed){
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++){
-        object->dxl_write_word(legNo*10+i,MOVING_SPEED,speed[i]*9);
+        //object->dxl_write_word(legNo*10+i,MOVING_SPEED,speed[i]*9);
+        sendCommand(WRITE_WORD, legNo < 3 ?0:1, legNo*10+i,MOVING_SPEED,speed[i]*9);
     }
 
     return 0;
@@ -160,8 +347,8 @@ unsigned int BoardDynamixel::setSpeed(unsigned char legNo, const std::vector<flo
 
 /// Set reference speed value for servomotors, returns error value
 unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
-    CDynamixel *object1=&dynamixelMotors[0];
-    CDynamixel *object2=&dynamixelMotors[1];
+    //CDynamixel *object1=&dynamixelMotors[0];
+    //CDynamixel *object2=&dynamixelMotors[1];
     int cnt = 0;
     int tmp = 0;
     for(int i=0;i<18;i++){
@@ -170,14 +357,16 @@ unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
             if(!(i%3) && i!=0){
                 cnt++;
             }
-            object1->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]*9);
+            //object1->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]*9);
+            sendCommand(WRITE_WORD, 0, cnt*10+tmp,MOVING_SPEED,speed[i]*9);
         }
             else{
             tmp=i%3;
             if(!(i%3) && i!=0){
                 cnt++;
                 }
-            object2->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]*9);
+            //object2->dxl_write_word(cnt*10+tmp,MOVING_SPEED,speed[i]*9);
+            sendCommand(WRITE_WORD, 1, cnt*10+tmp,MOVING_SPEED,speed[i]*9);
         }
         }
     return 0;
@@ -185,27 +374,31 @@ unsigned int BoardDynamixel::setSpeed(const std::vector<float_type>& speed){
 
 /// Set compliance margin [0,254]- dead zone -- for this area the torque is zero, returns error value
 unsigned int BoardDynamixel::setComplianceMargin(unsigned char legNo, unsigned char jointNo, float_type margin){
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-    object->dxl_write_byte(legNo*10 + jointNo, P_CCW_COMPLIANCE_MARGIN, margin);
-    object->dxl_write_byte(legNo*10 + jointNo, P_CW_COMPLIANCE_MARGIN, margin);
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    //object->dxl_write_byte(legNo*10 + jointNo, P_CCW_COMPLIANCE_MARGIN, margin);
+    //object->dxl_write_byte(legNo*10 + jointNo, P_CW_COMPLIANCE_MARGIN, margin);
+    sendCommand(WRITE_BYTE, legNo < 3 ?0:1, legNo*10 + jointNo, P_CCW_COMPLIANCE_MARGIN, margin);
+    sendCommand(WRITE_BYTE, legNo < 3 ?0:1, legNo*10 + jointNo, P_CW_COMPLIANCE_MARGIN, margin);
     return 0;
 }
 
 /// Set compliance margins [0,254]- dead zone -- for this area the torque is zero, returns error value
 unsigned int BoardDynamixel::setComplianceMargin(unsigned char legNo, const std::vector<float_type> margin){
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++)
     {
-        object->dxl_write_byte(legNo*10 + i, P_CCW_COMPLIANCE_MARGIN, margin[i]);
-        object->dxl_write_byte(legNo*10 + i, P_CW_COMPLIANCE_MARGIN, margin[i]);
+        //object->dxl_write_byte(legNo*10 + i, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+        //object->dxl_write_byte(legNo*10 + i, P_CW_COMPLIANCE_MARGIN, margin[i]);
+        sendCommand(WRITE_BYTE, legNo < 3 ?0:1, legNo*10 + i, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+        sendCommand(WRITE_BYTE, legNo < 3 ?0:1, legNo*10 + i, P_CW_COMPLIANCE_MARGIN, margin[i]);
     }
     return 0;
 }
 
 /// Set compliance margins [0,254]- dead zone -- for this area the torque is zero, returns error value
 unsigned int BoardDynamixel::setComplianceMargin(const std::vector<float_type> margin){
-    CDynamixel *object1 = &dynamixelMotors[0];
-    CDynamixel *object2 = &dynamixelMotors[1];
+    //CDynamixel *object1 = &dynamixelMotors[0];
+    //CDynamixel *object2 = &dynamixelMotors[1];
     int tmp = 0;
     int cnt = 0;
     for(int i = 0; i < 18; i++){
@@ -214,15 +407,19 @@ unsigned int BoardDynamixel::setComplianceMargin(const std::vector<float_type> m
             if(!(i%3) && i != 0){
                 cnt++;
             }
-            object1->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_MARGIN, margin[i]);
-            object2->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_MARGIN, margin[i]);
+            //object1->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+            //object2->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_MARGIN, margin[i]);
+            sendCommand(WRITE_BYTE, 0, cnt*10+tmp, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+            sendCommand(WRITE_BYTE, 0, cnt*10+tmp, P_CW_COMPLIANCE_MARGIN, margin[i]);
         }else{      //Left side of Mesor
             tmp = i%3;
             if(!i%3){
                 cnt++;
             }
-            object1->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_MARGIN, margin[i]);
-            object2->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_MARGIN, margin[i]);
+            //object1->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+            //object2->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_MARGIN, margin[i]);
+            sendCommand(WRITE_BYTE, 1, cnt*10+tmp, P_CCW_COMPLIANCE_MARGIN, margin[i]);
+            sendCommand(WRITE_BYTE, 1, cnt*10+tmp, P_CW_COMPLIANCE_MARGIN, margin[i]);
         }
 
     }
@@ -236,27 +433,31 @@ unsigned int BoardDynamixel::setComplianceSlope(unsigned char legNo, unsigned ch
     }else if(slope > 254){
         slope = 254;
     }
-    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
-    pMotor->dxl_write_byte(legNo*10+jointNo, P_CW_COMPLIANCE_SLOPE, slope);
-    pMotor->dxl_write_byte(legNo*10+jointNo, P_CCW_COMPLIANCE_SLOPE, slope);
+    //CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    //pMotor->dxl_write_byte(legNo*10+jointNo, P_CW_COMPLIANCE_SLOPE, slope);
+    //pMotor->dxl_write_byte(legNo*10+jointNo, P_CCW_COMPLIANCE_SLOPE, slope);
+    sendCommand(WRITE_BYTE, legNo < 3 ? 0:1, legNo*10+jointNo, P_CW_COMPLIANCE_SLOPE, slope);
+    sendCommand(WRITE_BYTE, legNo < 3 ? 0:1, legNo*10+jointNo, P_CW_COMPLIANCE_SLOPE, slope);
     return 0;
 }
 
 /// Set compiance slope [1,254] - the area with the reduced torque, returns error value
 unsigned int BoardDynamixel::setComplianceSlope(unsigned char legNo, const std::vector<float_type>& slope){
 
-    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    //CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
     for(int i = 0; i < 3; i++){     // i -> jointNo
-        pMotor->dxl_write_byte(legNo*10+i, P_CW_COMPLIANCE_SLOPE, slope[i]);
-        pMotor->dxl_write_byte(legNo*10+i, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+        //pMotor->dxl_write_byte(legNo*10+i, P_CW_COMPLIANCE_SLOPE, slope[i]);
+        //pMotor->dxl_write_byte(legNo*10+i, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+        sendCommand(WRITE_BYTE, legNo < 3 ? 0:1, legNo*10+i, P_CW_COMPLIANCE_SLOPE, slope[i]);
+        sendCommand(WRITE_BYTE, legNo < 3 ? 0:1, legNo*10+i, P_CCW_COMPLIANCE_SLOPE, slope[i]);
     }
     return 0;
 }
 
 /// Set compiance slope [1,254] - the area with the reduced torque, returns error value
 unsigned int BoardDynamixel::setComplianceSlope(const std::vector<float_type>& slope){
-    CDynamixel *pMotorR = &dynamixelMotors[0];
-    CDynamixel *pMotorL = &dynamixelMotors[1];
+    //CDynamixel *pMotorR = &dynamixelMotors[0];
+    //CDynamixel *pMotorL = &dynamixelMotors[1];
     int tmp = 0;
     int cnt = 0;
     for(int i = 0; i < 18; i++){
@@ -265,15 +466,19 @@ unsigned int BoardDynamixel::setComplianceSlope(const std::vector<float_type>& s
             if(!(i%3) && i != 0){
                 cnt++;
             }
-            pMotorR->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
-            pMotorR->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+            //pMotorR->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
+            //pMotorR->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+            sendCommand(WRITE_BYTE, 0, cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
+            sendCommand(WRITE_BYTE, 0, cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
         }else{      //Left side of Mesor
             tmp = i%3;
             if(!i%3){
                 cnt++;
             }
-            pMotorL->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
-            pMotorL->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+            //pMotorL->dxl_write_byte(cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
+            //pMotorL->dxl_write_byte(cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
+            sendCommand(WRITE_BYTE, 1, cnt*10+tmp, P_CW_COMPLIANCE_SLOPE, slope[i]);
+            sendCommand(WRITE_BYTE, 1, cnt*10+tmp, P_CCW_COMPLIANCE_SLOPE, slope[i]);
         }
 
     }
@@ -282,23 +487,25 @@ unsigned int BoardDynamixel::setComplianceSlope(const std::vector<float_type>& s
 
 /// Set torque limit torque_limit [0,1] - the torque limit, returns error value
 unsigned int BoardDynamixel::setTorqueLimit(unsigned char legNo, unsigned char jointNo, float_type torqueLimit){
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-            object->dxl_write_word(legNo*10 + jointNo, SET_TORQUE_LIMIT, torqueLimit*1023);
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+            //object->dxl_write_word(legNo*10 + jointNo, SET_TORQUE_LIMIT, torqueLimit*1023);
+    sendCommand(WRITE_WORD, legNo < 3 ? 0:1, legNo*10 + jointNo, SET_TORQUE_LIMIT, torqueLimit*1023);
     return 0;
 }
 
 /// Set torque limit torque_limit [0,1] - the torque limit, returns error value
 unsigned int BoardDynamixel::setTorqueLimit(unsigned char legNo, const std::vector<float_type>& torqueLimit){
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++)
-            object->dxl_write_word(legNo*10 + i, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
+            //object->dxl_write_word(legNo*10 + i, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
+            sendCommand(WRITE_WORD, legNo < 3 ? 0:1, legNo*10 + i, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
     return 0;
 }
 
 /// Set torque limit torque_limit [0,1] - the torque limit, returns error value
 unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqueLimit){
-    CDynamixel *object1 = &dynamixelMotors[0];
-    CDynamixel *object2 = &dynamixelMotors[1];
+    //CDynamixel *object1 = &dynamixelMotors[0];
+    //CDynamixel *object2 = &dynamixelMotors[1];
     int tmp = 0;
     int cnt = 0;
     for(int i = 0; i < 18; i++){
@@ -307,13 +514,15 @@ unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqu
             if(!(i%3) && i != 0){
                 cnt++;
             }
-            object1->dxl_write_word(cnt*10+tmp, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
+            //object1->dxl_write_word(cnt*10+tmp, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
+            sendCommand(WRITE_WORD, 0, cnt*10 + tmp, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
         }else{      //Left side of Mesor
             tmp = i%3;
             if(!i%3){
                 cnt++;
             }
-            object2->dxl_write_word(cnt*10+tmp, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
+            //object2->dxl_write_word(cnt*10+tmp, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
+            sendCommand(WRITE_WORD, 1, cnt*10+tmp, SET_TORQUE_LIMIT, torqueLimit[i]*1023);
         }
 
     }
@@ -325,9 +534,10 @@ unsigned int BoardDynamixel::setTorqueLimit(const std::vector<float_type>& torqu
 unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle){
     float_type ang_odt;
     float_type ang;
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     //cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
-    ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
+    //ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
+    ang_odt = sendCommand(READ_WORD, legNo < 3 ?0:1, legNo*10 + jointNo, P_PRESENT_POSITION_L, 0);
     ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*3+jointNo]+zero_angle[legNo*3+jointNo];
     angle=(ang/10)*(M_PI/180);
     if(legNo < 3 && jointNo == 2){
@@ -339,15 +549,35 @@ unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char joi
     return 0;
 }
 
+/// Returns current position of the servomotor, returns error value
+unsigned int BoardDynamixel::readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle, bool reversePos1){
+    float_type ang_odt;
+    float_type ang;
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    //cout << "Wartosc z rejestru readPos: " <<object->dxl_read_word(legNo*10+jointNo, P_PRESENT_POSITION_L) << endl;
+    //ang_odt = object->dxl_read_word(legNo*10 + jointNo, P_PRESENT_POSITION_L);
+    ang_odt = sendCommand(READ_WORD, legNo < 3 ?0:1, legNo*10 + jointNo, P_PRESENT_POSITION_L, 0);
+    ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*3+jointNo]+zero_angle[legNo*3+jointNo];
+    angle=(ang/10)*(M_PI/180);
+    if(reversePos1)
+    {
+        if(legNo > 2){
+                angle = -angle;
+        }
+    }
+    return 0;
+}
+
 /// Returns current position of the servomotors, returns error value
 unsigned int BoardDynamixel::readPositions(unsigned char legNo, std::vector<float_type>& angle){
     float_type ang_odt;
     float_type ang;
     float_type angleTmp;
     std::vector<float_type> angVec;
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i = 0; i<3; i++){
-        ang_odt = object->dxl_read_word(legNo*10 + i, P_PRESENT_POSITION_L);
+        //ang_odt = object->dxl_read_word(legNo*10 + i, P_PRESENT_POSITION_L);
+        sendCommand(READ_WORD, legNo < 3 ?0:1, legNo*10+i,P_PRESENT_POSITION_L, 0);
         ang = ((ang_odt-512)/(-0.341333))-angle_offset[legNo*3+i]+zero_angle[legNo*3+i];
         angleTmp=(ang/10)*(M_PI/180);
     if(legNo < 3 && i == 2){
@@ -372,15 +602,16 @@ unsigned int BoardDynamixel::readPosition(std::vector<float_type>& angle){
     std::vector<float_type> angVec;
     int tmp=0;// servo no in leg
     int cnt=0;// leg no
-    CDynamixel *object1 = &dynamixelMotors[0];
-    CDynamixel *object2 = &dynamixelMotors[1];
+    //CDynamixel *object1 = &dynamixelMotors[0];
+    //CDynamixel *object2 = &dynamixelMotors[1];
     for(int i=0;i<18;i++){
         if(i<9){
             tmp=i%3;
             if(!(i%3) && i!=0){
                 cnt++;
             }
-            ang_odt = object1->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
+            //ang_odt = object1->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
+            ang_odt = sendCommand(READ_WORD, 0, cnt*10 + tmp, P_PRESENT_POSITION_L, 0);
             ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*3+tmp]+zero_angle[cnt*3+tmp];
             angleTmp=(ang/10)*(M_PI/180);
             if(cnt < 3 && tmp == 2){
@@ -396,7 +627,8 @@ unsigned int BoardDynamixel::readPosition(std::vector<float_type>& angle){
             if(!(i%3) && i!=0){
                 cnt++;
             }
-            ang_odt = object2->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
+            //ang_odt = object2->dxl_read_word(cnt*10 + tmp, P_PRESENT_POSITION_L);
+            ang_odt = sendCommand(READ_WORD, 1, cnt*10 + tmp, P_PRESENT_POSITION_L, 0);
             ang = ((ang_odt-512)/(-0.341333))-angle_offset[cnt*3+tmp]+zero_angle[cnt*3+tmp];
             angleTmp=(ang/10)*(M_PI/180);
             if(cnt < 3 && tmp == 2){
@@ -436,7 +668,14 @@ unsigned int BoardDynamixel::readTorqueForce(const std::vector<float_type>& valu
 
 /// Returns contact or from microswitch
 bool BoardDynamixel::readContact(unsigned char legNo){
-    return false;
+    char buffer;
+    lseek(fileDescriptorsGPIO[legNo], 0, SEEK_SET);
+    read( fileDescriptorsGPIO[legNo], &buffer, 1 );
+
+    if ( buffer == '0')
+        return true;
+    else
+        return false;
 }
 
 /// Returns contact or from microswitches
@@ -446,8 +685,9 @@ void BoardDynamixel::readContact(const std::vector<bool> contact){
 
 /// Returns current from servo
 unsigned int BoardDynamixel::readCurrent(unsigned char legNo, unsigned char jointNo, float_type& servoCurrent){
-    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
-    servoCurrent = pMotor->dxl_read_word(legNo*10 + jointNo, PRESENT_VOLTAGE);
+    //CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    //servoCurrent = pMotor->dxl_read_word(legNo*10 + jointNo, PRESENT_VOLTAGE);
+    servoCurrent = sendCommand(READ_WORD, legNo < 3 ? 0:1, legNo*10 + jointNo, PRESENT_VOLTAGE, 0);
     servoCurrent = servoCurrent/10;
 
     return 0;
@@ -455,9 +695,10 @@ unsigned int BoardDynamixel::readCurrent(unsigned char legNo, unsigned char join
 
 /// Returns current from servo
 unsigned int BoardDynamixel::readCurrent(unsigned char legNo, std::vector<float_type>& servoCurrent){
-    CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
+    //CDynamixel *pMotor = &dynamixelMotors[ legNo < 3 ?0:1 ];
     for(int i=0; i<3; i++){
-        servoCurrent.push_back( pMotor->dxl_read_word(legNo*10 + i, PRESENT_VOLTAGE) );
+        //servoCurrent.push_back( pMotor->dxl_read_word(legNo*10 + i, PRESENT_VOLTAGE) );
+        servoCurrent.push_back(sendCommand(READ_WORD, legNo < 3 ? 0:1, legNo*10 + i, PRESENT_VOLTAGE, 0));
         servoCurrent[i] = servoCurrent[i] / 10;
     }
     return 0;
@@ -465,8 +706,8 @@ unsigned int BoardDynamixel::readCurrent(unsigned char legNo, std::vector<float_
 
 /// Returns current from servo
 unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent){
-    CDynamixel *pMotorR = &dynamixelMotors[0];
-    CDynamixel *pMotorL = &dynamixelMotors[1];
+    //CDynamixel *pMotorR = &dynamixelMotors[0];
+    //CDynamixel *pMotorL = &dynamixelMotors[1];
     int tmp = 0;
     int cnt = 0;
     for(int i = 0; i < 18; i++){
@@ -475,13 +716,15 @@ unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent)
             if(!(i%3) && i != 0){
                 cnt++;
             }
-            servoCurrent.push_back( pMotorR->dxl_read_word( cnt*10+tmp, PRESENT_VOLTAGE ) );
+            //servoCurrent.push_back( pMotorR->dxl_read_word( cnt*10+tmp, PRESENT_VOLTAGE ) );
+            servoCurrent.push_back(sendCommand(READ_WORD, 0, cnt*10+tmp, PRESENT_VOLTAGE, 0));
         }else{      //Left side of Mesor
             tmp = i%3;
             if(!i%3){
                 cnt++;
             }
-            servoCurrent.push_back( pMotorL->dxl_read_word( cnt*10+tmp, PRESENT_VOLTAGE ) );
+            //servoCurrent.push_back( pMotorL->dxl_read_word( cnt*10+tmp, PRESENT_VOLTAGE ) );
+            servoCurrent.push_back(sendCommand(READ_WORD, 1, cnt*10+tmp, PRESENT_VOLTAGE, 0));
         }
     servoCurrent[i] = servoCurrent[i]/10;
     }
@@ -490,25 +733,27 @@ unsigned int BoardDynamixel::readCurrent( std::vector<float_type>& servoCurrent)
 
 /// Returns torque/load from servo
 unsigned int BoardDynamixel::readTorque(unsigned char legNo, unsigned char jointNo, float_type& servoTorque){
-    CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
-    servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
+    //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+    servoTorque = sendCommand(READ_WORD, legNo < 3 ?0:1,legNo*10 + jointNo, TORQUE, 0) * sendCommand(READ_WORD, legNo < 3 ? 0:1, legNo*10+jointNo, GET_MAX_TORQUE, 0)/1024*28.3;
+    //servoTorque = object->dxl_read_word(legNo*10 + jointNo, TORQUE)*object->dxl_read_word(legNo*10+jointNo, GET_MAX_TORQUE)/1024*28.3;
      return 0;
 }
 
 /// Returns torque/load from servo
 unsigned int BoardDynamixel::readTorque(unsigned char legNo,std::vector<float_type>& servoTorque){
-   CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
+   //CDynamixel *object = &dynamixelMotors[legNo < 3 ?0:1];
     for(int i=0;i<3;i++)
     {
-       servoTorque.push_back(object->dxl_read_word(legNo*10 + i, TORQUE)*object->dxl_read_word(legNo*10+i, GET_MAX_TORQUE)/1024*28.3);
+       servoTorque.push_back(sendCommand(READ_WORD, legNo < 3 ?0:1,legNo*10 + i, TORQUE, 0)*sendCommand(READ_WORD, legNo < 3 ? 0:1,legNo*10+i, GET_MAX_TORQUE, 0)/1024*28.3);
+       //servoTorque.push_back(object->dxl_read_word(legNo*10 + i, TORQUE)*object->dxl_read_word(legNo*10+i, GET_MAX_TORQUE)/1024*28.3);
     }
     return 0;
 }
 
 /// Returns torque/load from servo
 unsigned int BoardDynamixel::readTorque(std::vector<float_type>& servoTorque){
-    CDynamixel *object1 = &dynamixelMotors[0];
-    CDynamixel *object2 = &dynamixelMotors[1];
+    //CDynamixel *object1 = &dynamixelMotors[0];
+    //CDynamixel *object2 = &dynamixelMotors[1];
     int tmp = 0;
     int cnt = 0;
     for(int i = 0; i < 18; i++){
@@ -517,13 +762,15 @@ unsigned int BoardDynamixel::readTorque(std::vector<float_type>& servoTorque){
             if(!(i%3) && i != 0){
                 cnt++;
             }
-           servoTorque.push_back(object1->dxl_read_word(cnt*10+tmp, TORQUE)*object1->dxl_read_word(cnt*10+tmp, GET_MAX_TORQUE)/1024*28.3);
+           //servoTorque.push_back(object1->dxl_read_word(cnt*10+tmp, TORQUE)*object1->dxl_read_word(cnt*10+tmp, GET_MAX_TORQUE)/1024*28.3);
+           servoTorque.push_back(sendCommand(READ_WORD, 0, cnt*10+tmp, TORQUE, 0)*sendCommand(READ_WORD, 0, cnt*10+tmp, GET_MAX_TORQUE, 0)/1024*28.3);
         }else{      //Left side of Mesor
             tmp = i%3;
             if(!i%3){
                 cnt++;
             }
-            servoTorque.push_back(object2->dxl_read_word(cnt*10+tmp, TORQUE)*object2->dxl_read_word(cnt*10+tmp, GET_MAX_TORQUE)/1024*28.3);
+            servoTorque.push_back(sendCommand(READ_WORD, 1, cnt*10+tmp, TORQUE, 0)*sendCommand(READ_WORD, 1, cnt*10+tmp, GET_MAX_TORQUE, 0)/1024*28.3);
+            //servoTorque.push_back(object2->dxl_read_word(cnt*10+tmp, TORQUE)*object2->dxl_read_word(cnt*10+tmp, GET_MAX_TORQUE)/1024*28.3);
         }
     }
     return 0;

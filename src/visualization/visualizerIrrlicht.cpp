@@ -85,28 +85,64 @@ void VisualizerIrrlicht::mat34ToIrrlichtTransform(const Mat34& robotPose) {
 }
 
 void VisualizerIrrlicht::setPosition(std::vector<float_type> configuration){
-    m_configuration = configuration;
+    //m_configuration = configuration;
+    //6th leg
     m_configuration[0]=-configuration[9];
     m_configuration[1]=configuration[10];
     m_configuration[2]=configuration[11];
+    //5th leg
     m_configuration[3]=-configuration[12];
     m_configuration[4]=configuration[13];
     m_configuration[5]=configuration[14];
+    //4th leg
     m_configuration[6]=-configuration[15];
     m_configuration[7]=configuration[16];
     m_configuration[8]=configuration[17];
 
+    //1st leg
     m_configuration[9]=-configuration[0];
     m_configuration[10]=configuration[1];
     m_configuration[11]=configuration[2];
+    //2nd leg
     m_configuration[12]=-configuration[3];
     m_configuration[13]=configuration[4];
     m_configuration[14]=configuration[5];
+    //3rd leg
     m_configuration[15]=-configuration[6];
     m_configuration[16]=configuration[7];
     m_configuration[17]=configuration[8];
 }
 
+void VisualizerIrrlicht::setPosition(unsigned char legNo, std::vector<float_type> configuration){
+
+    if(legNo < 3)
+        configuration[0] = -configuration[0];
+
+    for(int i=0; i<3; i++)
+    {
+        if(legNo < 3)
+            m_configuration[legNo*3+9+i] = configuration[i];
+        else
+            m_configuration[9-(legNo-2)*3+i] = configuration[i];
+    }
+
+}
+
+std::vector<float_type> VisualizerIrrlicht::getPosition(int legNo)
+{
+    std::vector<float_type> configuration;
+    for(int i=0; i<3; i++)
+    {
+        if(legNo < 3)
+            configuration.push_back(m_configuration[legNo*3+9+i]);
+        else
+            configuration.push_back(m_configuration[9-(legNo-2)*3+i]);
+    }
+    if(legNo < 3)
+        configuration[0] = -configuration[0];
+
+    return configuration;
+}
 
 void VisualizerIrrlicht::drawRobot(const Mat34& robotPose, std::vector<float_type> configuration) {
     this->m_configuration = configuration;

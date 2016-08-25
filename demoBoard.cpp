@@ -5,6 +5,8 @@
 #include "3rdParty/dynamixel/dxl_hal.h"
 #include <iostream>
 #include <stdio.h>
+#include <thread>
+
 using namespace std;
 using namespace controller;
 int main( int argc, const char** argv )
@@ -73,6 +75,18 @@ int main( int argc, const char** argv )
     wektorTestowy18[6]=-45*M_PI/180;
     demo->setPosition(wektorTestowy18);
 
+
+    while (true){
+        for (int legNo=0;legNo<6;legNo++){
+            std::cout << "Leg " << legNo << " switch value: ";
+            if (demo->readContact(legNo))
+                std::cout << "1";
+            else
+                std::cout << "0";
+        }
+        std::cout << "\n";
+        usleep(1000000);
+    }
 
     while (true){
         cout << "Noga = ";

@@ -103,6 +103,8 @@ public:
     ///Compute configuration of the robot for the reference motion (each foot generates separate motion)
     std::vector<float_type> movePlatform(const std::vector<Mat34>& motion);
 
+    std::vector<float_type> moveLeg(unsigned char legNo, const Mat34& trajectory);
+
     std::vector<float_type> movePlatformNeutral(const Mat34 motion);
 
     /// new method: computes forward kinematics for each leg and returns position of each link of the robot (body is [0,0,0]^T)
@@ -118,6 +120,10 @@ public:
     * @return std::vector<float_type> compliance of all servomechanism
     */
     std::vector<float_type> computeCompliance(const std::vector<float_type> configuration);
+
+    Mat34 legCPos(std::vector<float_type> configuration, int legNo);
+
+    std::vector<float_type> fluentPlatform(Mat34 askedP, int legNo);
 
     ~RobotMessor(void);
 

@@ -29,12 +29,99 @@ std::vector<float_type> RobotMessor::computeLegConfiguration(int legNo, const Ma
     int side = (legNo<3) ? 0 : 1;
     currentFootPosition = legMountPoints[legNo] * legModel->forwardKinematic(startConfiguration, 3, side).matrix();
 
+
     Mat34 footInMount;
     footInMount.matrix() = newLegMountPoint.matrix().inverse() * currentFootPosition.matrix();
 
     std::vector<float_type> conf;
     conf = legModel->inverseKinematic(footInMount, 3, side);
     return conf;
+}
+
+
+std::vector<float_type> RobotMessor::fluentPlatform(Mat34 asked, int legNo)
+{
+
+    int side = (legNo<3) ? 0 : 1;
+    Mat34 initial(Mat34::Identity());
+    Mat34 global(Mat34::Identity());
+    global(0,3) = 10;
+    global(1,3) = 10;
+    global(2,3) = 10;
+
+    std::vector<float_type> conf, confObserve, confGtoX, confGtoR, confAsked;
+    conf = computeLegConfiguration(legNo, initial, configurationStart);             //calculate initial configuration
+    confObserve = computeLegConfiguration(legNo, global, configurationStart);
+    initial = legModel->forwardKinematic(conf, 3, side);
+
+    Mat34 currentFootPosition;
+    //currentFootPosition = legMountPoints[legNo] * legModel->forwardKinematic(configurationStart, 3, side);//position Mat at the start
+    currentFootPosition = legMountPoints[legNo] * initial;
+
+    Mat34 GtoX, GtoR;
+    //z obserwatora konfiguracja dla stopy
+    confGtoX = computeLegConfiguration(legNo, currentFootPosition, confObserve);
+    GtoX = legModel->forwardKinematic(confGtoX,3, side);
+
+    //z obserwatora patrzymy na srodek platformy
+    confGtoR =  computeLegConfiguration(legNo, initial, confObserve);
+    GtoR = legModel->forwardKinematic(confGtoR, 3, side);
+
+    //z platformy patrzymy na nowa pozycje platofrmy
+    confAsked = computeLegConfiguration(legNo, asked, configurationStart);
+    asked = legModel->forwardKinematic(confAsked, 3, side);
+
+    std::vector<float_type> result;
+    asked = GtoX * GtoR.inverse() * asked.inverse();
+    result = computeLegConfiguration(legNo, asked, configurationStart);
+
+    return result;
+}
+
+
+
+Mat34 RobotMessor::legCPos(std::vector<float_type> configuration, int legNo)
+{
+    int side = (legNo<3) ? 0 : 1;
+    Mat34 legPos;
+
+    Mat34 initial(Mat34::Identity());                   //create initial matrix with z translation -0.1
+    initial(1,3) = -0.1;
+
+    std::cout << "zadaje to:  ";
+                for (int j = 0; j < 3; j++)
+                {
+                    std::cout << initial(j,3) << ", ";
+                }
+                std::cout << std::endl;
+
+
+    std::vector<float_type> conf;
+    conf = computeLegConfiguration(legNo, initial, configurationStart);        //inverse kinematics with initial condition
+
+    legPos = legModel->forwardKinematic(conf, 3,side);                  //forward kinematics initial
+
+    //Mat34 newLegMountPoint = bodyMotion * legMountPoints[legNo];
+
+    //legMountPoints its position of leg in relation to body
+    Mat34 currentFootPosition;
+    currentFootPosition = legMountPoints[legNo] * legModel->forwardKinematic(configurationStart, 3, side).matrix();
+
+    //footInMount.matrix() = newLegMountPoint.matrix().inverse() * currentFootPosition.matrix();
+    Mat34 newLegMountPoint;
+    newLegMountPoint.matrix() = legPos.matrix().inverse() * currentFootPosition.matrix();
+
+    Mat34 currFoot;
+    currFoot.matrix() = newLegMountPoint.matrix().inverse() * legMountPoints[legNo].matrix();
+
+    std::cout << "dostaje to:  ";
+                for (int j = 0; j < 3; j++)
+                {
+                    std::cout << currFoot(j,3) << ", ";
+                }
+                std::cout << std::endl;
+
+    return currFoot;
 }
 
 ///Compute configuration of the robot for the reference motion
@@ -66,6 +153,17 @@ std::vector<float_type> RobotMessor::movePlatform(const std::vector<Mat34>& moti
         conf.insert(conf.end(), conf2.begin(), conf2.end());
     }
     return conf;
+}
+
+std::vector<float_type> RobotMessor::moveLeg(unsigned char legNo, const Mat34& trajectory)
+{
+    std::vector<float_type> conf;
+
+    conf = computeLegConfiguration(legNo, trajectory, configurationStart);
+
+    //-------------------------------------------
+    return conf;
+
 }
 
 ///Compute configuration of the robot for the reference motion (in relation to neutral pose)
@@ -112,9 +210,9 @@ std::vector<Mat34> RobotMessor::conputeLinksPosition(std::vector<float_type> con
              }
 
          }
-         if (h<9)
-        linksPos.push_back(legMountPoints[h / 3] * legModel->forwardKinematic(conf, -1,0));
-
+         if (h<9){
+        linksPos.push_back(legMountPoints[h / 3] *legModel->forwardKinematic(conf, -1,0));
+}
          else
              linksPos.push_back(legMountPoints[h / 3] * legModel->forwardKinematic(conf, -1,1));
 

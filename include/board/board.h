@@ -163,6 +163,14 @@ namespace controller {
          * \param &angle Angle values.
          * \return Return error value.
          */
+            virtual unsigned int readPosition(unsigned char legNo, unsigned char jointNo, float_type& angle, bool reversePos1) = 0;
+            /**
+         * \brief Returns current position of the servomotors in particular leg.
+         * \param legNo Leg number.
+         * \param &angle Angle values.
+         * \param reversePos1 if 1st jointNo should be reversed
+         * \return Return error value.
+         */
             virtual unsigned int readPositions(unsigned char legNo, std::vector<float_type>& angle) = 0;
               /**
          * \brief Returns current position of the servomotors.
@@ -270,6 +278,17 @@ namespace controller {
 
             /// Virtual descrutor
             virtual ~Board() {}
+
+            virtual float_type  sendCommand(int dynamixelCmd, int usb2dynNo, unsigned char servoNo, int command, float_type value) = 0;
+
+            /**
+             * \brief Function replacing bibliotecal dxl_write_word
+             * \param usd2dynNo Usb number
+             * \param dynamixelCmd e.g. write_word, read_word, initialize
+             * \param servoNo servomotor number
+             * \param command e.g. movingSpeed, complianceMargin
+             * \param value value of command
+            */
 
         protected:
             /// Board type
