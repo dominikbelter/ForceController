@@ -125,6 +125,8 @@ public:
 
     std::vector<float_type> fluentPlatform(Mat34 askedP, int legNo);
 
+    Mat34 getLegPosFromRobot(Mat34 robotTraj, int legNo);
+
     ~RobotMessor(void);
 
 private:

@@ -46,6 +46,12 @@ int main( int argc, const char** argv )
         float_type speedo = 5;
         char wait;
         usleep(1000000);
+        Mat34 robotPos(Mat34::Identity());
+        robotPos(0,3) = -0.052;
+        robotPos(1,3) = 0.12;
+        robotPos(2,3) = 1;
+        controller->moveLegSingleRobot(5, robotPos, speedo);
+        while(true){};
         Mat34 motion1(Mat34::Identity());
         Mat34 motion2(Mat34::Identity());
         Mat34 motion3(Mat34::Identity());

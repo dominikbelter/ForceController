@@ -82,6 +82,9 @@ namespace controller {
 
             virtual std::vector<float_type> fluentPlatform(Mat34 askedP, int legNo) = 0;
 
+            virtual Mat34 getLegPosFromRobot(Mat34 robotTraj, int legNo) = 0;
+
+
             /// Virtual descrutor
             virtual ~Robot() {}
 

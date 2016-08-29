@@ -439,6 +439,23 @@ std::vector<float_type> RobotMessor::computeCompliance(const std::vector<float_t
 
 }
 
+Mat34 RobotMessor::getLegPosFromRobot(Mat34 robotTraj, int legNo)
+{
+    Mat34 localTraj = robotTraj * legMountPoints[legNo];
+//    Mat34 newLegMountPoint = localTraj * legMountPoints[legNo];
+//    Mat34 currentFootPosition;
+
+//    int side = (legNo<3) ? 0 : 1;
+//    currentFootPosition = legMountPoints[legNo] * legModel->forwardKinematic(configurationStart, 3, side).matrix();
+
+
+//    Mat34 footInMount;
+//    footInMount.matrix() = newLegMountPoint.matrix().inverse() * currentFootPosition.matrix();
+
+
+    return robotTraj;
+}
+
  controller::Robot* controller::createRobotMessor(void) {
      robotmessor.reset(new RobotMessor());
      return robotmessor.get();

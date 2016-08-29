@@ -185,12 +185,28 @@ void ControllerMessor2::moveLegSingleLin(unsigned char legNo, const Mat34& traje
 
 }
 
+void ControllerMessor2::moveLegSingleRobot(unsigned char legNo, const Mat34& trajectory, float_type speed)
+{
+    moveLegSingle(legNo, robot->getLegPosFromRobot(trajectory, legNo), speed);
+}
+
+void ControllerMessor2::moveLegRobot(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed)
+{
+    moveLeg(legNo, trajectory, speed);
+}
+
+void ControllerMessor2::moveLegsRobot(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed)
+{
+    moveLegs(legNo, trajectory, speed);
+}
+
 void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed)
 {
 
 
     std::vector<float_type> configuration;
     std::vector<float_type> diff(3);
+    std::vector<float_type> newConf(3);
 
     configuration = robot->moveLeg(legNo, trajectory);
 
@@ -209,14 +225,15 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         }
     }
     mtx.lock();
-    std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
+   // std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
     mtx.unlock();
     if (config.useVisualizer)
     {
+        bool wychodze = false;
 
         std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
         mtx.lock();
-        std::cout << currentConfiguration[0] <<"  c1: " << currentConfiguration[1] <<"  c2: " << currentConfiguration[2] << std::endl;
+        //std::cout << currentConfiguration[0] <<"  c1: " << currentConfiguration[1] <<"  c2: " << currentConfiguration[2] << std::endl;
         mtx.unlock();
 
         float_type step = 0.04;
@@ -229,15 +246,28 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
         int i = 0;
         while(i<=n)
+      //  while(!wychodze)
         {
+            std::vector<float_type> currentConfigurationNow = visualizer->getPosition(legNo);
+            std::vector<Mat34> jedno;
+            std::vector<Mat34> dodrugiego;
+
+            jedno = robot->conputeLinksPosition(currentConfigurationNow);
+            dodrugiego = robot->conputeLinksPosition(configuration);
 
             //cout << visualizer->getPosition(legNo)[0] << endl;
             for(int s=0; s<configuration.size(); s++)
             {
-                configuration[s] = currentConfiguration[s] + diff[s]*i;
+
+               //if(abs(configuration[s] - currentConfigurationNow[s]) < 0.0001)
+               if(abs(jedno[3](s,0) - dodrugiego[3](s,0)) < 0.0001)
+                {
+                    wychodze = true;
+                }
+                newConf[s] = currentConfiguration[s] + diff[s]*i;
             }
 
-            visualizer->setPosition(legNo,configuration);
+            visualizer->setPosition(legNo,newConf);
 
             i++;
             usleep(50000);

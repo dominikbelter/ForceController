@@ -115,7 +115,7 @@ void VisualizerIrrlicht::setPosition(std::vector<float_type> configuration){
 
 void VisualizerIrrlicht::setPosition(unsigned char legNo, std::vector<float_type> configuration){
 
-    if(legNo < 3)
+    //if(legNo < 3)
         configuration[0] = -configuration[0];
 
     for(int i=0; i<3; i++)
@@ -138,7 +138,7 @@ std::vector<float_type> VisualizerIrrlicht::getPosition(int legNo)
         else
             configuration.push_back(m_configuration[9-(legNo-2)*3+i]);
     }
-    if(legNo < 3)
+   // if(legNo < 3)
         configuration[0] = -configuration[0];
 
     return configuration;
