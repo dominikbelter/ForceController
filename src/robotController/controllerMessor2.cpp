@@ -85,6 +85,7 @@ void ControllerMessor2::movePlatform(Mat34& motion, double speed){
         {
             conf.push_back(configuration[i*3+j]);
         }
+
         configs.push_back(conf);
         confTotal.push_back(configs);
         conf.clear();
@@ -92,6 +93,7 @@ void ControllerMessor2::movePlatform(Mat34& motion, double speed){
     }
 
     moveLegs(legsNo, confTotal, speed);
+
 }
 
 void ControllerMessor2::movePlatform(std::vector<Mat34>& motion, double speed)
@@ -192,12 +194,18 @@ void ControllerMessor2::moveLegSingleRobot(unsigned char legNo, const Mat34& tra
 
 void ControllerMessor2::moveLegRobot(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed)
 {
-    moveLeg(legNo, trajectory, speed);
+    for(int i =0;i<trajectory.size();i++)
+    {
+        this->moveLegSingleRobot(legNo, trajectory[i], speed);
+    }
 }
 
 void ControllerMessor2::moveLegsRobot(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed)
 {
-    moveLegs(legNo, trajectory, speed);
+    /*for(int i=0;legNo.size();i++)
+    {
+        moveLegRobot(legNo[i], trajectory, speed);
+    }*/
 }
 
 void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed)
@@ -209,6 +217,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
     std::vector<float_type> newConf(3);
 
     configuration = robot->moveLeg(legNo, trajectory);
+
+    cout << "WYNIK" << configuration[0] << endl;
 
     for(int s=0; s<configuration.size(); s++)
     {
@@ -257,8 +267,14 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             jedno = robot->conputeLinksPosition(currentConfigurationNow);
             dodrugiego = robot->conputeLinksPosition(configuration);
 
-            cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-            cout << jedno.size() << endl;
+
+            cout << "TRAJ" << trajectory(0,3) << endl;
+
+            if(i==5)
+            {
+                cout << "OBECNIE" << jedno[3](0,0) << endl;
+
+            }
 
             //cout << visualizer->getPosition(legNo)[0] << endl;
             for(int s=0; s<configuration.size(); s++)
@@ -270,6 +286,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                     wychodze = true;
                 }
                 newConf[s] = currentConfiguration[s] + diff[s]*i;
+                cout << newConf[s] << endl;
             }
 
             visualizer->setPosition(legNo,newConf);

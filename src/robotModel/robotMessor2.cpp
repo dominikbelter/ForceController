@@ -4,6 +4,7 @@
 #include <Eigen/Dense>
 
 using namespace controller;
+using namespace std;
 
 RobotMessor::Ptr robotmessor;
 
@@ -452,8 +453,12 @@ Mat34 RobotMessor::getLegPosFromRobot(Mat34 robotTraj, int legNo)
 //    Mat34 footInMount;
 //    footInMount.matrix() = newLegMountPoint.matrix().inverse() * currentFootPosition.matrix();
 
-
-    return robotTraj;
+    cout << "wspolrzedne nogi" << endl;
+    for(int x=0;x<3;x++)
+    {
+        cout << localTraj(x,3) << endl;
+    }
+    return localTraj;
 }
 
  controller::Robot* controller::createRobotMessor(void) {
