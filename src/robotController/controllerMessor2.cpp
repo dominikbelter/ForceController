@@ -244,6 +244,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             diff[s]=(configuration[s] - currentConfiguration[s])*step;
         }
 
+
+
         int i = 0;
         while(i<=n)
       //  while(!wychodze)
@@ -254,6 +256,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
             jedno = robot->conputeLinksPosition(currentConfigurationNow);
             dodrugiego = robot->conputeLinksPosition(configuration);
+
+            cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+            cout << jedno.size() << endl;
 
             //cout << visualizer->getPosition(legNo)[0] << endl;
             for(int s=0; s<configuration.size(); s++)
@@ -277,7 +282,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
     }
     else
     {
-
+        //vector<Mat34> result;
+        //vector<Mat34> current;
         vector<float_type> readAngle(3);
         vector<float_type> speedScale(3);
         float_type longestJourney = 0;
@@ -302,7 +308,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
 
         bool motionFinished = false;
-        float_type offset = 0.20;
+        float_type offsetConf = 0.20;
+        //float_type offset = 0.05;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
@@ -315,7 +322,19 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             std::cout << (int)legNo << std::endl;
             cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
             mtx.unlock();
-            if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
+
+            /*current = robot->conputeLinksPosition(readAngle);
+            result = robot->conputeLinksPosition(configuration);
+
+            for(int i = 0;i<3;i++)
+            {
+                if(abs(result[3](i,0)-current[3](i,0)) < offset)
+                {
+                    motionFinished=true;
+                }
+            }*/
+
+            if((abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf) )
             {
                 motionFinished = true;
                 cout << "move finished " << legNo << endl;
