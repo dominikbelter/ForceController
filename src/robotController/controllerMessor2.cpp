@@ -343,12 +343,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             current = robot->conputeLinksPosition(readAngle);
             result = robot->conputeLinksPosition(configuration);
 
-            for(int i = 0;i<3;i++)
+            if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
             {
-                if(abs(result[3](i,0)-current[3](i,0)) < offset)
-                {
-                    motionFinished=true;
-                }
+                motionFinished=true;
             }
 
 //            if((abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf) )
