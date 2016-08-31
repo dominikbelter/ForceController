@@ -328,9 +328,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         //float_type offsetConf = 0.20;
         float_type offset;
         if(!lastMove)
-            offset = 0.005;
+            offset = 0.0075;
         else
-            offset = 0.0025;
+            offset = 0.005;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
@@ -452,9 +452,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
         //float_type offsetConf = 0.20;
         float_type offset;
         if(!lastMove)
-            offset = 0.005;
+            offset = 0.0075;
         else
-            offset = 0.0025;
+            offset = 0.005;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
