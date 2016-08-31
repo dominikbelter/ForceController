@@ -30,20 +30,20 @@ int main( int argc, const char** argv )
 
         bool startMotion = false;
         vector<float_type> readTorque(3);
-        while(!startMotion)
-        {
-            board->readTorque(5, 0, readTorque[0]);
-            board->readTorque(5, 1, readTorque[1]);
-            board->readTorque(5, 2, readTorque[2]);
-            for (int i=0; i<3; i++)
-            {
-                cout << "NOGA 5 WENZEL " << i << "   " << readTorque[i] << endl;;
-            }
+//        while(!startMotion)
+//        {
+//            board->readTorque(5, 0, readTorque[0]);
+//            board->readTorque(5, 1, readTorque[1]);
+//            board->readTorque(5, 2, readTorque[2]);
+//            for (int i=0; i<3; i++)
+//            {
+//                cout << "NOGA 5 WENZEL " << i << "   " << readTorque[i] << endl;;
+//            }
 
-            cout << endl;
+//            cout << endl;
 
-            usleep(1000000);
-        }
+//            usleep(1000000);
+//        }
 
         for(int i=0; i<6; i++)
         {

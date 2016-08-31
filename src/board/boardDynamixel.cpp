@@ -24,8 +24,8 @@ BoardDynamixel::BoardDynamixel(void) : Board("Board Dynamixel", TYPE_USB2DYNAMIX
                           sendCommand(WRITE_WORD,i,j*10+k, P_MOVING_SPEED_L,512);
                           sendCommand(WRITE_WORD,i,j*10+k, P_CW_COMPLIANCE_MARGIN, 1);
                           sendCommand(WRITE_WORD,i,j*10+k, P_CCW_COMPLIANCE_MARGIN, 1);
-                          sendCommand(WRITE_WORD,i,j*10+k, P_CW_COMPLIANCE_SLOPE, 32);
-                          sendCommand(WRITE_WORD,i,j*10+k, P_CCW_COMPLIANCE_SLOPE, 32);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_CW_COMPLIANCE_SLOPE, 1);
+                          sendCommand(WRITE_WORD,i,j*10+k, P_CCW_COMPLIANCE_SLOPE, 1);
                           sendCommand(WRITE_WORD,i,j*10+k, P_TORQUE_LIMIT_L, 1012);
                           sendCommand(WRITE_WORD,i,j*10+k, P_TEMERATURE_LIMIT_L, 99);
                           /*dynamixelMotors[i].dxl_write_word(j*10+k, P_MOVING_SPEED_L, 512);
