@@ -328,9 +328,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         //float_type offsetConf = 0.20;
         float_type offset;
         if(!lastMove)
-            offset = 0.0075;
+            offset = 0.015;
         else
-            offset = 0.005;
+            offset = 0.013;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
@@ -346,7 +346,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
             current = robot->conputeLinksPosition(readAngle);
             result = robot->conputeLinksPosition(configuration);
-
+	    cout << "0: " << abs(result[3](0,3)-current[3](0,3)) << " 1: " << abs(current[3](1,3)-result[3](1,3)) << " 2: " << abs(current[3](2,3)-result[3](2,3)) << endl;
             if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
             {
                 motionFinished=true;
@@ -452,9 +452,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
         //float_type offsetConf = 0.20;
         float_type offset;
         if(!lastMove)
-            offset = 0.0075;
+            offset = 0.014;
         else
-            offset = 0.005;
+            offset = 0.011;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
