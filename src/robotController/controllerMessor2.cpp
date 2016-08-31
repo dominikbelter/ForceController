@@ -299,8 +299,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
     }
     else
     {
-        //vector<Mat34> result;
-        //vector<Mat34> current;
+        vector<Mat34> result;
+        vector<Mat34> current;
         vector<float_type> readAngle(3);
         vector<float_type> speedScale(3);
         float_type longestJourney = 0;
@@ -326,7 +326,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
         bool motionFinished = false;
         float_type offsetConf = 0.20;
-        //float_type offset = 0.05;
+        float_type offset = 0.05;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
@@ -340,7 +340,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
             mtx.unlock();
 
-            /*current = robot->conputeLinksPosition(readAngle);
+            current = robot->conputeLinksPosition(readAngle);
             result = robot->conputeLinksPosition(configuration);
 
             for(int i = 0;i<3;i++)
@@ -349,13 +349,13 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                 {
                     motionFinished=true;
                 }
-            }*/
-
-            if((abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf) )
-            {
-                motionFinished = true;
-                cout << "move finished " << legNo << endl;
             }
+
+//            if((abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf) )
+//            {
+//                motionFinished = true;
+//                cout << "move finished " << legNo << endl;
+//            }
         }
 
     }
