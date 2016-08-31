@@ -139,7 +139,7 @@ void ControllerMessor2::moveLegSingleLin(unsigned char legNo, const Mat34& traje
 //    }
 //    cout << endl;
 
-    moveLegSingle(legNo, trajectory, speed);
+ //   moveLegSingle(legNo, trajectory, speed,);
 
 //    configuration = robot->moveLeg(legNo, trajectory);
 
@@ -189,7 +189,7 @@ void ControllerMessor2::moveLegSingleLin(unsigned char legNo, const Mat34& traje
 
 void ControllerMessor2::moveLegSingleRobot(unsigned char legNo, const Mat34& trajectory, float_type speed)
 {
-    moveLegSingle(legNo, robot->getLegPosFromRobot(trajectory, legNo), speed);
+    moveLegSingle(legNo, robot->getLegPosFromRobot(trajectory, legNo), speed, false);
 }
 
 void ControllerMessor2::moveLegRobot(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed)
@@ -208,7 +208,7 @@ void ControllerMessor2::moveLegsRobot(std::vector<unsigned char> legNo, const st
     }*/
 }
 
-void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed)
+void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove)
 {
 
 
@@ -325,8 +325,12 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
 
         bool motionFinished = false;
-        float_type offsetConf = 0.20;
-        float_type offset = 0.005;
+        //float_type offsetConf = 0.20;
+        float_type offset;
+        if(!lastMove)
+            offset = 0.005;
+        else
+            offset = 0.0025;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
@@ -359,7 +363,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
 }
 
-void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<float_type>& configuration1, float_type speed)
+void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<float_type>& configuration1, float_type speed, bool lastMove)
 {
 
     std::vector<float_type> configuration(3);
@@ -421,6 +425,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
 
         vector<float_type> readAngle(3);
         vector<float_type> speedScale(3);
+        vector<Mat34> result;
+        vector<Mat34> current;
         float_type longestJourney = 0;
 
         for(int i=0; i<configuration.size(); i++)
@@ -443,7 +449,12 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
 
 
         bool motionFinished = false;
-        float_type offset = 0.20;
+        //float_type offsetConf = 0.20;
+        float_type offset;
+        if(!lastMove)
+            offset = 0.005;
+        else
+            offset = 0.0025;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
@@ -456,11 +467,16 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
             std::cout << (int)legNo << std::endl;
             cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
             mtx.unlock();
-            if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
+
+            if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
             {
-                motionFinished = true;
-                cout << "move finished " << legNo << endl;
+                motionFinished=true;
             }
+//            if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
+//            {
+//                motionFinished = true;
+//                cout << "move finished " << legNo << endl;
+//            }
         }
 
     }
@@ -472,7 +488,10 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& t
 {
     for(int i=0; i<trajectory.size(); i++)
     {
-        this->moveLegSingleLin(legNo, trajectory[i], speed);
+        if(i==trajectory.size()-1)
+            this->moveLegSingle(legNo, trajectory[i], speed, true);
+        else
+            this->moveLegSingle(legNo, trajectory[i], speed, false);
     }
 
 }
@@ -481,7 +500,10 @@ void ControllerMessor2::moveLegConf(unsigned char legNo,const std::vector<std::v
 {
     for(int i=0; i<configuration.size(); i++)
     {
-        this->moveLegSingle(legNo, configuration[i], speed);
+        if(i==configuration.size()-1)
+            this->moveLegSingle(legNo, configuration[i], speed, true);
+        else
+            this->moveLegSingle(legNo, configuration[i], speed, false);
     }
 
 }

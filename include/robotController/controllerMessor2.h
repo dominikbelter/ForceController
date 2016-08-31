@@ -66,7 +66,7 @@ class ControllerMessor2 : public RobotController
         void moveLegSingleLin(unsigned char legNo, const Mat34& trajectory, float_type speed);
 
         //methods for moving robot legs by passing trajectory in the leg coordinate system
-        void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed);
+        void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove);
 
         void moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed);
 
@@ -83,7 +83,7 @@ class ControllerMessor2 : public RobotController
         void movePlatform(std::vector<Mat34>& motion, double speed);
 
         //methods for moving robot legs by passing motors configuration
-        void moveLegSingle(unsigned char legNo,const std::vector<float_type>& configuration1, float_type speed);
+        void moveLegSingle(unsigned char legNo,const std::vector<float_type>& configuration1, float_type speed, bool lastMove);
 
         void moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed);
 
