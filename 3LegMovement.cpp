@@ -28,16 +28,20 @@ int main( int argc, const char** argv )
 
         board->setSpeed(motorSpeed);
 
-//        bool startMotion = false;
+        bool startMotion = false;
+        vector<float_type> readTorque(3);
+        while(!startMotion)
+        {
+            board->readTorque(5,readTorque);
+            for (int i=0; i<3; i++)
+            {
+                cout << "NOGA 5 WENZEL " << i << "   " << readTorque[i] << endl;;
+            }
 
-//        while(!startMotion)
-//        {
-//            for(int i=0; i<6; i++)
-//            {
-//                cout << "NOGA " << i << "  " << board->readContact(i) << endl;
-//            }
-//            usleep(1000000);
-//        }
+            cout << endl;
+
+            usleep(1000000);
+        }
 
         for(int i=0; i<6; i++)
         {
