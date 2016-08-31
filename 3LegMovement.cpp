@@ -28,6 +28,16 @@ int main( int argc, const char** argv )
 
         board->setSpeed(motorSpeed);
 
+        bool startMotion = false;
+
+        while(!startMotion)
+        {
+            for(int i=0; i<6; i++)
+            {
+                cout << "NOGA " << i << "  " << board->readContact(i) << endl;
+            }
+        }
+
         for(int i=0; i<6; i++)
         {
             board->setPosition(i, position1);
