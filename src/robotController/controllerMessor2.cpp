@@ -326,7 +326,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
         bool motionFinished = false;
         float_type offsetConf = 0.20;
-        float_type offset = 0.05;
+        float_type offset = 0.005;
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
