@@ -32,7 +32,9 @@ int main( int argc, const char** argv )
         vector<float_type> readTorque(3);
         while(!startMotion)
         {
-            board->readTorque(5,readTorque);
+            board->readCurrent(5, 0, readTorque[0]);
+            board->readCurrent(5, 1, readTorque[1]);
+            board->readCurrent(5, 2, readTorque[2]);
             for (int i=0; i<3; i++)
             {
                 cout << "NOGA 5 WENZEL " << i << "   " << readTorque[i] << endl;;
