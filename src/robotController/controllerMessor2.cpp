@@ -395,6 +395,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<float_type>& configuration1, float_type speed, bool lastMove)
 {
 
+    cout << " SPEED PRZEKAZANY " << (int)legNo << " WYNOSI: " << speed << endl;
     std::vector<float_type> configuration(3);
     std::vector<float_type> diff(3);
     mtx.lock();
