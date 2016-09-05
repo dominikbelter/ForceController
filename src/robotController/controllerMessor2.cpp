@@ -552,19 +552,20 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
         longest[i]=0;
         for(int j=0; j<trajectory[i].size(); j++)
         {
+            cout << "RUCH " << j << endl;
             configuration = robot->moveLeg(legNo[i], trajectory[i][j]);
             for(int k=0; k<configuration.size(); k++)
             {
                 if(j==0)
                 {
                     board->readPosition(legNo[i], k, currentAngle[k]);
-                    cout << "CZYTAM NOGE: " << legNo[i] << " SERWO: " << k << "WYNIK: " << currentAngle[k] << endl;
+                    cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << currentAngle[k] << endl;
                     diff[k] = abs(currentAngle[k] - configuration[k]);
                     currentAngle[k] = configuration[k];
                 }
                 else
                 {
-                    cout << "CZYTAM NOGE: " << legNo[i] << " SERWO: " << k << "WYNIK: " << currentAngle[k] << endl;
+                    cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << currentAngle[k] << endl;
                     diff[k] = abs(currentAngle[k] - configuration[k]);
                     currentAngle[k] = configuration[k];
                 }
