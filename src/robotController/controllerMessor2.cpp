@@ -218,8 +218,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
     configuration = robot->moveLeg(legNo, trajectory);
 
-    cout << "WYNIK" << configuration[0] << endl;
-
     for(int s=0; s<configuration.size(); s++)
     {
         if(s == 0)
@@ -347,8 +345,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
             mtx.lock();
-            std::cout << (int)legNo << std::endl;
-            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
+//            std::cout << (int)legNo << std::endl;
+//            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
             mtx.unlock();
 
             current = robot->conputeLinksPosition(readAngle);
@@ -417,7 +415,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
         }
     }
     mtx.lock();
-    std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
+//    std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
     mtx.unlock();
     if (config.useVisualizer)
     {
@@ -552,8 +550,9 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
         longest[i]=0;
         for(int j=0; j<trajectory[i].size(); j++)
         {
-            cout << "RUCH " << j << endl;
+//            cout << "RUCH " << j << endl;
             configuration = robot->moveLeg(legNo[i], trajectory[i][j]);
+
             for(int k=0; k<configuration.size(); k++)
             {
                 if(configuration[k] > 3.14)
@@ -564,17 +563,15 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
                 {
                     configuration[k]+=6.28;
                 }
+
                 if(j==0)
-                {
                     board->readPosition(legNo[i], k, currentAngle[k]);
-                    //cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << configuration[k] << endl;
-                    diff[k] = abs(currentAngle[k] - configuration[k]);
-                    currentAngle[k] = configuration[k];
-                }
+
                 else
                 {
                     //cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << configuration[k] << endl;
                     diff[k] = abs(currentAngle[k] - configuration[k]);
+                    cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK DIFF: " << diff[k] << endl;
                     currentAngle[k] = configuration[k];
                 }
                 if(diff[k] > longestJourney)
@@ -584,6 +581,7 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
             }
             longest[i] += longestJourney;
         }
+        cout << "LONGEST NOGA: " << i << " = " << longest[i] << endl;
 
     }
 
