@@ -107,10 +107,11 @@ int main( int argc, const char** argv )
         legUp(2,3) = -0.1;
         legUp(0,3) = -0.05;
         trajUp.push_back(legUp);
-
+        trajUp.push_back(initial);
         legUpR(2,3) = -0.1;
         legUpR(0,3) = 0.05;
         trajUpR.push_back(legUpR);
+        trajUpR.push_back(initial);
 
         trajToInitial.push_back(initial);
 
@@ -137,10 +138,10 @@ int main( int argc, const char** argv )
         while(true)
         {
             controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
-            controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
+           // controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
 
             controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
-            controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
+           // controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
 
         }
 

@@ -567,13 +567,13 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
                 if(j==0)
                 {
                     board->readPosition(legNo[i], k, currentAngle[k]);
-                    cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << configuration[k] << endl;
+                    //cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << configuration[k] << endl;
                     diff[k] = abs(currentAngle[k] - configuration[k]);
                     currentAngle[k] = configuration[k];
                 }
                 else
                 {
-                    cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << configuration[k] << endl;
+                    //cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << configuration[k] << endl;
                     diff[k] = abs(currentAngle[k] - configuration[k]);
                     currentAngle[k] = configuration[k];
                 }
