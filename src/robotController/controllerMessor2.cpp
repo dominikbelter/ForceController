@@ -556,11 +556,11 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
             configuration = robot->moveLeg(legNo[i], trajectory[i][j]);
             for(int k=0; k<configuration.size(); k++)
             {
-                if(configuration[k] >= 6.28)
+                if(configuration[k] > 3.14)
                 {
                     configuration[k]-=6.28;
                 }
-                if(configuration[k] <= -6.28)
+                if(configuration[k] < -3.14)
                 {
                     configuration[k]+=6.28;
                 }
