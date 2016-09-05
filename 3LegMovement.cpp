@@ -52,7 +52,7 @@ int main( int argc, const char** argv )
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
-        float_type speedo = 5;
+        float_type speedo = 10;
 
         usleep(1000000);
 
