@@ -598,8 +598,10 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
     for(int i=0; i<trajectory.size(); i++)
     {
         speedScale[i] = longest[i] / longestestJourney;
+        cout << " SPEED " << i << " WYNOSI: " << speedScale[i] << endl;
     }
 
+    cout << endl;
 
     if(legNo.size() == 1)
     {
