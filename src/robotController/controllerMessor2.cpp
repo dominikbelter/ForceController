@@ -539,26 +539,76 @@ void ControllerMessor2::moveLegConf(unsigned char legNo,const std::vector<std::v
 
 void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed)
 {
+    std::vector<float_type> longest(trajectory.size());
+    float_type longestJourney = 0;
+    float_type longestestJourney = 0;
+    std::vector<float_type> configuration;
+    std::vector<float_type> diff(3);
+    std::vector<float_type> currentAngle(3);
+    std::vector<float_type> speedScale(trajectory.size());
+
+    for(int i=0; i < trajectory.size(); i++)
+    {
+        longest[i]=0;
+        for(int j=0; j<trajectory[i].size(); j++)
+        {
+            configuration = robot->moveLeg(legNo[i], trajectory[i][j]);
+            for(int k=0; k<configuration.size(); k++)
+            {
+                if(j==0)
+                {
+                    board->readPosition(legNo[i], k, currentAngle[k]);
+                    diff[k] = abs(currentAngle[k] - configuration[k]);
+                    currentAngle[k] = configuration[k];
+                }
+                else
+                {
+                    diff[k] = abs(currentAngle[k] - configuration[k]);
+                    currentAngle[k] = configuration[k];
+                }
+                if(diff[k] > longestJourney)
+                {
+                    longestJourney = diff[k];
+                }
+            }
+            longest[i] += longestJourney;
+        }
+
+    }
+
+    for(int i=0; i<trajectory.size(); i++)
+    {
+        if(longest[i] > longestestJourney)
+        {
+            longestestJourney = longest[i];
+        }
+    }
+
+    for(int i=0; i<trajectory.size(); i++)
+    {
+        speedScale[i] = longest[i] / longestestJourney;
+    }
+
 
     if(legNo.size() == 1)
     {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
         first.join();
     }
 
     else if(legNo.size() == 2)
     {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
         first.join();
         second.join();
     }
 
     else if(legNo.size() == 3)
     {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
-        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed);
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2]);
         first.join();
         second.join();
         third.join();
@@ -566,10 +616,10 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
 
     else if(legNo.size() == 4)
     {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
-        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed);
-        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed);
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2]);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3]);
         first.join();
         second.join();
         third.join();
@@ -578,11 +628,11 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
 
     else if(legNo.size() == 5)
     {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
-        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed);
-        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed);
-        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed);
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2]);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3]);
+        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed*speedScale[4]);
         first.join();
         second.join();
         third.join();
@@ -592,12 +642,12 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
 
     else if(legNo.size() == 6)
     {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed);
-        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed);
-        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed);
-        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed);
-        std::thread sixth(&ControllerMessor2::moveLeg,this,legNo[5],trajectory[5], speed);
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2]);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3]);
+        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed*speedScale[4]);
+        std::thread sixth(&ControllerMessor2::moveLeg,this,legNo[5],trajectory[5], speed*speedScale[5]);
         first.join();
         second.join();
         third.join();
