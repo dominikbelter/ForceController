@@ -538,8 +538,8 @@ void ControllerMessor2::moveLegConf(unsigned char legNo,const std::vector<std::v
 void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed)
 {
     std::vector<float_type> longest(trajectory.size());
-    float_type longestJourney = 0;
-    float_type longestestJourney = 0;
+    float_type longestJourney;
+    float_type longestestJourney;
     std::vector<float_type> configuration;
     std::vector<float_type> diff(3);
     std::vector<float_type> currentAngle(3);
@@ -548,6 +548,8 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
     for(int i=0; i < trajectory.size(); i++)
     {
         longest[i]=0;
+        longestJourney = 0;
+        longestestJourney = 0;
         for(int j=0; j<trajectory[i].size(); j++)
         {
 //            cout << "RUCH " << j << endl;
