@@ -56,18 +56,8 @@ int main( int argc, const char** argv )
 
         usleep(1000000);
 
-        std::vector<unsigned char> legNos024;
-        std::vector<unsigned char> legNos135;
         std::vector<unsigned char> legNos024135;
         std::vector<unsigned char> legNos135024;
-
-        legNos024.push_back(0);
-        legNos024.push_back(2);
-        legNos024.push_back(4);
-
-        legNos135.push_back(1);
-        legNos135.push_back(3);
-        legNos135.push_back(5);
 
         legNos024135.push_back(0);
         legNos024135.push_back(2);
@@ -83,55 +73,103 @@ int main( int argc, const char** argv )
         legNos135024.push_back(2);
         legNos135024.push_back(4);
 
-        Mat34 initial(Mat34::Identity());
-        Mat34 legBack(Mat34::Identity());
-        Mat34 legUp(Mat34::Identity());
+        Mat34 initialFront(Mat34::Identity());
+        Mat34 initialMid(Mat34::Identity());
+        Mat34 initialBack(Mat34::Identity());
 
-        Mat34 legUpR(Mat34::Identity());
+        Mat34 legBackFront(Mat34::Identity());
+        Mat34 legBackMid(Mat34::Identity());
+        Mat34 legBackBack(Mat34::Identity());
 
-        vector<Mat34> trajBack;
-        vector<Mat34> trajToInitial;
-        vector<Mat34> trajUp;
+        Mat34 legUpFront(Mat34::Identity());
+        Mat34 legUpMid(Mat34::Identity());
+        Mat34 legUpBack(Mat34::Identity());
 
-        vector<Mat34> trajUpR;
+        Mat34 legUpRFront(Mat34::Identity());
+        Mat34 legUpRMid(Mat34::Identity());
+        Mat34 legUpRBack(Mat34::Identity());
 
-        std::vector<std::vector<Mat34>> executeLegsMovementInitial;
+        vector<Mat34> trajBackFront;
+        vector<Mat34> trajUpFront;
+        vector<Mat34> trajUpRFront;
+
+        vector<Mat34> trajBackMid;
+        vector<Mat34> trajUpMid;
+        vector<Mat34> trajUpRMid;
+
+        vector<Mat34> trajBackBack;
+        vector<Mat34> trajUpBack;
+        vector<Mat34> trajUpRBack;
+
+
         std::vector<std::vector<Mat34>> executeLegsMovementBackUp;
         std::vector<std::vector<Mat34>> executeLegsMovementBackUpR;
 
-        initial(1,3)=-0.04;
+        initialFront(1,3)=-0.08;
+        legBackFront(1,3)=0.00;
+        legUpFront(0,3) = -0.05;
+        legUpFront(1,3) = -0.04;
+        legUpFront(2,3) = -0.1;
 
-        legBack(1,3)=0.04;
-        trajBack.push_back(legBack);
+        trajBackFront.push_back(legBackFront);
+        trajUpFront.push_back(legUpFront);
+        trajUpFront.push_back(initialFront);
 
-        legUp(2,3) = -0.1;
-        legUp(0,3) = -0.05;
-        trajUp.push_back(legUp);
-        trajUp.push_back(initial);
-        legUpR(2,3) = -0.1;
-        legUpR(0,3) = 0.05;
-        trajUpR.push_back(legUpR);
-        trajUpR.push_back(initial);
+        initialMid(1,3)=-0.04;
+        legBackMid(1,3)=0.04;
+        legUpMid(0,3) = -0.05;
+        legUpMid(1,3) = 0.00;
+        legUpMid(2,3) = -0.1;
 
-        trajToInitial.push_back(initial);
+        trajBackMid.push_back(legBackMid);
+        trajUpMid.push_back(legUpMid);
+        trajUpMid.push_back(initialMid);
 
-        executeLegsMovementInitial.push_back(trajToInitial);
-        executeLegsMovementInitial.push_back(trajToInitial);
-        executeLegsMovementInitial.push_back(trajToInitial);
+        initialBack(1,3)=0.00;
+        legBackBack(1,3)=0.08;
+        legUpBack(0,3) = -0.05;
+        legUpBack(1,3) = 0.04;
+        legUpBack(2,3) = -0.1;
 
-        executeLegsMovementBackUp.push_back(trajUp);
-        executeLegsMovementBackUp.push_back(trajUp);
-        executeLegsMovementBackUp.push_back(trajUpR);
-        executeLegsMovementBackUp.push_back(trajBack);
-        executeLegsMovementBackUp.push_back(trajBack);
-        executeLegsMovementBackUp.push_back(trajBack);
+        trajBackBack.push_back(legBackBack);
+        trajUpBack.push_back(legUpBack);
+        trajUpBack.push_back(initialBack);
 
-        executeLegsMovementBackUpR.push_back(trajUp);
-        executeLegsMovementBackUpR.push_back(trajUpR);
-        executeLegsMovementBackUpR.push_back(trajUpR);
-        executeLegsMovementBackUpR.push_back(trajBack);
-        executeLegsMovementBackUpR.push_back(trajBack);
-        executeLegsMovementBackUpR.push_back(trajBack);
+        legUpRFront(0,3) = 0.05;
+        legUpRFront(1,3) = -0.04;
+        legUpRFront(2,3) = -0.1;
+
+        legUpRBack(0,3) = 0.05;
+        legUpRBack(1,3) = 0.04;
+        legUpRBack(2,3) = -0.1;
+
+        legUpRMid(0,3) = 0.05;
+        legUpRMid(1,3) = 0.00;
+        legUpRMid(2,3) = -0.1;
+
+        trajUpRFront.push_back(legUpRFront);
+        trajUpRFront.push_back(initialFront);
+
+        trajUpRMid.push_back(legUpRMid);
+        trajUpRMid.push_back(initialMid);
+
+        trajUpRBack.push_back(legUpRBack);
+        trajUpRBack.push_back(initialBack);
+
+
+        executeLegsMovementBackUp.push_back(trajUpFront);
+        executeLegsMovementBackUp.push_back(trajUpBack);
+        executeLegsMovementBackUp.push_back(trajUpRMid);
+        executeLegsMovementBackUp.push_back(trajBackMid);
+        executeLegsMovementBackUp.push_back(trajBackBack);
+        executeLegsMovementBackUp.push_back(trajBackFront);
+
+        executeLegsMovementBackUpR.push_back(trajUpMid);
+        executeLegsMovementBackUpR.push_back(trajUpRBack);
+        executeLegsMovementBackUpR.push_back(trajUpRFront);
+        executeLegsMovementBackUpR.push_back(trajBackFront);
+        executeLegsMovementBackUpR.push_back(trajBackBack);
+        executeLegsMovementBackUpR.push_back(trajBackMid);
 
         usleep(1000000);
 
