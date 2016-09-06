@@ -25,37 +25,11 @@ int main( int argc, const char** argv )
         position1.push_back((24*M_PI)/180);
         position1.push_back((114*M_PI)/180);
 
-        std::vector<float_type> position2;
-        position2.push_back((10*M_PI)/180);
-        position2.push_back((34*M_PI)/180);
-        position2.push_back((84*M_PI)/180);
-
-
-        std::vector<float_type> position3;
-        position3.push_back((-10*M_PI)/180);
-        position3.push_back((16*M_PI)/180);
-        position3.push_back((90*M_PI)/180);
-
-
 
         board->setSpeed(motorSpeed);
 
         bool startMotion = false;
-        vector<float_type> readTorque(3);
-//        while(!startMotion)
-//        {
-//            board->readTorque(5, 0, readTorque[0]);
-//            board->readTorque(5, 1, readTorque[1]);
-//            board->readTorque(5, 2, readTorque[2]);
-//            for (int i=0; i<3; i++)
-//            {
-//                cout << "NOGA 5 WENZEL " << i << "   " << readTorque[i] << endl;;
-//            }
 
-//            cout << endl;
-
-//            usleep(1000000);
-//        }
 
         for(int i=0; i<6; i++)
         {
@@ -63,26 +37,6 @@ int main( int argc, const char** argv )
         }
 
         usleep(1000000);
-
-
-
-
-        /*while(true)
-        {
-            board->setSpeed(5,speedTest);
-            board->setPosition(5, position1);
-            usleep(1000000);
-            board->setPosition(5, position2);
-            usleep(1000000);
-            board->setPosition(5, position3);
-            usleep(1000000);
-            if(speedTest[0]<50)
-            {
-                speedTest[0]+=5;
-                speedTest[1]+=5;
-                speedTest[2]+=5;
-            }
-        }*/
 
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
@@ -213,18 +167,11 @@ int main( int argc, const char** argv )
 
         while(true)
         {
-            controller->moveLegSingle(5,initialFront,speedo,false);
-            controller->moveLegSingle(5,legUpRFront,speedo,false);
-            controller->moveLegSingle(5,legBackFront,speedo,false);
-            if(speedo<50)
-            {
-                speedo+=5;
-            }
 
-            //controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
+            controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
            // controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
 
-            //controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
+            controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
            // controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
 
         }
