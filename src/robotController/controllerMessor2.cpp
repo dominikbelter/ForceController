@@ -323,7 +323,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
 
         bool motionFinished = false;
-        //float_type offsetConf = 0.20;
+        float_type offsetConf = 0.20;
         float_type offset;
         if(!lastMove)
             offset = 0.015;
@@ -352,7 +352,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 //            cout << "0: " << abs(result[3](0,3)-current[3](0,3)) << " 1: " << abs(current[3](1,3)-result[3](1,3)) << " 2: " << abs(current[3](2,3)-result[3](2,3)) << endl;
             if(lastMove)
             {
-                if(isContactDetected || (abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset))
+                //if(isContactDetected || (abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset))
+                if(isContactDetected || (abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf))
                 {
                     if(startReadingContact)
                     {
@@ -375,11 +376,18 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             }
             else
             {
-                if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
+                //if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
+                if((abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf))
                 {
                     motionFinished=true;
                 }
             }
+
+            // if((abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf) )
+            // {
+            // motionFinished = true;
+            // cout << "move finished " << legNo << endl;
+            // }
 
         }
 
