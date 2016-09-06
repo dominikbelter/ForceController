@@ -64,13 +64,10 @@ int main( int argc, const char** argv )
 
         usleep(1000000);
 
-        vector<float_type> speedTest(3);
-        speedTest[0]=10;
-        speedTest[1]=10;
-        speedTest[2]=10;
 
 
-        while(true)
+
+        /*while(true)
         {
             board->setSpeed(5,speedTest);
             board->setPosition(5, position1);
@@ -85,7 +82,7 @@ int main( int argc, const char** argv )
                 speedTest[1]+=5;
                 speedTest[2]+=5;
             }
-        }
+        }*/
 
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
@@ -216,10 +213,18 @@ int main( int argc, const char** argv )
 
         while(true)
         {
-            controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
+            controller->moveLegSingle(5,position1,speedo,false);
+            controller->moveLegSingle(5,position2,speedo,false);
+            controller->moveLegSingle(5,position3,speedo,false);
+            if(speedo<50)
+            {
+                speedo+=5;
+            }
+
+            //controller->moveLegs(legNos024135, executeLegsMovementBackUp, speedo);
            // controller->moveLegs(legNos024, executeLegsMovementInitial, speedo);
 
-            controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
+            //controller->moveLegs(legNos135024, executeLegsMovementBackUpR, speedo);
            // controller->moveLegs(legNos135, executeLegsMovementInitial, speedo);
 
         }
