@@ -360,6 +360,13 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             current = robot->conputeLinksPosition(readAngle);
             result = robot->conputeLinksPosition(configuration);
 
+
+            if(sumTorque>90000)
+            {
+                board->setPosition(legNo, readAngle);
+                motionFinished=true;
+            }
+
 //            cout << "0: " << abs(result[3](0,3)-current[3](0,3)) << " 1: " << abs(current[3](1,3)-result[3](1,3)) << " 2: " << abs(current[3](2,3)-result[3](2,3)) << endl;
             if(lastMove)
             {

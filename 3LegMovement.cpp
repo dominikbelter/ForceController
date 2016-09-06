@@ -53,9 +53,9 @@ int main( int argc, const char** argv )
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
         float_type speedo = 20;
-char start;
-cin >> start;
-        usleep(1000000);
+        char start;
+        cin >> start;
+
 
         std::vector<unsigned char> legNos024135;
         std::vector<unsigned char> legNos135024;
@@ -173,6 +173,12 @@ cin >> start;
         executeLegsMovementBackUpR.push_back(trajBackMid);
 
         usleep(1000000);
+
+
+        while(true)
+        {
+            controller->moveLegSingle(5,initialFront,10,false);
+        }
 
         while(true)
         {
