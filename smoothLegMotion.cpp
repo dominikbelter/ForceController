@@ -45,28 +45,23 @@ int main( int argc, const char** argv )
 
         float_type speedo = 5;
         char wait;
-        usleep(1000000);
-        Mat34 robotPos(Mat34::Identity());
-        robotPos(0,3) = -0.052;
-        robotPos(1,3) = 0.12;
-        robotPos(2,3) = 1;
-        controller->moveLegSingleRobot(5, robotPos, speedo);
+        cin >> wait;
         while(true){};
         Mat34 motion1(Mat34::Identity());
         Mat34 motion2(Mat34::Identity());
         Mat34 motion3(Mat34::Identity());
         Mat34 motion4(Mat34::Identity());
         std::vector<Mat34> trajectoryForPlatform;
-        controller->movePlatform(motion4,speedo);
+
         motion4(1,3)=0.03;
         motion2(1,3)=0.03;
-        controller->movePlatform(motion4,speedo);
+
         motion4(0,3)=0.03;
         motion3(1,3)=0.03;
         motion3(0,3)=0.03;
-        controller->movePlatform(motion4,speedo);
+
         motion4(2,3)=0.03;
-        controller->movePlatform(motion4,speedo);
+
 
         trajectoryForPlatform.push_back(motion1);
         trajectoryForPlatform.push_back(motion2);
@@ -74,6 +69,8 @@ int main( int argc, const char** argv )
         trajectoryForPlatform.push_back(motion4);
         while(true){
             controller->movePlatform(trajectoryForPlatform, speedo);
+            if(speedo<30)
+                speedo+=5;
         };
 
 
