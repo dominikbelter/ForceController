@@ -376,7 +376,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                     {
                         vector<float_type> newConf(3);
                         newConf[0] = configuration[0];
-                        newConf[1] = readAngle[1];
+                        newConf[1] = readAngle[1]-0.1;
                         newConf[2] = readAngle[2];
                         motionFinished=true;
                         if(isContactDetected)
