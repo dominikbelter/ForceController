@@ -322,8 +322,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         }
 
 
-        vector<float_type> readTorque(3);
-        float_type sumTorque=0;
+
         bool motionFinished = false;
         float_type offsetConf = 0.20;
         float_type offset;
@@ -347,25 +346,11 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             board->readPosition(legNo, 2, readAngle[2]);
 
 
-            board->readTorque(legNo, 0, readTorque[0]);
-            board->readTorque(legNo, 1, readTorque[1]);
-            board->readTorque(legNo, 2, readTorque[2]);
-
-            sumTorque=readTorque[0]+readTorque[1]+readTorque[2];
-
-            cout << "NOGA : " << (int)legNo << " MOMENT " << sumTorque << endl;
-
-
-
             current = robot->conputeLinksPosition(readAngle);
             result = robot->conputeLinksPosition(configuration);
 
 
-            if(sumTorque>90000)
-            {
-                board->setPosition(legNo, readAngle);
-                motionFinished=true;
-            }
+
 
 //            cout << "0: " << abs(result[3](0,3)-current[3](0,3)) << " 1: " << abs(current[3](1,3)-result[3](1,3)) << " 2: " << abs(current[3](2,3)-result[3](2,3)) << endl;
             if(lastMove)

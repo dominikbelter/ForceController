@@ -25,6 +25,18 @@ int main( int argc, const char** argv )
         position1.push_back((24*M_PI)/180);
         position1.push_back((114*M_PI)/180);
 
+        std::vector<float_type> position2;
+        position2.push_back((10*M_PI)/180);
+        position2.push_back((34*M_PI)/180);
+        position2.push_back((84*M_PI)/180);
+
+
+        std::vector<float_type> position3;
+        position3.push_back((-10*M_PI)/180);
+        position3.push_back((16*M_PI)/180);
+        position3.push_back((90*M_PI)/180);
+
+
 
         board->setSpeed(motorSpeed);
 
@@ -177,8 +189,16 @@ int main( int argc, const char** argv )
 
         while(true)
         {
-            controller->moveLegSingle(5,initialFront,10,false);
+            board->setPosition(5, position1);
+            delay(1000000);
+            board->setPosition(5, position2);
+            delay(1000000);
+            board->setPosition(5, position3);
+            delay(1000000);
         }
+
+
+
 
         while(true)
         {
