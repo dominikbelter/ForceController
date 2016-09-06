@@ -494,20 +494,20 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
             board->readPosition(legNo, 0, readAngle[0]);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
-            mtx.lock();
-            std::cout << (int)legNo << std::endl;
-            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
-            mtx.unlock();
+//            mtx.lock();
+//            std::cout << (int)legNo << std::endl;
+//            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
+//            mtx.unlock();
 
-            if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
-            {
-                motionFinished=true;
-            }
-//            if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
+//            if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
 //            {
-//                motionFinished = true;
-//                cout << "move finished " << legNo << endl;
+//                motionFinished=true;
 //            }
+            if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
+            {
+                motionFinished = true;
+              //  cout << "move finished " << legNo << endl;
+            }
         }
 
     }
