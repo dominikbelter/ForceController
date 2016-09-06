@@ -45,8 +45,9 @@ int main( int argc, const char** argv )
 
         float_type speedo = 5;
         char wait;
-        cin >> wait;
-        while(true){};
+        usleep(1000000);
+       // cin >> wait;
+      //  while(true){};
         Mat34 motion1(Mat34::Identity());
         Mat34 motion2(Mat34::Identity());
         Mat34 motion3(Mat34::Identity());

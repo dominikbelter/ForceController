@@ -480,12 +480,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
 
 
         bool motionFinished = false;
-        //float_type offsetConf = 0.20;
-        float_type offset;
-        if(!lastMove)
-            offset = 0.014;
-        else
-            offset = 0.011;
+        float_type offset = 0.20;
+
         board->setPosition(legNo, configuration);
 
         while(!motionFinished)
