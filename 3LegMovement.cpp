@@ -87,7 +87,7 @@ int main( int argc, const char** argv )
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
-        float_type speedo = 20;
+        float_type speedo = 10;
         char start;
         cin >> start;
 
@@ -213,9 +213,9 @@ int main( int argc, const char** argv )
 
         while(true)
         {
-            controller->moveLegSingle(5,position1,speedo,false);
-            controller->moveLegSingle(5,position2,speedo,false);
-            controller->moveLegSingle(5,position3,speedo,false);
+            controller->moveLegSingle(5,initialFront,speedo,false);
+            controller->moveLegSingle(5,legUpRFront,speedo,false);
+            controller->moveLegSingle(5,legBackFront,speedo,false);
             if(speedo<50)
             {
                 speedo+=5;
