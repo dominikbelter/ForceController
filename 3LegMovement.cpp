@@ -186,15 +186,27 @@ int main( int argc, const char** argv )
 
         usleep(1000000);
 
+        vector<float_type> speedTest(3);
+        speedTest[0]=10;
+        speedTest[1]=10;
+        speedTest[2]=10;
+
 
         while(true)
         {
+            board->setSpeed(5,speedTest);
             board->setPosition(5, position1);
-            delay(1000000);
+            usleep(1000000);
             board->setPosition(5, position2);
-            delay(1000000);
+            usleep(1000000);
             board->setPosition(5, position3);
-            delay(1000000);
+            usleep(1000000);
+            if(speedTest[0]<50)
+            {
+                speedTest[0]+=5;
+                speedTest[1]+=5;
+                speedTest[2]+=5;
+            }
         }
 
 
