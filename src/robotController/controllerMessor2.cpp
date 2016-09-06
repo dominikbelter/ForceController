@@ -337,7 +337,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         bool startReadingContact = false;
         while(!motionFinished)
         {
-
+            usleep(200000);
             isContactDetected = board->readContact(legNo);
             if(!isContactDetected && !startReadingContact)
                 startReadingContact = true;
@@ -347,11 +347,11 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             board->readPosition(legNo, 2, readAngle[2]);
 
 
-            /*board->readTorque(5, 0, readTorque[0]);
-            board->readTorque(5, 1, readTorque[1]);
-            board->readTorque(5, 2, readTorque[2]);
+            board->readTorque(legNo, 0, readTorque[0]);
+            board->readTorque(legNo, 1, readTorque[1]);
+            board->readTorque(legNo, 2, readTorque[2]);
 
-            sumTorque=readTorque[0]+readTorque[1]+readTorque[2];*/
+            sumTorque=readTorque[0]+readTorque[1]+readTorque[2];
 
             cout << "NOGA : " << (int)legNo << " MOMENT " << sumTorque << endl;
 
