@@ -211,7 +211,7 @@ void ControllerMessor2::moveLegsRobot(std::vector<unsigned char> legNo, const st
 void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove)
 {
 
-    cout << " SPEED PRZEKAZANY " << (int)legNo << " WYNOSI: " << speed << endl;
+    //cout << " SPEED PRZEKAZANY " << (int)legNo << " WYNOSI: " << speed << endl;
     std::vector<float_type> configuration;
     std::vector<float_type> diff(3);
     std::vector<float_type> newConf(3);
@@ -322,6 +322,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         }
 
 
+        vector<float_type> readTorque(3);
+        float_type sumTorque=0;
         bool motionFinished = false;
         float_type offsetConf = 0.20;
         float_type offset;
@@ -335,7 +337,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         bool startReadingContact = false;
         while(!motionFinished)
         {
-            usleep(200000);
 
             isContactDetected = board->readContact(legNo);
             if(!isContactDetected && !startReadingContact)
@@ -344,6 +345,16 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             board->readPosition(legNo, 0, readAngle[0]);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
+
+
+            board->readTorque(5, 0, readTorque[0]);
+            board->readTorque(5, 1, readTorque[1]);
+            board->readTorque(5, 2, readTorque[2]);
+
+            sumTorque=readTorque[0]+readTorque[1]+readTorque[2];
+
+            cout << "NOGA : " << (int)legNo << " MOMENT " << sumTorque << endl;
+
 
 
             current = robot->conputeLinksPosition(readAngle);
@@ -572,7 +583,7 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
 
                 //cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK: " << configuration[k] << endl;
                 diff[k] = abs(currentAngle[k] - configuration[k]);
-                cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK DIFF: " << diff[k] << endl;
+                //cout << "CZYTAM NOGE: " << (int)legNo[i] << " SERWO: " << k << "WYNIK DIFF: " << diff[k] << endl;
                 currentAngle[k] = configuration[k];
 
 
@@ -583,7 +594,7 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
             }
             longest[i] += longestJourney;
         }
-        cout << "LONGEST NOGA: " << i << " = " << longest[i] << endl;
+        //cout << "LONGEST NOGA: " << i << " = " << longest[i] << endl;
 
     }
 
@@ -598,7 +609,7 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
     for(int i=0; i<trajectory.size(); i++)
     {
         speedScale[i] = longest[i] / longestestJourney;
-        cout << " SPEED " << i << " WYNOSI: " << speedScale[i] << endl;
+        //cout << " SPEED " << i << " WYNOSI: " << speedScale[i] << endl;
     }
 
     cout << endl;
