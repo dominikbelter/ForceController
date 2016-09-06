@@ -62,6 +62,32 @@ int main( int argc, const char** argv )
             board->setPosition(i, position1);
         }
 
+        usleep(1000000);
+
+        vector<float_type> speedTest(3);
+        speedTest[0]=10;
+        speedTest[1]=10;
+        speedTest[2]=10;
+
+
+        while(true)
+        {
+            board->setSpeed(5,speedTest);
+            board->setPosition(5, position1);
+            usleep(1000000);
+            board->setPosition(5, position2);
+            usleep(1000000);
+            board->setPosition(5, position3);
+            usleep(1000000);
+            if(speedTest[0]<50)
+            {
+                speedTest[0]+=5;
+                speedTest[1]+=5;
+                speedTest[2]+=5;
+            }
+        }
+
+
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
         float_type speedo = 20;
@@ -184,30 +210,6 @@ int main( int argc, const char** argv )
         executeLegsMovementBackUpR.push_back(trajBackBack);
         executeLegsMovementBackUpR.push_back(trajBackMid);
 
-        usleep(1000000);
-
-        vector<float_type> speedTest(3);
-        speedTest[0]=10;
-        speedTest[1]=10;
-        speedTest[2]=10;
-
-
-        while(true)
-        {
-            board->setSpeed(5,speedTest);
-            board->setPosition(5, position1);
-            usleep(1000000);
-            board->setPosition(5, position2);
-            usleep(1000000);
-            board->setPosition(5, position3);
-            usleep(1000000);
-            if(speedTest[0]<50)
-            {
-                speedTest[0]+=5;
-                speedTest[1]+=5;
-                speedTest[2]+=5;
-            }
-        }
 
 
 
