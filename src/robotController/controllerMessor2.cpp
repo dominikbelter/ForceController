@@ -347,11 +347,11 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             board->readPosition(legNo, 2, readAngle[2]);
 
 
-            board->readTorque(5, 0, readTorque[0]);
+            /*board->readTorque(5, 0, readTorque[0]);
             board->readTorque(5, 1, readTorque[1]);
             board->readTorque(5, 2, readTorque[2]);
 
-            sumTorque=readTorque[0]+readTorque[1]+readTorque[2];
+            sumTorque=readTorque[0]+readTorque[1]+readTorque[2];*/
 
             cout << "NOGA : " << (int)legNo << " MOMENT " << sumTorque << endl;
 
@@ -612,7 +612,7 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
         //cout << " SPEED " << i << " WYNOSI: " << speedScale[i] << endl;
     }
 
-    cout << endl;
+    //cout << endl;
 
     if(legNo.size() == 1)
     {
