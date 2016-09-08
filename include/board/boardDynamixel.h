@@ -59,7 +59,7 @@ namespace controller {
 
     /// create a single board controller (with usb2dynamixel)
     Board* createBoardDynamixel(void);
-};
+}
 
 using namespace controller;
 

@@ -33,6 +33,10 @@ option(BUILD_CONTROLLER_CTRL "Build Controller Robot library" YES)
 mark_as_advanced(BUILD_CONTROLLER_CTRL)
 option(BUILD_CONTROLLER_VISUALIZATION "Build Visualization library" YES)
 mark_as_advanced(BUILD_CONTROLLER_VISUALIZATION)
+option(BUILD_CONTROLLER_LOCALIZATION "Build Localization library" YES)
+mark_as_advanced(BUILD_CONTROLLER_LOCALIZATION)
+option(BUILD_MTI "Build MTi AHRS library" YES)
+mark_as_advanced(BUILD_MTI)
 
 
 # demos
@@ -57,6 +61,8 @@ option(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY "Build Susceptibility program and li
 mark_as_advanced(BUILD_CONTROLLER_DEMO_SUSCEPTIBILITY)
 option(BUILD_CONTROLLER_DEMO_MESSOR2CTRL "Build Messor2 controller demo" YES)
 mark_as_advanced(BUILD_CONTROLLER_DEMO_MESSOR2CTRL)
+option(DEMO_AHRS "Build AHRS demo" YES)
+mark_as_advanced(DEMO_AHRS)
 
 #smooth smart walking
 option(BUILD_SMART_WALKING_PROGRAMS "Build smart walking programs and libraries" YES)
@@ -141,6 +147,21 @@ INCLUDE_DIRECTORIES(
    #${X11_INCLUDE_DIR}
    #${ZLIB_INCLUDE_DIR}
 )
+
+###############################################################################
+#
+# Mti AHRS
+#
+###############################################################################
+if(BUILD_CONTROLLER AND BUILD_MTI)
+    file(GLOB MTI_SOURCES
+        "${CMAKE_SOURCE_DIR}/3rdParty/mti/*.cpp"
+    )
+    file(GLOB MTI_HEADERS
+        "${CMAKE_SOURCE_DIR}/3rdParty/mti/*.h"
+    )
+    ADD_LIBRARY(cmt STATIC ${MTI_SOURCES} ${MTI_HEADERS})
+endif(BUILD_CONTROLLER AND BUILD_MTI)
 
 ###############################################################################
 #
@@ -259,6 +280,26 @@ if(BUILD_CONTROLLER AND BUILD_CONTROLLER_VISUALIZATION)
         INSTALL(TARGETS Visualization RUNTIME DESTINATION bin LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
         INSTALL(FILES ${VISUALIZATION_HEADERS} DESTINATION include/visualization/)
 endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_VISUALIZATION)
+
+###############################################################################
+#
+# LOCALIZATION Robot library
+#
+###############################################################################
+
+if(BUILD_CONTROLLER AND BUILD_CONTROLLER_LOCALIZATION)
+        file(GLOB LOCALIZATION_SOURCES
+            "${CMAKE_SOURCE_DIR}/src/localization/*.cpp"
+        )
+        file(GLOB LOCALIZATION_HEADERS
+            "${CMAKE_SOURCE_DIR}/include/localization/*.h"
+        )
+
+        ADD_LIBRARY(Localization STATIC ${LOCALIZATION_SOURCES} ${LOCALIZATION_HEADERS})
+        TARGET_LINK_LIBRARIES(Localization cmt)
+        INSTALL(TARGETS Localization RUNTIME DESTINATION bin LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+        INSTALL(FILES ${LOCALIZATION_HEADERS} DESTINATION include/robotController/)
+endif(BUILD_CONTROLLER AND BUILD_CONTROLLER_LOCALIZATION)
 
 ###############################################################################
 #
@@ -476,4 +517,12 @@ if(BUILD_SMART_WALKING_PROGRAMS AND 5_LEG_MOVEMENT)
 
 endif(BUILD_SMART_WALKING_PROGRAMS AND 5_LEG_MOVEMENT)
 
+if(BUILD_SMART_WALKING_PROGRAMS AND DEMO_AHRS)
 
+        SET(AHRS_DEMO_SOURCES ./demoAHRS.cpp)
+        ADD_EXECUTABLE(demoAHRS ${AHRS_DEMO_SOURCES})
+        TARGET_LINK_LIBRARIES(demoAHRS cmt Localization)
+        INSTALL(TARGETS demoAHRS RUNTIME DESTINATION bin)
+        INSTALL(FILES ${AHRS_DEMO_FILES} DESTINATION bin)
+
+endif(BUILD_SMART_WALKING_PROGRAMS AND DEMO_AHRS)
