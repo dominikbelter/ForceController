@@ -259,32 +259,17 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
       //  while(!wychodze)
         {
             std::vector<float_type> currentConfigurationNow = visualizer->getPosition(legNo);
-            std::vector<Mat34> jedno;
-            std::vector<Mat34> dodrugiego;
-
-            jedno = robot->conputeLinksPosition(currentConfigurationNow);
-            dodrugiego = robot->conputeLinksPosition(configuration);
-
-
-            cout << "TRAJ" << trajectory(0,3) << endl;
-
-            if(i==5)
-            {
-                cout << "OBECNIE" << jedno[3](0,0) << endl;
-
-            }
 
             //cout << visualizer->getPosition(legNo)[0] << endl;
             for(int s=0; s<configuration.size(); s++)
             {
 
-               //if(abs(configuration[s] - currentConfigurationNow[s]) < 0.0001)
-               if(abs(jedno[3](s,0) - dodrugiego[3](s,0)) < 0.0001)
+               if(abs(configuration[s] - currentConfigurationNow[s]) < 0.0001)
                 {
                     wychodze = true;
                 }
                 newConf[s] = currentConfiguration[s] + diff[s]*i;
-                cout << newConf[s] << endl;
+               // cout << newConf[s] << endl;
             }
 
             visualizer->setPosition(legNo,newConf);

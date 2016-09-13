@@ -35,82 +35,141 @@ int main( int argc, const char** argv )
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
-        float_type speedo = 5;
+        float_type speedo = 15;
+        char start;
 
-        Mat34 initial(Mat34::Identity());
-        Mat34 legBack(Mat34::Identity());
-        Mat34 legUp(Mat34::Identity());
-        Mat34 legUp0(Mat34::Identity());
+        Mat34 initialFront(Mat34::Identity());
+        Mat34 initialMid(Mat34::Identity());
+        Mat34 initialBack(Mat34::Identity());
 
-        Mat34 legUpR(Mat34::Identity());
+        Mat34 legBackFront(Mat34::Identity());
+        Mat34 legBackMid(Mat34::Identity());
+        Mat34 legBackBack(Mat34::Identity());
 
-        vector<Mat34> trajBack;
-        vector<Mat34> trajBackToInitial;
-        vector<Mat34> trajBackToInitialR;
-        vector<Mat34> trajToInitial;
-        vector<Mat34> trajUp;
-        vector<Mat34> trajUp0;
+        Mat34 legUpFront(Mat34::Identity());
+        Mat34 legUpMid(Mat34::Identity());
+        Mat34 legUpBack(Mat34::Identity());
 
-        vector<Mat34> trajUpR;
+        Mat34 legUpRFront(Mat34::Identity());
+        Mat34 legUpRMid(Mat34::Identity());
+        Mat34 legUpRBack(Mat34::Identity());
+
+        vector<Mat34> trajBackFront;
+        vector<Mat34> trajUpFront;
+        vector<Mat34> trajUpRFront;
+
+        vector<Mat34> trajBackMid;
+        vector<Mat34> trajUpMid;
+        vector<Mat34> trajUpRMid;
+
+        vector<Mat34> trajBackBack;
+        vector<Mat34> trajUpBack;
+        vector<Mat34> trajUpRBack;
+
+        vector<Mat34> trajInitialF;
+        vector<Mat34> trajInitialM;
+        vector<Mat34> trajInitialB;
 
         std::vector<std::vector<Mat34>> executeLegsMovementBack;
+        std::vector<std::vector<Mat34>> executeLegsMovementInitial;
 
-        initial(1,3)=-0.04;
 
-        legBack(1,3)=0.04;
-        trajBack.push_back(legBack);
+        initialFront(1,3)=-0.08;
+        legBackFront(1,3)=0.00;
+        legUpFront(0,3) = -0.05;
+        legUpFront(1,3) = -0.04;
+        legUpFront(2,3) = -0.1;
 
-        legUp(2,3) = -0.1;
-        legUp(0,3) = -0.05;
-        trajUp.push_back(legUp);
+        trajBackFront.push_back(legBackFront);
+        trajUpFront.push_back(legUpFront);
+        trajUpFront.push_back(initialFront);
 
-        legUp0(2,3) = -0.1;
-        legUp0(1,3)=-0.04;
-        legUp0(0,3) = -0.05;
-        trajUp0.push_back(legUp0);
+        initialMid(1,3)=-0.04;
+        legBackMid(1,3)=0.04;
+        legUpMid(0,3) = -0.05;
+        legUpMid(1,3) = 0.00;
+        legUpMid(2,3) = -0.1;
 
-        legUpR(2,3) = -0.1;
-        legUpR(0,3) = 0.05;
-        trajUpR.push_back(legUpR);
+        trajBackMid.push_back(legBackMid);
+        trajUpMid.push_back(legUpMid);
+        trajUpMid.push_back(initialMid);
 
-        trajBackToInitial.push_back(legUp);
-        trajBackToInitial.push_back(initial);
+        initialBack(1,3)=0.00;
+        legBackBack(1,3)=0.08;
+        legUpBack(0,3) = -0.05;
+        legUpBack(1,3) = 0.04;
+        legUpBack(2,3) = -0.1;
 
-        trajBackToInitialR.push_back(legUpR);
-        trajBackToInitialR.push_back(initial);
+        trajBackBack.push_back(legBackBack);
+        trajUpBack.push_back(legUpBack);
+        trajUpBack.push_back(initialBack);
 
-        trajToInitial.push_back(initial);
+        legUpRFront(0,3) = 0.05;
+        legUpRFront(1,3) = -0.04;
+        legUpRFront(2,3) = -0.1;
 
-        executeLegsMovementBack.push_back(trajBack);
-        executeLegsMovementBack.push_back(trajBack);
-        executeLegsMovementBack.push_back(trajBack);
-        executeLegsMovementBack.push_back(trajBack);
-        executeLegsMovementBack.push_back(trajBack);
+        legUpRBack(0,3) = 0.05;
+        legUpRBack(1,3) = 0.04;
+        legUpRBack(2,3) = -0.1;
+
+        legUpRMid(0,3) = 0.05;
+        legUpRMid(1,3) = 0.00;
+        legUpRMid(2,3) = -0.1;
+
+        trajUpRFront.push_back(legUpRFront);
+        trajUpRFront.push_back(initialFront);
+
+        trajUpRMid.push_back(legUpRMid);
+        trajUpRMid.push_back(initialMid);
+
+        trajUpRBack.push_back(legUpRBack);
+        trajUpRBack.push_back(initialBack);
+
+        executeLegsMovementBack.push_back(trajUpFront);
+        executeLegsMovementBack.push_back(trajBackBack);
+        executeLegsMovementBack.push_back(trajBackMid);
+        executeLegsMovementBack.push_back(trajBackMid);
+        executeLegsMovementBack.push_back(trajBackBack);
+        executeLegsMovementBack.push_back(trajBackFront);
 
         usleep(1000000);
 
         ///////RUCH PIĘCIOPODPOROWY/////////
 
-        std::vector<unsigned char> legNos;
+        std::vector<unsigned char> legNos024135;
 
-        legNos.push_back(1);
-        legNos.push_back(2);
-        legNos.push_back(3);
-        legNos.push_back(4);
-        legNos.push_back(5);
+        legNos024135.push_back(0);
+        legNos024135.push_back(2);
+        legNos024135.push_back(4);
+        legNos024135.push_back(1);
+        legNos024135.push_back(3);
+        legNos024135.push_back(5);
+
+        trajInitialF.push_back(initialFront);
+        trajInitialM.push_back(initialMid);
+        trajInitialB.push_back(initialBack);
+
+        executeLegsMovementInitial.push_back(trajInitialF);
+        executeLegsMovementInitial.push_back(trajInitialB);
+        executeLegsMovementInitial.push_back(trajInitialM);
+        executeLegsMovementInitial.push_back(trajInitialM);
+        executeLegsMovementInitial.push_back(trajInitialB);
+        executeLegsMovementInitial.push_back(trajInitialF);
+
+        controller->moveLegs(legNos024135, executeLegsMovementInitial, speedo);
+
+        cin >> start;
+
 
         while(true)
         {
-            controller->moveLeg(0, trajUp0, speedo);
-            controller->moveLegs(legNos, executeLegsMovementBack, speedo);
+            controller->moveLegs(legNos024135, executeLegsMovementBack, speedo);
 
-            controller->moveLeg(0, trajToInitial, speedo);
-
-            controller->moveLeg(5, trajBackToInitialR, speedo);
-            controller->moveLeg(1, trajBackToInitial, speedo);
-            controller->moveLeg(4, trajBackToInitialR, speedo);
-            controller->moveLeg(2, trajBackToInitial, speedo);
-            controller->moveLeg(3, trajBackToInitialR, speedo);
+            controller->moveLeg(5, trajUpRFront, speedo);
+            controller->moveLeg(1, trajUpMid, speedo);
+            controller->moveLeg(4, trajUpRMid, speedo);
+            controller->moveLeg(2, trajUpBack, speedo);
+            controller->moveLeg(3, trajUpRBack, speedo);
 
         }
 

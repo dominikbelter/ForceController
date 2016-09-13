@@ -28,22 +28,18 @@ int main( int argc, const char** argv )
 
         board->setSpeed(motorSpeed);
 
-        bool startMotion = false;
-
-
         for(int i=0; i<6; i++)
         {
             board->setPosition(i, position1);
         }
 
-        usleep(1000000);
 
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
         float_type speedo = 10;
         char start;
-        cin >> start;
+        //cin >> start;
 
 
         std::vector<unsigned char> legNos024135;
@@ -91,9 +87,15 @@ int main( int argc, const char** argv )
         vector<Mat34> trajUpBack;
         vector<Mat34> trajUpRBack;
 
+        vector<Mat34> trajInitialF;
+        vector<Mat34> trajInitialM;
+        vector<Mat34> trajInitialB;
+
+
 
         std::vector<std::vector<Mat34>> executeLegsMovementBackUp;
         std::vector<std::vector<Mat34>> executeLegsMovementBackUpR;
+        std::vector<std::vector<Mat34>> executeLegsMovementInitial;
 
         initialFront(1,3)=-0.08;
         legBackFront(1,3)=0.00;
@@ -146,7 +148,6 @@ int main( int argc, const char** argv )
         trajUpRBack.push_back(legUpRBack);
         trajUpRBack.push_back(initialBack);
 
-
         executeLegsMovementBackUp.push_back(trajUpFront);
         executeLegsMovementBackUp.push_back(trajUpBack);
         executeLegsMovementBackUp.push_back(trajUpRMid);
@@ -163,7 +164,22 @@ int main( int argc, const char** argv )
 
 
 
+        usleep(1000000);
 
+        trajInitialF.push_back(initialFront);
+        trajInitialM.push_back(initialMid);
+        trajInitialB.push_back(initialBack);
+
+        executeLegsMovementInitial.push_back(trajInitialF);
+        executeLegsMovementInitial.push_back(trajInitialB);
+        executeLegsMovementInitial.push_back(trajInitialM);
+        executeLegsMovementInitial.push_back(trajInitialM);
+        executeLegsMovementInitial.push_back(trajInitialB);
+        executeLegsMovementInitial.push_back(trajInitialF);
+
+        controller->moveLegs(legNos024135, executeLegsMovementInitial, speedo);
+
+        cin >> start;
 
         while(true)
         {
