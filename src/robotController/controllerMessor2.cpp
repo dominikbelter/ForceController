@@ -527,8 +527,10 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& t
     {
         if(i==trajectory.size()-1)
         {
-            if(i<3)
+            if(trajectory.size()!=1)
+            {
                 this->moveLegSingle(legNo, trajectory[i], speed, true);
+            }
             else
                 this->moveLegSingle(legNo, trajectory[i], speed, false);
         }
