@@ -326,7 +326,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         bool doOnce = false;
         while(!motionFinished)
         {
-            usleep(200000);
+            //usleep(200000);
             isContactDetected = board->readContact(legNo);
             if(!isContactDetected && !startReadingContact)
                 startReadingContact = true;
@@ -496,7 +496,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
 
         while(!motionFinished)
         {
-            usleep(200000);
+            //usleep(200000);
             board->readPosition(legNo, 0, readAngle[0]);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
