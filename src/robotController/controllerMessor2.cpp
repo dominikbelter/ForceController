@@ -319,6 +319,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
         bool isContactDetected = false;
         bool startReadingContact = false;
+        bool doOnce = false;
         while(!motionFinished)
         {
             usleep(200000);
@@ -346,8 +347,11 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                     if(startReadingContact)
                     {
                         motionFinished=true;
-                        if(isContactDetected)
+                        if(isContactDetected && !doOnce)
+                        {
                             board->setPosition(legNo, readAngle);
+                            doOnce = true;
+                        }
                     }
                     else
                     {
@@ -358,11 +362,14 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                             newConf[1] = readAngle[1]-0.25;
                         }
                         else
-                            newConf[1] = readAngle[1]-0.15;
+                            newConf[1] = readAngle[1];
                         newConf[2] = readAngle[2];
                         motionFinished=true;
-                        if(isContactDetected)
+                        if(isContactDetected && !doOnce)
+                        {
                             board->setPosition(legNo, newConf);
+                            doOnce = true;
+                        }
                     }
                 }
 
