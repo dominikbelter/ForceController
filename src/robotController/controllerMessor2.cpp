@@ -208,7 +208,7 @@ void ControllerMessor2::moveLegsRobot(std::vector<unsigned char> legNo, const st
     }*/
 }
 
-void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove)
+void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove )
 {
 
     //cout << " SPEED PRZEKAZANY " << (int)legNo << " WYNOSI: " << speed << endl;
@@ -372,6 +372,11 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             }
 
 
+
+        }
+
+        if(motionFinished)
+        {
 
         }
 

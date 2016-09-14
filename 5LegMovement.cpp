@@ -74,10 +74,10 @@ int main( int argc, const char** argv )
         std::vector<std::vector<Mat34>> executeLegsMovementInitial;
 
 
-        initialFront(1,3)=-0.08;
-        legBackFront(1,3)=0.00;
+        initialFront(1,3)=-0.12;
+        legBackFront(1,3)=-0.04;
         legUpFront(0,3) = -0.05;
-        legUpFront(1,3) = -0.04;
+        legUpFront(1,3) = -0.08;
         legUpFront(2,3) = -0.1;
 
         trajBackFront.push_back(legBackFront);
@@ -94,10 +94,10 @@ int main( int argc, const char** argv )
         trajUpMid.push_back(legUpMid);
         trajUpMid.push_back(initialMid);
 
-        initialBack(1,3)=0.00;
-        legBackBack(1,3)=0.08;
+        initialBack(1,3)=0.04;
+        legBackBack(1,3)=0.12;
         legUpBack(0,3) = -0.05;
-        legUpBack(1,3) = 0.04;
+        legUpBack(1,3) = 0.08;
         legUpBack(2,3) = -0.1;
 
         trajBackBack.push_back(legBackBack);
@@ -158,7 +158,7 @@ int main( int argc, const char** argv )
 
         controller->moveLegs(legNos024135, executeLegsMovementInitial, speedo);
 
-        cin >> start;
+       // cin >> start;
 
 
         while(true)
