@@ -35,7 +35,8 @@ int main( int argc, const char** argv )
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
-        float_type speedo = 15;
+        float_type speedo = ((ControllerMessor2*)controller)->speedPajak();
+
         char start;
 
         Mat34 initialFront(Mat34::Identity());
@@ -151,7 +152,6 @@ int main( int argc, const char** argv )
         trajInitialF.push_back(initialFront);
         trajInitialM.push_back(initialMid);
         trajInitialB.push_back(initialBack);
-
         executeLegsMovementInitial.push_back(trajInitialF);
         executeLegsMovementInitial.push_back(trajInitialB);
         executeLegsMovementInitial.push_back(trajInitialM);
@@ -162,6 +162,7 @@ int main( int argc, const char** argv )
         controller->moveLegs(legNos024135, executeLegsMovementInitial, speedo);
 
         cin >> start;
+
 
 
         while(true)

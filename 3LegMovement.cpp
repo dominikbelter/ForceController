@@ -37,7 +37,7 @@ int main( int argc, const char** argv )
 
         RobotController* controller = createControllerMessor2("controllerMessor2.xml");
 
-        float_type speedo = 10;
+        float_type speedo = ((ControllerMessor2*)controller)->speedPajak();
         char start;
         //cin >> start;
 

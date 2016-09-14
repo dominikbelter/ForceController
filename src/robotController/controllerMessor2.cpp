@@ -38,6 +38,8 @@ ControllerMessor2::Config::Config(std::string configFilename){
         config.FirstChildElement( "parameters" )->QueryIntAttribute("verbose", &verbose);
         config.FirstChildElement( "parameters" )->QueryBoolAttribute("useVisualizer", &useVisualizer);
         config.FirstChildElement( "parameters" )->QueryDoubleAttribute("offsetPajak", &offsetPajak);
+        config.FirstChildElement( "parameters" )->QueryIntAttribute("speedPajak", &speedPajak);
+
 
         if (verbose){
             std::cout << "verbose: " << verbose << "\n";
@@ -353,10 +355,11 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                         motionFinished=true;
                         if(isContactDetected && !doOnce)
                         {
-                            board->setPosition(legNo, readAngle);
                             newConf[0] = readAngle[0];
                             newConf[1] = readAngle[1]-config.offsetPajak;
                             newConf[2] = readAngle[2];
+                            board->setPosition(legNo, newConf);
+
                             doOnce = true;
                         }
                     }

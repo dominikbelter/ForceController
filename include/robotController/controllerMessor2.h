@@ -51,6 +51,7 @@ class ControllerMessor2 : public RobotController
                 /// use visualizer
                 bool useVisualizer;
                 double offsetPajak;
+                int speedPajak;
         };
 
         /** Returns name of the ControllerMessor2
@@ -94,6 +95,7 @@ class ControllerMessor2 : public RobotController
 
         /// use visualizer?
         inline bool useVisualizer(void) {return config.useVisualizer;}
+        inline int speedPajak(void) {return config.speedPajak;}
 
 
 
