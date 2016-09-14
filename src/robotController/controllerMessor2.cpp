@@ -312,8 +312,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
         }
 
-
-
         bool motionFinished = false;
         float_type offsetConf = 0.20;
         float_type offset;
@@ -528,7 +526,12 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& t
     for(int i=0; i<trajectory.size(); i++)
     {
         if(i==trajectory.size()-1)
-            this->moveLegSingle(legNo, trajectory[i], speed, true);
+        {
+            if(i<3)
+                this->moveLegSingle(legNo, trajectory[i], speed, true);
+            else
+                this->moveLegSingle(legNo, trajectory[i], speed, false);
+        }
         else
             this->moveLegSingle(legNo, trajectory[i], speed, false);
     }
