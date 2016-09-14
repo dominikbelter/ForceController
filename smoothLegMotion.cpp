@@ -52,6 +52,7 @@ int main( int argc, const char** argv )
         Mat34 motion2(Mat34::Identity());
         Mat34 motion3(Mat34::Identity());
         Mat34 motion4(Mat34::Identity());
+        Mat34 motion5(Mat34::Identity());
         std::vector<Mat34> trajectoryForPlatform;
 
         motion2(1,3)=0.04;
@@ -59,14 +60,20 @@ int main( int argc, const char** argv )
         motion3(1,3)=0.04;
         motion3(0,3)=0.03;
 
+
         motion4(0,3)=0.04;
         motion4(1,3)=0.03;
         motion4(2,3)=0.05;
+
+        motion5(2,3)=0.05;
+
 
         trajectoryForPlatform.push_back(motion1);
         trajectoryForPlatform.push_back(motion2);
         trajectoryForPlatform.push_back(motion3);
         trajectoryForPlatform.push_back(motion4);
+        trajectoryForPlatform.push_back(motion5);
+
         while(true){
             controller->movePlatform(trajectoryForPlatform, speedo);
             //if(speedo<30)
