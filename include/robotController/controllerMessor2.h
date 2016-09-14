@@ -50,6 +50,7 @@ class ControllerMessor2 : public RobotController
                 int verbose;
                 /// use visualizer
                 bool useVisualizer;
+                double offsetPajak;
         };
 
         /** Returns name of the ControllerMessor2

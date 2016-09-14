@@ -37,9 +37,13 @@ ControllerMessor2::Config::Config(std::string configFilename){
         //tinyxml2::XMLElement * parameters;
         config.FirstChildElement( "parameters" )->QueryIntAttribute("verbose", &verbose);
         config.FirstChildElement( "parameters" )->QueryBoolAttribute("useVisualizer", &useVisualizer);
+        config.FirstChildElement( "parameters" )->QueryDoubleAttribute("offsetPajak", &offsetPajak);
+
         if (verbose){
             std::cout << "verbose: " << verbose << "\n";
             std::cout << "useVisualizer: " << useVisualizer << "\n";
+            std::cout << "offsetPajak: " << offsetPajak << "\n";
+
         }
     }
 }
@@ -350,6 +354,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                         if(isContactDetected && !doOnce)
                         {
                             board->setPosition(legNo, readAngle);
+                            newConf[0] = readAngle[0];
+                            newConf[1] = readAngle[1]-config.offsetPajak;
+                            newConf[2] = readAngle[2];
                             doOnce = true;
                         }
                     }
@@ -357,12 +364,12 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                     {
                         vector<float_type> newConf(3);
                         newConf[0] = configuration[0];
-                        if(legNo==2 || legNo==3)
-                        {
-                            newConf[1] = readAngle[1]-0.25;
-                        }
-                        else
-                            newConf[1] = readAngle[1];
+//                        if(legNo==2 || legNo==3)
+//                        {
+//                            newConf[1] = readAngle[1]-0.25;
+//                        }
+//                        else
+                        newConf[1] = readAngle[1];
                         newConf[2] = readAngle[2];
                         motionFinished=true;
                         if(isContactDetected && !doOnce)
