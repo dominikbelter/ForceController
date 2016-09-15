@@ -46,7 +46,7 @@ public:
             tinyxml2::XMLElement * parameters;
             parameters = config.FirstChildElement("parameters");
             parameters->QueryIntAttribute("legsNo", &legsNo);
-            std::cout << "Load leg parameters\n";
+            std::cout << "Load leg parameters\n" << std::endl;
 
             for (int i=0;i<legsNo;i++){
                 std::string legName = "leg" + std::to_string(i+1);
@@ -61,6 +61,7 @@ public:
                         position(row-1,col-1) = element;
                     }
                 }
+       //         std::cout << position(0,3) << "  ,  " << position(1,3) << "  ,  "<< position(2,3) << "  ,  "<< std::endl;
                 legMountPoints.push_back(position);
             }
         }

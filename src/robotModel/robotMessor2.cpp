@@ -30,7 +30,6 @@ std::vector<float_type> RobotMessor::computeLegConfiguration(int legNo, const Ma
     int side = (legNo<3) ? 0 : 1;
     currentFootPosition = legMountPoints[legNo] * legModel->forwardKinematic(startConfiguration, 3, side).matrix();
 
-
     Mat34 footInMount;
     footInMount.matrix() = newLegMountPoint.matrix().inverse() * currentFootPosition.matrix();
 
@@ -83,46 +82,33 @@ std::vector<float_type> RobotMessor::fluentPlatform(Mat34 asked, int legNo)
 
 Mat34 RobotMessor::legCPos(std::vector<float_type> configuration, int legNo)
 {
-    int side = (legNo<3) ? 0 : 1;
-    Mat34 legPos;
-
-    Mat34 initial(Mat34::Identity());                   //create initial matrix with z translation -0.1
-    initial(1,3) = -0.1;
-
-    std::cout << "zadaje to:  ";
-                for (int j = 0; j < 3; j++)
-                {
-                    std::cout << initial(j,3) << ", ";
-                }
-                std::cout << std::endl;
-
-
-    std::vector<float_type> conf;
-    conf = computeLegConfiguration(legNo, initial, configurationStart);        //inverse kinematics with initial condition
-
-    legPos = legModel->forwardKinematic(conf, 3,side);                  //forward kinematics initial
-
-    //Mat34 newLegMountPoint = bodyMotion * legMountPoints[legNo];
-
-    //legMountPoints its position of leg in relation to body
     Mat34 currentFootPosition;
-    currentFootPosition = legMountPoints[legNo] * legModel->forwardKinematic(configurationStart, 3, side).matrix();
+    Mat34 startFootPosition;
+    Mat34 returnFootPosition;
+    Mat34 temp;
 
-    //footInMount.matrix() = newLegMountPoint.matrix().inverse() * currentFootPosition.matrix();
-    Mat34 newLegMountPoint;
-    newLegMountPoint.matrix() = legPos.matrix().inverse() * currentFootPosition.matrix();
+    int side = (legNo<3) ? 0 : 1;
 
-    Mat34 currFoot;
-    currFoot.matrix() = newLegMountPoint.matrix().inverse() * legMountPoints[legNo].matrix();
+    startFootPosition.matrix() = legMountPoints[legNo] * legModel->forwardKinematic(configurationStart, 3, side).matrix();
+    currentFootPosition.matrix() = legModel->forwardKinematic(configuration, 3, side).matrix();
 
-    std::cout << "dostaje to:  ";
-                for (int j = 0; j < 3; j++)
-                {
-                    std::cout << currFoot(j,3) << ", ";
-                }
-                std::cout << std::endl;
+    for(int i=0;i<4;i++)
+    {
+        for(int j=0;j<3;j++)
+        {
+            currentFootPosition(i,j) = startFootPosition(i,j);
+        }
+        cout << endl;
+    }
 
-    return currFoot;
+    temp.matrix() = startFootPosition.matrix() * currentFootPosition.matrix().inverse();
+
+
+    returnFootPosition.matrix() = temp.matrix() * legMountPoints[legNo].matrix().inverse();
+
+    std::cout << returnFootPosition(0,3) << "  ,  " << returnFootPosition(1,3) << "  ,  "<< returnFootPosition(2,3) << "  ,  "<< std::endl;
+
+    return returnFootPosition;
 }
 
 ///Compute configuration of the robot for the reference motion

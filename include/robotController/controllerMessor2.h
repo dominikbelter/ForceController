@@ -65,8 +65,6 @@ class ControllerMessor2 : public RobotController
         ///Compliant tripod step
         void tripodStepCompliant(Mat34& motion, double speed);
 
-        void moveLegSingleLin(unsigned char legNo, const Mat34& trajectory, float_type speed);
-
         //methods for moving robot legs by passing trajectory in the leg coordinate system
         void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove);
 

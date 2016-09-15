@@ -41,8 +41,6 @@ namespace controller {
             ///Compliant tripod step
             virtual void tripodStepCompliant(Mat34& motion, double speed) = 0;
 
-            virtual void moveLegSingleLin(unsigned char legNo, const Mat34& trajectory, float_type speed) = 0;
-
             //methods for moving robot legs by passing trajectory in the leg coordinate system
             virtual void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove) = 0;
 
