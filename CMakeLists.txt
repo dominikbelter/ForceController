@@ -7,7 +7,7 @@ SET(CMAKE_BUILD_TYPE "Release" CACHE PATH "Current build configuration")
 
 # TRACKER Project configuration
 PROJECT(ForceController)
-SET(CMAKE_CXX_FLAGS "-std=c++0x -pthread -lrt")
+SET(CMAKE_CXX_FLAGS "-std=c++0x -pthread")
 SET(CMAKE_LD_FLAGS "-lz")
 
 # Folders
