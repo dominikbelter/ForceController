@@ -103,10 +103,26 @@ Mat34 RobotMessor::legCPos(std::vector<float_type> configuration, int legNo)
 
     temp.matrix() = startFootPosition.matrix() * currentFootPosition.matrix().inverse();
 
-
     returnFootPosition.matrix() = temp.matrix() * legMountPoints[legNo].matrix().inverse();
 
-    std::cout << returnFootPosition(0,3) << "  ,  " << returnFootPosition(1,3) << "  ,  "<< returnFootPosition(2,3) << "  ,  "<< std::endl;
+    return returnFootPosition;
+}
+
+Mat34 RobotMessor::robotToFootTransformation(const Mat34& traj, int legNo)
+{
+    Mat34 returnFootPosition;
+    Mat34 currentFootPosition;
+    Mat34 startFootPosition;
+    Mat34 temp;
+
+    int side = (legNo<3) ? 0 : 1;
+
+    startFootPosition.matrix() = legMountPoints[legNo] * legModel->forwardKinematic(configurationStart, 3, side).matrix();
+    currentFootPosition = legMountPoints[legNo].inverse() * traj ;
+
+    temp.matrix() = startFootPosition.matrix() * currentFootPosition.matrix().inverse();
+
+    returnFootPosition.matrix() = temp.matrix() * legMountPoints[legNo].matrix().inverse();
 
     return returnFootPosition;
 }

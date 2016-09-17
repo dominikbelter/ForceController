@@ -80,6 +80,8 @@ namespace controller {
 
             virtual Mat34 legCPos(std::vector<float_type> configuration, int legNo) = 0;
 
+            virtual Mat34 robotToFootTransformation(const Mat34& traj, int legNo) = 0;
+
             virtual std::vector<float_type> fluentPlatform(Mat34 askedP, int legNo) = 0;
 
             virtual Mat34 getLegPosFromRobot(Mat34 robotTraj, int legNo) = 0;

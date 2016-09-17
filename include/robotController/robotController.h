@@ -42,28 +42,24 @@ namespace controller {
             virtual void tripodStepCompliant(Mat34& motion, double speed) = 0;
 
             //methods for moving robot legs by passing trajectory in the leg coordinate system
-            virtual void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove) = 0;
+            virtual void moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove, int smartMotionMode, int inputCoordinateSystem) = 0;
 
-            virtual void moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed) = 0;
+            virtual void moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed, int smartMotionMode, int inputCoordinateSystem) = 0;
 
-            virtual void moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed) = 0;
+            virtual void moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed, int smartMotionMode, int inputCoordinateSystem) = 0;
 
             //methods for moving robot legs by passing trajectory in the robot coordinate system
-            virtual void moveLegSingleRobot(unsigned char legNo, const Mat34& trajectory, float_type speed) = 0;
-
-            virtual void moveLegRobot(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed) = 0;
-
-            virtual void moveLegsRobot(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed) = 0;
-
             virtual void movePlatform(std::vector<Mat34>& motion, double speed) = 0;
 
             //methods for moving robot legs by passing motors configuration
-            virtual void moveLegSingle(unsigned char legNo,const std::vector<float_type>& configuration1, float_type speed, bool lastMove) = 0;
+            virtual void moveLegSingle(unsigned char legNo,const std::vector<float_type>& configuration1, float_type speed, bool lastMove, int smartMotionMode) = 0;
 
-            virtual void moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed) = 0;
+            virtual void moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed, int smartMotionMode) = 0;
 
-            virtual void moveLegs(std::vector<unsigned char> legNo,const  std::vector<std::vector<std::vector<float_type> > >& configuration, float_type speed) = 0;
+            virtual void moveLegs(std::vector<unsigned char> legNo,const  std::vector<std::vector<std::vector<float_type> > >& configuration, float_type speed, int smartMotionMode) = 0;
 
+
+            virtual std::vector<float_type> scaleSpeedBytrajectory (std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory) = 0;
 
             /// Virtual descrutor
             virtual ~RobotController() {}

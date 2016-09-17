@@ -159,7 +159,7 @@ int main( int argc, const char** argv )
         executeLegsMovementInitial.push_back(trajInitialB);
         executeLegsMovementInitial.push_back(trajInitialF);
 
-        controller->moveLegs(legNos024135, executeLegsMovementInitial, speedo);
+        controller->moveLegs(legNos024135, executeLegsMovementInitial, speedo, 0, 0);
 
         cin >> start;
 
@@ -167,13 +167,13 @@ int main( int argc, const char** argv )
 
         while(true)
         {
-            controller->moveLegs(legNos024135, executeLegsMovementBack, speedo);
+            controller->moveLegs(legNos024135, executeLegsMovementBack, speedo, 1, 0);
 
-            controller->moveLeg(5, trajUpRFront, speedo);
-            controller->moveLeg(1, trajUpMid, speedo);
-            controller->moveLeg(4, trajUpRMid, speedo);
-            controller->moveLeg(2, trajUpBack, speedo);
-            controller->moveLeg(3, trajUpRBack, speedo);
+            controller->moveLeg(5, trajUpRFront, speedo, 1, 0);
+            controller->moveLeg(1, trajUpMid, speedo, 1, 0);
+            controller->moveLeg(4, trajUpRMid, speedo, 1, 0);
+            controller->moveLeg(2, trajUpBack, speedo, 1, 0);
+            controller->moveLeg(3, trajUpRBack, speedo, 1, 0);
 
         }
 

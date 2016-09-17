@@ -124,6 +124,8 @@ public:
 
     Mat34 legCPos(std::vector<float_type> configuration, int legNo);
 
+    Mat34 robotToFootTransformation(const Mat34& traj, int legNo);
+
     std::vector<float_type> fluentPlatform(Mat34 askedP, int legNo);
 
     Mat34 getLegPosFromRobot(Mat34 robotTraj, int legNo);

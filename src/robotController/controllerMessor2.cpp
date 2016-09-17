@@ -98,7 +98,7 @@ void ControllerMessor2::movePlatform(Mat34& motion, double speed){
         configs.clear();
     }
 
-    moveLegs(legsNo, confTotal, speed);
+    moveLegs(legsNo, confTotal, speed, 0);
 
 }
 
@@ -131,36 +131,20 @@ controller::RobotController* controller::createControllerMessor2(std::string fil
     return controllerMessor2.get();
 }
 
-void ControllerMessor2::moveLegSingleRobot(unsigned char legNo, const Mat34& trajectory, float_type speed)
+void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove, int smartMotionMode, int inputCoordinateSystem )
 {
-    moveLegSingle(legNo, robot->getLegPosFromRobot(trajectory, legNo), speed, false);
-}
-
-void ControllerMessor2::moveLegRobot(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed)
-{
-    for(int i =0;i<trajectory.size();i++)
-    {
-        this->moveLegSingleRobot(legNo, trajectory[i], speed);
-    }
-}
-
-void ControllerMessor2::moveLegsRobot(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed)
-{
-    /*for(int i=0;legNo.size();i++)
-    {
-        moveLegRobot(legNo[i], trajectory, speed);
-    }*/
-}
-
-void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajectory, float_type speed, bool lastMove )
-{
-
-    //cout << " SPEED PRZEKAZANY " << (int)legNo << " WYNOSI: " << speed << endl;
     std::vector<float_type> configuration;
     std::vector<float_type> diff(3);
     std::vector<float_type> newConf(3);
 
-    configuration = robot->moveLeg(legNo, trajectory);
+    if(inputCoordinateSystem == 1)
+    {
+        Mat34 trajectoryFromRobotToLeg;
+        trajectoryFromRobotToLeg = robot->robotToFootTransformation(trajectory, legNo);
+        configuration = robot->moveLeg(legNo, trajectoryFromRobotToLeg);
+    }
+    else
+        configuration = robot->moveLeg(legNo, trajectory);
 
     for(int s=0; s<configuration.size(); s++)
     {
@@ -176,35 +160,27 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             }
         }
     }
-    mtx.lock();
-   // std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
-    mtx.unlock();
+
     if (config.useVisualizer)
     {
         bool wychodze = false;
 
         std::vector<float_type> currentConfiguration = visualizer->getPosition(legNo);
         mtx.lock();
-        //std::cout << currentConfiguration[0] <<"  c1: " << currentConfiguration[1] <<"  c2: " << currentConfiguration[2] << std::endl;
         mtx.unlock();
 
         float_type step = 0.04;
         int n = 1/step;
-        //std::cout << n << "    " << step << endl;
         for(int s=0; s<configuration.size(); s++)
         {
             diff[s]=(configuration[s] - currentConfiguration[s])*step;
         }
 
-
-
         int i = 0;
         while(i<=n)
-      //  while(!wychodze)
         {
             std::vector<float_type> currentConfigurationNow = visualizer->getPosition(legNo);
 
-            //cout << visualizer->getPosition(legNo)[0] << endl;
             for(int s=0; s<configuration.size(); s++)
             {
 
@@ -213,7 +189,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                     wychodze = true;
                 }
                 newConf[s] = currentConfiguration[s] + diff[s]*i;
-               // cout << newConf[s] << endl;
             }
 
             visualizer->setPosition(legNo,newConf);
@@ -251,7 +226,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         }
 
         bool motionFinished = false;
-        float_type offsetConf = 0.20;
+//        float_type offsetConf = 0.20;
         float_type offset;
         if(!lastMove)
             offset = 0.015;
@@ -273,15 +248,11 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
 
-
             current = robot->conputeLinksPosition(readAngle);
             result = robot->conputeLinksPosition(configuration);
 
-
-
-
-//            cout << "0: " << abs(result[3](0,3)-current[3](0,3)) << " 1: " << abs(current[3](1,3)-result[3](1,3)) << " 2: " << abs(current[3](2,3)-result[3](2,3)) << endl;
-            if(lastMove)
+            //smartMotionMode = 1 for reading contact state
+            if(smartMotionMode == 1)
             {
                 if(isContactDetected || (abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset))
                 //if(isContactDetected || (abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf))
@@ -303,11 +274,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                     {
                         vector<float_type> newConf(3);
                         newConf[0] = configuration[0];
-//                        if(legNo==2 || legNo==3)
-//                        {
-//                            newConf[1] = readAngle[1]-0.25;
-//                        }
-//                        else
                         newConf[1] = readAngle[1];
                         newConf[2] = readAngle[2];
                         motionFinished=true;
@@ -320,6 +286,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                 }
 
             }
+            //stardard smartMotionMode for reading servo position only
             else
             {
                 if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
@@ -329,20 +296,13 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                 }
             }
 
-
-
-        }
-
-        if(motionFinished)
-        {
-
         }
 
     }
 
 }
 
-void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<float_type>& configuration1, float_type speed, bool lastMove)
+void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<float_type>& configuration1, float_type speed, bool lastMove, int smartMotionMode)
 {
 
     std::vector<float_type> configuration(3);
@@ -367,7 +327,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
         }
     }
     mtx.lock();
-//    std::cout << "legNo: " << (int)legNo <<"  c0: " << configuration[0] <<"  c1: " << configuration[1] <<"  c2: " << configuration[2] << std::endl;
     mtx.unlock();
     if (config.useVisualizer)
     {
@@ -375,7 +334,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
 
         float_type step = 0.04;
         int n = 1/step;
-        //std::cout << n << "    " << step << endl;
         for(int s=0; s<configuration.size(); s++)
         {
             diff[s]=(configuration[s] - currentConfiguration[s])*step;
@@ -384,8 +342,6 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
         int i = 0;
         while(i<=n)
         {
-
-            //cout << visualizer->getPosition(legNo)[0] << endl;
             for(int s=0; s<configuration.size(); s++)
             {
                 configuration[s] = currentConfiguration[s] + diff[s]*i;
@@ -434,23 +390,14 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
 
         while(!motionFinished)
         {
-            //usleep(200000);
+            usleep(90000);
             board->readPosition(legNo, 0, readAngle[0]);
             board->readPosition(legNo, 1, readAngle[1]);
             board->readPosition(legNo, 2, readAngle[2]);
-//            mtx.lock();
-//            std::cout << (int)legNo << std::endl;
-//            cout << "s0 " << readAngle[0] << " s1 " << readAngle[1] << " s2 " << readAngle[2] << endl;
-//            mtx.unlock();
 
-//            if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
-//            {
-//                motionFinished=true;
-//            }
             if((abs(readAngle[0] - configuration[0]) < offset) && (abs(readAngle[1] - configuration[1]) < offset) && (abs(readAngle[2] - configuration[2]) < offset) )
             {
                 motionFinished = true;
-              //  cout << "move finished " << legNo << endl;
             }
         }
 
@@ -459,38 +406,211 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const std::vector<flo
 }
 
 
-void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed)
+void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& trajectory, float_type speed, int smartMotionMode, int inputCoordinateSystem)
 {
     for(int i=0; i<trajectory.size(); i++)
     {
-        if(i==trajectory.size()-1)
+        if(smartMotionMode == 1)
         {
-            if(trajectory.size()!=1)
+            if(trajectory.size() == 1)
             {
-                this->moveLegSingle(legNo, trajectory[i], speed, true);
+                this->moveLegSingle(legNo, trajectory[i], speed, true, 0, inputCoordinateSystem);
             }
             else
-                this->moveLegSingle(legNo, trajectory[i], speed, false);
+            {
+                if(i==0)
+                    this->moveLegSingle(legNo, trajectory[i], speed, false, 0, inputCoordinateSystem);
+                else if(i == trajectory.size()-1)
+                    this->moveLegSingle(legNo, trajectory[i], speed, true, 1, inputCoordinateSystem);
+                else
+                    this->moveLegSingle(legNo, trajectory[i], speed, false, 1, inputCoordinateSystem);
+            }
         }
         else
-            this->moveLegSingle(legNo, trajectory[i], speed, false);
-    }
+        {
+            if(i==trajectory.size()-1)
+                this->moveLegSingle(legNo, trajectory[i], speed, true, smartMotionMode, inputCoordinateSystem);
+            else
+                this->moveLegSingle(legNo, trajectory[i], speed, false, smartMotionMode, inputCoordinateSystem);
+        }
 
+    }
 }
 
-void ControllerMessor2::moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed)
-{
+void ControllerMessor2::moveLegConf(unsigned char legNo,const std::vector<std::vector<float_type> >& configuration, float_type speed, int smartMotionMode)
+{   
     for(int i=0; i<configuration.size(); i++)
     {
-        if(i==configuration.size()-1)
-            this->moveLegSingle(legNo, configuration[i], speed, true);
+        if(smartMotionMode == 1)
+        {
+            if(configuration.size() == 1)
+            {
+                this->moveLegSingle(legNo, configuration[i], speed, true, 0);
+            }
+            else
+            {
+                if(i==0)
+                    this->moveLegSingle(legNo, configuration[i], speed, false, 0);
+                else if(i == configuration.size()-1)
+                    this->moveLegSingle(legNo, configuration[i], speed, true, 1);
+                else
+                    this->moveLegSingle(legNo, configuration[i], speed, false, 1);
+            }
+        }
         else
-            this->moveLegSingle(legNo, configuration[i], speed, false);
+        {
+            if(i==configuration.size()-1)
+                this->moveLegSingle(legNo, configuration[i], speed, true, smartMotionMode);
+            else
+                this->moveLegSingle(legNo, configuration[i], speed, false, smartMotionMode);
+        }
     }
-
 }
 
-void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed)
+void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory, float_type speed, int smartMotionMode, int inputCoordinateSystem)
+{
+
+    std::vector<float_type> speedScale;
+    speedScale = scaleSpeedBytrajectory(legNo, trajectory);
+
+    if(legNo.size() == 1)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0], smartMotionMode, inputCoordinateSystem);
+        first.join();
+    }
+
+    else if(legNo.size() == 2)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0], smartMotionMode, inputCoordinateSystem);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1], smartMotionMode, inputCoordinateSystem);
+        first.join();
+        second.join();
+    }
+
+    else if(legNo.size() == 3)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0], smartMotionMode, inputCoordinateSystem);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1], smartMotionMode, inputCoordinateSystem);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2], smartMotionMode, inputCoordinateSystem);
+        first.join();
+        second.join();
+        third.join();
+    }
+
+    else if(legNo.size() == 4)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0], smartMotionMode, inputCoordinateSystem);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1], smartMotionMode, inputCoordinateSystem);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2], smartMotionMode, inputCoordinateSystem);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3], smartMotionMode, inputCoordinateSystem);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+    }
+
+    else if(legNo.size() == 5)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0], smartMotionMode, inputCoordinateSystem);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1], smartMotionMode, inputCoordinateSystem);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2], smartMotionMode, inputCoordinateSystem);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3], smartMotionMode, inputCoordinateSystem);
+        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed*speedScale[4], smartMotionMode, inputCoordinateSystem);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+        fifth.join();
+    }
+
+    else if(legNo.size() == 6)
+    {
+        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0], smartMotionMode, inputCoordinateSystem);
+        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1], smartMotionMode, inputCoordinateSystem);
+        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2], smartMotionMode, inputCoordinateSystem);
+        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3], smartMotionMode, inputCoordinateSystem);
+        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed*speedScale[4], smartMotionMode, inputCoordinateSystem);
+        std::thread sixth(&ControllerMessor2::moveLeg,this,legNo[5],trajectory[5], speed*speedScale[5], smartMotionMode, inputCoordinateSystem);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+        fifth.join();
+        sixth.join();
+    }
+}
+
+void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo,const std::vector<std::vector<std::vector<float_type> > >& configuration, float_type speed, int smartMotionMode)
+{   
+    if(legNo.size() == 1)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed, smartMotionMode);
+        first.join();
+    }
+
+    else if(legNo.size() == 2)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed, smartMotionMode);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed, smartMotionMode);
+        first.join();
+        second.join();
+    }
+
+    else if(legNo.size() == 3)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed, smartMotionMode);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed, smartMotionMode);
+        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed, smartMotionMode);
+        first.join();
+        second.join();
+        third.join();
+    }
+
+    else if(legNo.size() == 4)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed, smartMotionMode);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed, smartMotionMode);
+        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed, smartMotionMode);
+        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed, smartMotionMode);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+    }
+
+    else if(legNo.size() == 5)
+    {
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed, smartMotionMode);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed, smartMotionMode);
+        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed, smartMotionMode);
+        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed, smartMotionMode);
+        std::thread fifth(&ControllerMessor2::moveLegConf,this,legNo[4],configuration[4], speed, smartMotionMode);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+        fifth.join();
+    }
+
+    else if(legNo.size() == 6)
+    {
+
+        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed, smartMotionMode);
+        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed, smartMotionMode);
+        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed, smartMotionMode);
+        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed, smartMotionMode);
+        std::thread fifth(&ControllerMessor2::moveLegConf,this,legNo[4],configuration[4], speed, smartMotionMode);
+        std::thread sixth(&ControllerMessor2::moveLegConf,this,legNo[5],configuration[5], speed, smartMotionMode);
+        first.join();
+        second.join();
+        third.join();
+        fourth.join();
+        fifth.join();
+        sixth.join();
+    }
+}
+
+std::vector<float_type> ControllerMessor2::scaleSpeedBytrajectory (std::vector<unsigned char> legNo, const std::vector<std::vector<Mat34> >& trajectory)
 {
     std::vector<float_type> longest(trajectory.size());
     float_type longestJourney;
@@ -555,174 +675,6 @@ void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo, const std::ve
         //cout << " SPEED " << i << " WYNOSI: " << speedScale[i] << endl;
     }
 
-    //cout << endl;
-
-    if(legNo.size() == 1)
-    {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
-        first.join();
-    }
-
-    else if(legNo.size() == 2)
-    {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
-        first.join();
-        second.join();
-    }
-
-    else if(legNo.size() == 3)
-    {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
-        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2]);
-        first.join();
-        second.join();
-        third.join();
-    }
-
-    else if(legNo.size() == 4)
-    {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
-        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2]);
-        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3]);
-        first.join();
-        second.join();
-        third.join();
-        fourth.join();
-    }
-
-    else if(legNo.size() == 5)
-    {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
-        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2]);
-        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3]);
-        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed*speedScale[4]);
-        first.join();
-        second.join();
-        third.join();
-        fourth.join();
-        fifth.join();
-    }
-
-    else if(legNo.size() == 6)
-    {
-        std::thread first(&ControllerMessor2::moveLeg,this,legNo[0],trajectory[0], speed*speedScale[0]);
-        std::thread second(&ControllerMessor2::moveLeg,this,legNo[1],trajectory[1], speed*speedScale[1]);
-        std::thread third(&ControllerMessor2::moveLeg,this,legNo[2],trajectory[2], speed*speedScale[2]);
-        std::thread fourth(&ControllerMessor2::moveLeg,this,legNo[3],trajectory[3], speed*speedScale[3]);
-        std::thread fifth(&ControllerMessor2::moveLeg,this,legNo[4],trajectory[4], speed*speedScale[4]);
-        std::thread sixth(&ControllerMessor2::moveLeg,this,legNo[5],trajectory[5], speed*speedScale[5]);
-        first.join();
-        second.join();
-        third.join();
-        fourth.join();
-        fifth.join();
-        sixth.join();
-    }
-
-
-
-//    std::vector<std::thread> legsThreads;
-
-//    for(int i=0; i<legNo.size(); i++){
-//        legsThreads.emplace_back(&ControllerMessor2::moveLeg,this,legNo[i],trajectory[i], speed);
-//    }
-
-//    // later
-//    for (int i=0; i<legNo.size(); i++) {
-//        legsThreads.at(i).join();
-//    }
-
-//    // OK to destroy now
-//    legsThreads.clear();
-}
-
-void ControllerMessor2::moveLegs(std::vector<unsigned char> legNo,const std::vector<std::vector<std::vector<float_type> > >& configuration, float_type speed)
-{
-    if(legNo.size() == 1)
-    {
-        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
-        first.join();
-    }
-
-    else if(legNo.size() == 2)
-    {
-        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
-        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
-        first.join();
-        second.join();
-    }
-
-    else if(legNo.size() == 3)
-    {
-        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
-        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
-        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed);
-        first.join();
-        second.join();
-        third.join();
-    }
-
-    else if(legNo.size() == 4)
-    {
-        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
-        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
-        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed);
-        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed);
-        first.join();
-        second.join();
-        third.join();
-        fourth.join();
-    }
-
-    else if(legNo.size() == 5)
-    {
-        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
-        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
-        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed);
-        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed);
-        std::thread fifth(&ControllerMessor2::moveLegConf,this,legNo[4],configuration[4], speed);
-        first.join();
-        second.join();
-        third.join();
-        fourth.join();
-        fifth.join();
-    }
-
-    else if(legNo.size() == 6)
-    {
-
-        std::thread first(&ControllerMessor2::moveLegConf,this,legNo[0],configuration[0], speed);
-        std::thread second(&ControllerMessor2::moveLegConf,this,legNo[1],configuration[1], speed);
-        std::thread third(&ControllerMessor2::moveLegConf,this,legNo[2],configuration[2], speed);
-        std::thread fourth(&ControllerMessor2::moveLegConf,this,legNo[3],configuration[3], speed);
-        std::thread fifth(&ControllerMessor2::moveLegConf,this,legNo[4],configuration[4], speed);
-        std::thread sixth(&ControllerMessor2::moveLegConf,this,legNo[5],configuration[5], speed);
-        first.join();
-        second.join();
-        third.join();
-        fourth.join();
-        fifth.join();
-        sixth.join();
-    }
-
-
-
-//    std::vector<std::thread> legsThreads;
-
-//    for(int i=0; i<legNo.size(); i++){
-//        legsThreads.emplace_back(&ControllerMessor2::moveLeg,this,legNo[i],trajectory[i], speed);
-//    }
-
-//    // later
-//    for (int i=0; i<legNo.size(); i++) {
-//        legsThreads.at(i).join();
-//    }
-
-//    // OK to destroy now
-//    legsThreads.clear();
+    return speedScale;
 }
 
