@@ -229,9 +229,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 //        float_type offsetConf = 0.20;
         float_type offset;
         if(!lastMove)
-            offset = 0.015;
+            offset = 0.020;
         else
-            offset = 0.013;
+            offset = 0.018;
         board->setPosition(legNo, configuration);
 
         bool isContactDetected = false;
@@ -269,22 +269,22 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
                             doOnce = true;
                         }
-                    }
-                    else
-                    {
-                        vector<float_type> newConf(3);
-                        newConf[0] = configuration[0];
-                        newConf[1] = readAngle[1];
-                        newConf[2] = readAngle[2];
-                        motionFinished=true;
-                        if(isContactDetected && !doOnce)
-                        {
-                            board->setPosition(legNo, newConf);
-                            doOnce = true;
-                        }
-                    }
+                    }                  
                 }
 
+            }
+            else if(smartMotionMode == 5) //mdoe for tripod step back movement
+            {
+                vector<float_type> newConf(3);
+                newConf[0] = configuration[0];
+                newConf[1] = readAngle[1];
+                newConf[2] = readAngle[2];
+                motionFinished=true;
+                if(isContactDetected && !doOnce)
+                {
+                    board->setPosition(legNo, newConf);
+                    doOnce = true;
+                }
             }
             //stardard smartMotionMode for reading servo position only
             else
@@ -414,7 +414,7 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& t
         {
             if(trajectory.size() == 1)
             {
-                this->moveLegSingle(legNo, trajectory[i], speed, true, 0, inputCoordinateSystem);
+                this->moveLegSingle(legNo, trajectory[i], speed, true, 5, inputCoordinateSystem);
             }
             else
             {
