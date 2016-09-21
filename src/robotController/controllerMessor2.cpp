@@ -244,6 +244,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         bool isContactDetected = false;
         bool startReadingContact = false;
         bool doOnce = false;
+        bool noGround = false;
+
         while(!motionFinished)
         {
 
@@ -301,6 +303,8 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                     }
                 }
                 else if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
+                    noGround = true;
+                if(noGround)
                 {
                    Mat34 nextPos;
                    std::vector<float_type> configurationDown;
