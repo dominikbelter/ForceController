@@ -179,7 +179,7 @@ int main( int argc, const char** argv )
 
         controller->moveLegs(legNos024135, executeLegsMovementInitial, speedo, 0, 0);
 
-        cin >> start;
+       // cin >> start;
 
         while(true)
         {

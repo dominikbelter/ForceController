@@ -177,6 +177,13 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         }
 
         int i = 0;
+
+//        Mat34 max(Mat34::Identity());
+//        max(1,3) = 1323243242313;
+//        vector<float_type> nowy;
+//        nowy = robot->moveLeg(1, max);
+//        cout << nowy[0] << "   " << nowy[1] << "   " << nowy[2] << endl;
+
         while(i<=n)
         {
             std::vector<float_type> currentConfigurationNow = visualizer->getPosition(legNo);
@@ -239,6 +246,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
         bool doOnce = false;
         while(!motionFinished)
         {
+
             //usleep(200000);
             isContactDetected = board->readContact(legNo);
             if(!isContactDetected && !startReadingContact)
@@ -270,6 +278,38 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                             doOnce = true;
                         }
                     }                  
+                }
+
+            }
+            else if(smartMotionMode == 6)
+            {
+                if(isContactDetected)
+                //if(isContactDetected || (abs(readAngle[0] - configuration[0]) < offsetConf) && (abs(readAngle[1] - configuration[1]) < offsetConf) && (abs(readAngle[2] - configuration[2]) < offsetConf))
+                {
+                    if(startReadingContact)
+                    {
+                        motionFinished=true;
+                        if(isContactDetected && !doOnce)
+                        {
+                            newConf[0] = readAngle[0];
+                            newConf[1] = readAngle[1]-config.offsetPajak;
+                            newConf[2] = readAngle[2];
+                            board->setPosition(legNo, newConf);
+
+                            doOnce = true;
+                        }
+                    }
+                }
+                else if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
+                {
+                   Mat34 nextPos;
+                   std::vector<float_type> configurationDown;
+                   nextPos = robot->legCPos(configuration, legNo);
+                   nextPos(2,3)+=0.02;
+
+                   configurationDown = robot->moveLeg(legNo, nextPos);
+                   board->setPosition(legNo, configurationDown);
+
                 }
 
             }
@@ -421,7 +461,7 @@ void ControllerMessor2::moveLeg(unsigned char legNo, const std::vector<Mat34>& t
                 if(i==0)
                     this->moveLegSingle(legNo, trajectory[i], speed, false, 0, inputCoordinateSystem);
                 else if(i == trajectory.size()-1)
-                    this->moveLegSingle(legNo, trajectory[i], speed, true, 1, inputCoordinateSystem);
+                    this->moveLegSingle(legNo, trajectory[i], speed, true, 6, inputCoordinateSystem);
                 else
                     this->moveLegSingle(legNo, trajectory[i], speed, false, 1, inputCoordinateSystem);
             }
