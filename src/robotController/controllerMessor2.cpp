@@ -304,14 +304,21 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                 }
                 else if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
                     noGround = true;
-                if(noGround)
+                if(noGround && !isContactDetected)
                 {
-                   Mat34 nextPos;
-                   std::vector<float_type> configurationDown;
-                   nextPos = robot->legCPos(configuration, legNo);
-                   nextPos(2,3)+=0.02;
+                    for(int i=0; i<configuration.size(); i++)
+                    {
+                        //speedScale[i] = diff[i] / longestJourney;
+                        board->setSpeed(legNo, i, speed);
 
-                   configurationDown = robot->moveLeg(legNo, nextPos);
+                    }
+
+
+                   std::vector<float_type> configurationDown;
+                   //nextPos = robot->legCPos(readAngle, legNo);
+                   trajectory(2,3)+=0.01;
+
+                   configurationDown = robot->moveLeg(legNo, trajectory);
                    board->setPosition(legNo, configurationDown);
 
                 }
@@ -330,7 +337,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                     doOnce = true;
                 }
             }
-            //stardard smartMotionMode for reading servo position only
+            //stardard smartMotionMode for reading servo position on    ly
             else
             {
                 if(abs(result[3](0,3)-current[3](0,3)) < offset && abs(result[3](1,3)-current[3](1,3)) < offset && abs(result[3](2,3)-current[3](2,3)) < offset)
