@@ -136,6 +136,7 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
     std::vector<float_type> configuration;
     std::vector<float_type> diff(3);
     std::vector<float_type> newConf(3);
+    Mat34 nextPos = trajectory;
 
     if(inputCoordinateSystem == 1)
     {
@@ -308,7 +309,13 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
                 {
                     for(int i=0; i<configuration.size(); i++)
                     {
-                        //speedScale[i] = diff[i] / longestJourney;
+                        //speedScale[i] = diff[i] / longestJourney;for(int i=0; i<configuration.size(); i++)
+                        {
+                            speedScale[i] = diff[i] / longestJourney;
+                            board->setSpeed(legNo, i, speed*speedScale[i]);
+
+                        }
+
                         board->setSpeed(legNo, i, speed);
 
                     }
@@ -316,9 +323,9 @@ void ControllerMessor2::moveLegSingle(unsigned char legNo, const Mat34& trajecto
 
                    std::vector<float_type> configurationDown;
                    //nextPos = robot->legCPos(readAngle, legNo);
-                   trajectory(2,3)+=0.01;
+                   nextPos(2,3)+=0.01;
 
-                   configurationDown = robot->moveLeg(legNo, trajectory);
+                   configurationDown = robot->moveLeg(legNo, nextPos);
                    board->setPosition(legNo, configurationDown);
 
                 }
